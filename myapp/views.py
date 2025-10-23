@@ -33,7 +33,7 @@ def loginup(request):
     if request.method == 'GET': #si se hace la petición al servidor entonces este devuelve la vista de login
         return render(request,'login.html')        
     else:
-        user = authenticate(username=str.lower(request.POST['correo']), 
+        user = authenticate(username=str.lower(request.POST['usuario']), 
                             password=request.POST['contrasena']) # almacena el usuario en una variable user y autentifica el usuario y contraseña enviados
 
         if user is None: #si el usuario y/o contraseña no existen entonces muestra nuevamente la vista login

@@ -1,37 +1,449 @@
- body {
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #ddd;
-        }
-        .section-title {
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+/* ======================================================
+   🎨 ESTILOS CORREGIDOS - HISTORIA GERONTOLÓGICA
+   ====================================================== */
+
+/* RESET UNIFICADO DEL BODY */
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../img/fondo.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+/* TITULO PRINCIPAL */
+.main-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #1e3a8a;
+    border-bottom: 3px solid #1e3a8a;
+    margin: 20px auto 35px;
+    padding-bottom: 12px;
+    width: 90%;
+}
+
+/* TITULOS DE SECCIÓN */
+.section-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #1f2937;
+    font-size: 1.3rem;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    padding: 14px 20px;
+    border-left: 6px solid #1e3a8a;
+    margin: 35px 0 18px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* SOLUCIÓN DEFINITIVA PARA OPCIONES DE GÉNERO */
+.gender-options-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 18px 30px !important;
+    min-height: 70px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.gender-radio-group {
+    display: flex !important;
+    gap: 25px !important;
+    align-items: center !important;
+    flex: 1 !important;
+    justify-content: center !important;
+}
+
+.gender-option {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 24px !important;
+    cursor: pointer;
+    border: 2px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    transition: all 0.4s ease !important;
+    min-width: 120px;
+    justify-content: center;
+    font-weight: 600;
+    color: #374151;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.gender-option:hover {
+    border-color: #007bff !important;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e1f5fe 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0,123,255,0.15) !important;
+}
+
+.gender-option input[type="radio"] {
+    transform: scale(1.4);
+    accent-color: #1e3a8a;
+}
+
+.other-gender-option {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 10px 18px !important;
+    border: 2px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    min-width: 180px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.other-gender-input {
+    width: 120px !important;
+    padding: 8px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    font-size: 0.9rem;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.other-gender-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+/* TABLAS MEJORADAS */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+table th {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #d1d5db;
+    padding: 14px 12px;
+    color: #374151;
+    font-size: 1rem;
+}
+
+table td {
+    border: 1px solid #e5e7eb;
+    padding: 12px 14px;
+    vertical-align: middle;
+    background: white;
+}
+
+/* ELIMINAR LA CLASE CONFLICTIVA */
+.centered-options {
+    /* Esta clase causa problemas - mejor usar gender-options-container */
+    all: unset;
+}
+
+/* ESTILOS MEJORADOS PARA LA SECCIÓN DE IDENTIFICACIÓN */
+.identification-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.identification-table th[colspan="4"] {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    color: white;
+    font-size: 1.3rem;
+    padding: 18px;
+    text-align: center;
+    border: none;
+}
+
+.identification-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.3s ease;
+}
+
+.identification-table tr:hover td {
+    background-color: #f8fafc;
+}
+
+.identification-table td:first-child {
+    font-weight: 600;
+    color: #374151;
+    background-color: #f8fafc;
+    width: 25%;
+    text-align: center;
+    border-right: 2px solid #e2e8f0;
+}
+
+/* ESTILOS PARA INPUTS MEJORADOS */
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: white;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    background-color: #fafbfc;
+}
+
+/* INPUTS PEQUEÑOS MEJORADOS */
+.small-number-input {
+    width: 70px;
+    padding: 8px 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 0.9rem;
+    margin: 0 5px;
+}
+
+.date-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.date-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* ESTILOS PARA CÉDULA MEJORADOS */
+.cedula-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.cedula-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.cedula-label {
+    font-size: 0.85rem;
+    color: #374151;
+    font-weight: 600;
+    min-width: 35px;
+}
+
+.cedula-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+/* ESTILOS PARA ZONA MEJORADOS */
+.zona-options {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    align-items: center;
+    padding: 10px;
+}
+
+.zona-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.zona-option:hover {
+    border-color: #007bff;
+    background-color: #f0f9ff;
+    transform: translateY(-1px);
+}
+
+.zona-option input[type="radio"] {
+    transform: scale(1.3);
+    accent-color: #1e3a8a;
+}
+
+/* ESTILOS MEJORADOS CON MEJOR ESPACIADO */
+.parentesco-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.parentesco-table td {
+    padding: 20px 25px; /* AUMENTÉ el padding vertical y horizontal */
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.3s ease;
+    vertical-align: middle; /* Asegura alineación vertical */
+}
+
+.parentesco-table tr:hover td {
+    background-color: #f8fafc;
+}
+
+.parentesco-table td:first-child {
+    font-weight: 600;
+    color: #374151;
+    background-color: #f8fafc;
+    width: 35%;
+    text-align: left;
+    border-right: 2px solid #e2e8f0;
+    padding-left: 30px; /* Más espacio a la izquierda */
+    font-size: 0.95rem;
+}
+
+.parentesco-table td:last-child {
+    background: white;
+    padding-right: 30px; /* Más espacio a la derecha */
+}
+
+/* AUMENTAR ESPACIADO EN INPUTS */
+.contact-input {
+    width: 100%;
+    padding: 14px 18px; /* MÁS PADDING interno */
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem; /* TEXTO MÁS GRANDE */
+    transition: all 0.3s ease;
+    background: white;
+    box-sizing: border-box;
+    line-height: 1.5;
+    min-height: 50px; /* ALTURA MÍNIMA */
+}
+
+.contact-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    background-color: #fafbfc;
+}
+
+/* MEJORAR ESPACIADO EN GRUPOS CON ÍCONOS */
+.email-input-group,
+.phone-input-group,
+.direccion-input-group {
+    position: relative;
+    width: 100%;
+    margin: 5px 0; /* ESPACIO adicional alrededor */
+}
+
+.email-input-group .contact-input,
+.phone-input-group .contact-input,
+.direccion-input-group .contact-input {
+    padding-left: 50px; /* MÁS ESPACIO para íconos */
+}
+
+/* AUMENTAR TAMAÑO DE ÍCONOS */
+.email-input-group::before,
+.phone-fijo::before,
+.phone-celular::before,
+.direccion-input-group::before {
+    content: "✉️";
+    position: absolute;
+    left: 18px; /* MÁS ESPACIO del borde */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.3rem; /* ÍCONOS MÁS GRANDES */
+    z-index: 2;
+}
+
+.phone-fijo::before {
+    content: "📞";
+}
+
+.phone-celular::before {
+    content: "📱";
+}
+
+.direccion-input-group::before {
+    content: "🏠";
+}
+
+/* MEJORAR SELECT DE ESTADO CIVIL */
+.estado-civil-select {
+    width: 100%;
+    padding: 14px 45px 14px 18px; /* MÁS PADDING */
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem; /* TEXTO MÁS GRANDE */
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23374151' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 14px;
+    min-height: 50px; /* MISMA ALTURA QUE INPUTS */
+    line-height: 1.5;
+}
+
+.estado-civil-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+/* ESPACIADO ADICIONAL ENTRE FILAS */
+.parentesco-table tr {
+    height: 75px; /* ALTURA MÍNIMA DE FILAS */
+}
+
+/* MEJORAR LEGIBILIDAD DE LABELS */
+.parentesco-table td:first-child {
+    line-height: 1.4;
+    padding-top: 22px;
+    padding-bottom: 22px;
+}
