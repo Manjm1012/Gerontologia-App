@@ -118,6 +118,7 @@ body {
     min-width: 180px;
     font-weight: 600;
     color: #374151;
+    width: auto !important;
 }
 
 .other-gender-input {
@@ -143,8 +144,9 @@ table {
     margin-bottom: 30px;
     border: 1px solid #d1d5db;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: auto;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    table-layout: fixed;
 }
 
 table th {
@@ -174,8 +176,10 @@ table td {
 .identification-table {
     background: white;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: auto;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    width: 100%;
+    table-layout: fixed;
 }
 
 .identification-table th[colspan="4"] {
@@ -446,4 +450,57 @@ table td {
     line-height: 1.4;
     padding-top: 22px;
     padding-bottom: 22px;
+}
+
+/* MEJORAR ESTILO EN SELECTS */
+select {
+        width: 100%;
+    padding: 14px 45px 14px 18px; /* MÁS PADDING */
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem; /* TEXTO MÁS GRANDE */
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23374151' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 14px;
+    min-height: 50px; /* MISMA ALTURA QUE INPUTS */
+    line-height: 1.5;
+}
+
+/* ESTILO PARA EL BOTÓN DEL FORMULARIO */
+.submit-button {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin-top: 20px;
+    width: 100%; /* se adapta al contenedor */
+}
+
+.submit-button:hover {
+    background: linear-gradient(135deg, #3740c0 0%, #4b3bd6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4); /* halo azul al enfocarse */
 }

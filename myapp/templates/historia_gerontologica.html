@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historia Clínica</title>
-    <link rel="stylesheet" href="{% static 'CSS/historia_gerontologica.css' %}">
+    <link rel="stylesheet" href="{% static 'css/historia_gerontologica.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
        
     </style>
 </head>
 <body>
+    <form method="post" action="{% url 'historia_gerontologica' %}">
     <div class="container">
         <h1 class="main-tittle" style="text-align: center;">Historia Clínica Gerontológica</h1>
         <div>
@@ -22,71 +23,164 @@
                 </tr>
                 <tr>
                     <td>Nombres y apellidos:</td>
-                    <td colspan="3">
-                        <input type="text" class="form-input" placeholder="Ingrese nombres y apellidos completos">
-                    </td>
+                    <div>
+                        <td colspan="3">
+                            <input type="text" class="form-input" placeholder="Primer nombre" name="primer_nombre">
+                            <input type="text" class="form-input" placeholder="Segundo nombre (Opcional)" name="segundo_nombre">
+                            <input type="text" class="form-input" placeholder="Primer apellido" name="primer_apellido">
+                            <input type="text" class="form-input" placeholder="Segundo apellido" name="segundo_apellido">
+                        </td>
+                    </div>
                 </tr>
                 <tr>
                     <td>Fecha de nacimiento:</td>
                     <td>
                         <div class="date-input-group">
-                            <span class="date-label">Día:</span>
-                            <input type="number" class="small-number-input" placeholder="DD" min="1" max="31">
-                            <span class="date-label">Mes:</span>
-                            <input type="number" class="small-number-input" placeholder="MM" min="1" max="12">
-                            <span class="date-label">Año:</span>
-                            <input type="number" class="small-number-input" placeholder="AAAA" min="1900" max="2024">
+                            <div>
+                                <!-- <span class="date-label">Día:</span> -->
+                                <input type="date" id="fecha_nacimiento" class="form-input" name="fecha_nacimiento">
+                            </div>
+                            <!-- <div>
+                                <span class="date-label">Mes:</span>
+                                <input type="number" class="small-number-input" placeholder="MM" min="1" max="12">
+                            </div>
+                            <div>
+                                <span class="date-label">Año:</span>
+                                <input type="number" class="small-number-input" placeholder="AAAA" min="1900" max="2030">
+                            </div> -->
                         </div>
                     </td>
                     <td>Edad:</td>
                     <td>
-                        <input type="number" class="form-input" placeholder="Edad en años">
+                        <input type="number" class="form-input" placeholder="Edad en años" name="edad_paciente">
                     </td>
                 </tr>
                 <tr>
                     <td>Lugar de nacimiento:</td>
+                    <!-- Solo input sin listado desplegable -->
+                    <!-- <td> 
+                        <input type="text" class="form-input" placeholder="Pais" name="pais_nacimiento">
+                        <input type="text" class="form-input" placeholder="Departamento" name="departamento_nacimiento">
+                        <input type="text" class="form-input" placeholder="Ciudad" name="ciudad_nacimiento">
+                    </td> -->
+
+                    <!-- Listados desplegables de pais, departamento y ciudad -->
+
                     <td>
-                        <input type="text" class="form-input" placeholder="Ciudad, Departamento">
+                        <!-- País (si quieres solo Colombia, puedes dejarlo fijo o deshabilitado) -->
+                        <label for="pais_nacimiento">País:</label><br>
+                        <select id="pais_nacimiento" name="pais_nacimiento" style="width: 100%;">
+                            <option value="Colombia" selected>Colombia</option>
+                        </select>
+                        <br><br>
+
+                        <!-- Departamento -->
+                        <label for="departamento_nacimiento">Departamento:</label><br>
+                        <select id="departamento_nacimiento" name="departamento_nacimiento" style="width: 100%;">
+                            <option value="">Seleccione un departamento</option>
+                        </select>
+                        <br><br>
+
+                        <!-- Ciudad -->
+                        <label for="ciudad_nacimiento">Ciudad:</label><br>
+                        <select id="ciudad_nacimiento" name="ciudad_nacimiento" style="width: 100%;">
+                            <option value="">Seleccione una ciudad</option>
+                        </select>
                     </td>
+                    <script>
+                        const departamentosSelect = document.getElementById("departamento_nacimiento");
+                        const ciudadesSelect = document.getElementById("ciudad_nacimiento");
+
+                        fetch("https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.min.json")
+                            .then(res => res.json())
+                            .then(data => {
+                                // Llenar departamentos
+                                data.forEach(dep => {
+                                    const opt = document.createElement("option");
+                                    opt.value = dep.departamento;
+                                    opt.textContent = dep.departamento;
+                                    departamentosSelect.appendChild(opt);
+                                });
+
+                                // Actualizar ciudades al seleccionar departamento
+                                departamentosSelect.addEventListener("change", function() {
+                                    const departamento = this.value;
+                                    ciudadesSelect.innerHTML = '<option value="">Seleccione una ciudad</option>';
+                                    const dep = data.find(d => d.departamento === departamento);
+                                    if (dep) {
+                                        dep.ciudades.forEach(ciudad => {
+                                            const opt = document.createElement("option");
+                                            opt.value = ciudad;
+                                            opt.textContent = ciudad;
+                                            ciudadesSelect.appendChild(opt);
+                                        });
+                                    }
+                                });
+                            });
+                    </script>
+
                     <td>Género:</td>
                     <td class="gender-options-container">
-                        <div class="gender-radio-group">
+                        <div class="gender-select-group">
+                            <select class="gender-option" name="sexo">
+                                <option value="">Seleccione el genero</option>
+                                <option value="genero_femenino">Femenino</option>
+                                <option value="genero_masculino">Masculino</option>
+                                <option value="otro">otro, cual?</option>
+                            </select>
+                                <div class="other-gender-option">
+                                    <span>Otro:</span>
+                                    <input type="text" class="other-gender-input" placeholder="Especificar">
+                                </div>
+                        </div>
+                        <!-- <div class="gender-radio-group">
                             <label class="gender-option">
                                 <input type="radio" name="genero" value="F"> F
                             </label>
                             <label class="gender-option">
                                 <input type="radio" name="genero" value="M"> M
                             </label>
-                        </div>
-                        <div class="other-gender-option">
+                        </div> -->
+                        <!-- <div class="other-gender-option">
                             <span>Otro:</span>
                             <input type="text" class="other-gender-input" placeholder="Especificar">
-                        </div>
+                        </div>   -->
                     </td>
                 </tr>
                 <tr>
-                    <td>Cédula de ciudadanía:</td>
+                    <td>Documento de identidad:</td>
                     <td>
                         <div class="cedula-group">
                             <div class="cedula-input-group">
-                                <span class="cedula-label">COL:</span>
-                                <input type="text" class="cedula-input" placeholder="Número cédula">
+                                <select class="tipo-documento-select" name="tipo_documento_paciente">
+                                    <option value="">Seleccione el tipo de documento</option>
+                                    <option value="cedula_ciudadania">Cédula de Ciudadanía</option>
+                                    <option value="cedula_extranjeria">Cédula de Extranjería</option>
+                                </select>
                             </div>
                             <div class="cedula-input-group">
-                                <span class="cedula-label">EXT:</span>
-                                <input type="text" class="cedula-input" placeholder="Número extranjero">
-                            </div>
+                                <input type="text" class="form-input" name="numero_documento_paciente" placeholder="Número de documento">
                         </div>
                     </td>
                     <td>Grupo Sanguíneo:</td>
                     <td>
-                        <input type="text" class="form-input" placeholder="Ej: O+, A-, etc.">
+                        <select class="grupo-sanguineo-select" name="grupo_sanguineo">
+                            <option value="">Seleccione el grupo sanguíneo</option>
+                            <option value="a+">A+</option>
+                            <option value="a-">A-</option>
+                            <option value="b+">B+</option>
+                            <option value="b-">B-</option>
+                            <option value="ab+">AB+</option>
+                            <option value="ab-">AB-</option>
+                            <option value="o+">O+</option>
+                            <option value="o-">O-</option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
-                    <td>Lugar de procedencia:</td>
+                    <td>Lugar de Residencia:</td>
                     <td>
-                        <input type="text" class="form-input" placeholder="Ciudad actual de residencia">
+                        <input type="text" class="form-input" placeholder="Ciudad actual de residencia" name="ciudad_residencia">
                     </td>
                     <td>Zona:</td>
                     <td class="zona-options">
@@ -100,19 +194,19 @@
                 </tr>
             </table>
             
-            <div class="section-title">2. PARENTESCO</div>
+            <div class="section-title">2. FAMILIA O ACUDIENTES</div>
                 <table class="parentesco-table">
                     <tr>
                         <td>Nombre de un pariente o acudiente:</td>
                         <td>
-                            <input type="text" class="contact-input" placeholder="Ingrese nombre completo del acudiente">
+                            <input type="text" class="contact-input" placeholder="Ingrese nombre completo del acudiente" name="acudiente">
                         </td>
                     </tr>
                     <tr>
                         <td>Dirección:</td>
                         <td>
                             <div class="direccion-input-group">
-                                <input type="text" class="contact-input" placeholder="Dirección completa de residencia">
+                                <input type="text" class="contact-input" placeholder="Dirección completa de residencia" name="direccion_acudiente">
                             </div>
                         </td>
                     </tr>
@@ -120,7 +214,7 @@
                         <td>Teléfono fijo:</td>
                         <td>
                             <div class="phone-input-group phone-fijo">
-                                <input type="tel" class="contact-input" placeholder="Ej: 601 123 4567">
+                                <input type="tel" class="contact-input" placeholder="Ej: 601 123 4567" name ="telefono_fijo_acudiente">
                             </div>
                         </td>
                     </tr>
@@ -128,7 +222,7 @@
                         <td>Celular:</td>
                         <td>
                             <div class="phone-input-group phone-celular">
-                                <input type="tel" class="contact-input" placeholder="Ej: 300 123 4567">
+                                <input type="tel" class="contact-input" placeholder="Ej: 300 123 4567" name="celular_acudiente">
                             </div>
                         </td>
                     </tr>
@@ -136,7 +230,7 @@
                         <td>Email:</td>
                         <td>
                             <div class="email-input-group">
-                                <input type="email" class="contact-input" placeholder="correo@ejemplo.com">
+                                <input type="email" class="contact-input" placeholder="correo@ejemplo.com" name="email_acudiente">
                             </div>
                         </td>
                     </tr>
@@ -158,6 +252,56 @@
 
             <div class="section-title"> 3. GRADO DE ESCOLARIDAD</div>
             <table>
+                <!-- <tr>
+                    <th colspan="3">Nivel Básico</th>
+                    <th colspan="3">Nivel Técnico y Superior</th>
+                </tr>
+                <tr>
+                    <th>Habilidad</th>
+                    <th>Sí</th>
+                    <th>No</th>
+                    <th>Grado de Estudios</th>
+                    <th colspan="2">Especialidad</th>
+                </tr> -->
+                <tr>
+                        <td>Lee</td>
+                        <td><input type="radio" name="lee" value="si"> Sí</td>
+                        <td><input type="radio" name="lee" value="no"> No</td>
+                        <td>Técnica: ¿En qué?</td>
+                        <td colspan="2"><input type="text"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Escribe</td>
+                        <td><input type="radio" name="escribe" value="si"> Sí</td>
+                        <td><input type="radio" name="escribe" value="no"> No</td>
+                        <td>Tecnología: ¿En qué?</td>
+                        <td colspan="2"><input type="text"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Primaria</td>
+                        <td><input type="radio" name="primaria" value="completa"> Completa</td>
+                        <td><input type="radio" name="primaria" value="incompleta"> Incompleta</td>
+                        <td>Pregrado: ¿En qué?</td>
+                        <td colspan="2"><input type="text"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Secundaria</td>
+                        <td><input type="radio" name="secundaria" value="completa"> Completa</td>
+                        <td><input type="radio" name="secundaria" value="incompleta"> Incompleta</td>
+                        <td>Posgrado: ¿En qué?</td>
+                        <td colspan="2"><input type="text"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="6">Otros estudios:
+                            <input type="text" width="100%">
+                        </td>
+                    </tr>
+            </table>
+            <!-- <table>
                 <tr>
                     <th>Nivel</th>
                     <th>Si</th>
@@ -199,7 +343,7 @@
                     <td>Otros estudios:</td>
                     <td colspan="2"><input type="text" style="width: 100%;"></td>
                 </tr>
-            </table>
+            </table> -->
             <div class="section-title"> 4. DATOS SOCIO ECONOMICOS</div>
             <table>
                 <tr>
@@ -356,18 +500,9 @@
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
-                <td>¿Qué actividades le gusta utilizar el tiempo libre?:</td>
+                <td>¿Realiza actividades en su tiempo libre? ¿Cuales?:</td>
                 <td colspan="4">
-                    <label><input type="checkbox"> Escuchar radio</label>
-                    <label><input type="checkbox"> Juegos de mesa</label>
-                    <label><input type="checkbox"> Ver televisión</label>
-                    <label><input type="checkbox"> Escuchar música</label>
-                    <label><input type="checkbox"> Pasear</label>
-                    <label><input type="checkbox"> Jardinería</label>
-                    <label><input type="checkbox"> Pintura</label>
-                    <label><input type="checkbox"> Capacitación</label>
-                    <label><input type="checkbox"> Caminar</label>
-                    <label><input type="checkbox"> Otros: <input type="text" style="width: 50%;"></label>
+                    <input type="text">
                 </td>
             </tr>
         </table>
@@ -1284,7 +1419,7 @@
             </tr>
         </table>
         <div class="section-title">SEGUIMIENTO Y CONTROL</div>
-        <table>
+        <!-- <table>
             <tr>
                 <th>SEGUIMIENTO Y CONTROL</th>
                 <th>Día</th>
@@ -1333,15 +1468,32 @@
                 <td>Registro profesional N°:</td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
+        </table> -->
+        <table>
+            <tr>
+                <th>SEGUIMIENTO Y CONTROL</th>
+                <th>Fecha</th>
+            </tr>
+            <tr>
+                <td><textarea style="width: 100%; height: 50px;" placeholder="Escriba aquí el seguimiento y control..."></textarea></td>
+                <td><input type="date" style="width: 100%;"></td>
+            </tr>
         </table>
+
+        <table>
+            <tr>
+                <td>Nombre del Gerontólogo:</td>
+                <td><input type="text" style="width: 100%;"></td>
+                <td>Firma del Gerontólogo:</td>
+                <td><input type="text" style="width: 100%;"></td>
+            </tr>
+            <tr>
+                <td>Registro profesional N°:</td>
+                <td><input type="text" style="width: 100%;"></td>
+            </tr>
+        </table>
+        <button type="submit" class="submit-button">Guardar Historia</button>
     </div>
+    </form>
 </body>
 </html>
-
-
-
-
-
-
-
-
