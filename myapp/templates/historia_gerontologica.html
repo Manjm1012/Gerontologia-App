@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <form method="post" action="{% url 'historia_gerontologica' %}">
+<form method="post" action="{% url 'historia_gerontologica' %}">
     <div class="container">
         <h1 class="main-tittle" style="text-align: center;">Historia Clínica Gerontológica</h1>
         <div>
@@ -118,15 +118,15 @@
                                 });
                             });
                     </script>
-
                     <td>Género:</td>
                     <td class="gender-options-container">
                         <div class="gender-select-group">
                             <select class="gender-option" name="sexo">
-                                <option value="">Seleccione el genero</option>
-                                <option value="genero_femenino">Femenino</option>
-                                <option value="genero_masculino">Masculino</option>
-                                <option value="otro">otro, cual?</option>
+                                <option value="">Seleccione el género</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                                <option value="otro">Otro</option>
+                                <option value="prefiero_no_decirlo">Prefiero no decirlo</option>
                             </select>
                                 <div class="other-gender-option">
                                     <span>Otro:</span>
@@ -154,8 +154,17 @@
                             <div class="cedula-input-group">
                                 <select class="tipo-documento-select" name="tipo_documento_paciente">
                                     <option value="">Seleccione el tipo de documento</option>
-                                    <option value="cedula_ciudadania">Cédula de Ciudadanía</option>
-                                    <option value="cedula_extranjeria">Cédula de Extranjería</option>
+                                    <option value="RC">Registro civil</option>
+                                    <option value="TI">Tarjeta de identidad</option>
+                                    <option value="CC">Cédula de ciudadanía</option>
+                                    <option value="TE">Tarjeta de extranjería</option>
+                                    <option value="CE">Cédula de extranjería</option>
+                                    <option value="NIT">Número de Identificación Tributaria(NIT)</option>
+                                    <option value="PP">Pasaporte</option>
+                                    <option value="PEP">Permiso especial de permanencia</option>
+                                    <option value="DIE">Documento de identificación extranjero</option>
+                                    <option value="NUIP">NUIP</option>
+                                    <option value="FOREIGN_NIT">NIT de otro país</option>
                                 </select>
                             </div>
                             <div class="cedula-input-group">
@@ -238,7 +247,7 @@
                         <td>Estado Civil:</td>
                         <td>
                             <select class="estado-civil-select">
-                                <option value="">Seleccione estado civil</option>
+                                <option value="">Seleccione el estado civil</option>
                                 <option value="soltero">Soltero(a)</option>
                                 <option value="casado">Casado(a)</option>
                                 <option value="union_libre">Unión Libre</option>
@@ -344,7 +353,7 @@
                     <td colspan="2"><input type="text" style="width: 100%;"></td>
                 </tr>
             </table> -->
-            <div class="section-title"> 4. DATOS SOCIO ECONOMICOS</div>
+            <div class="section-title"> 4. DATOS SOCIOECONÓMICOS</div>
             <table>
                 <tr>
                     <td>En qué actividad se desempeñó durante su vida laboral:</td>
@@ -361,7 +370,7 @@
                     <td>Aporte familiar</td>
                     <td>Jubilación</td>
                     <td>Renta propia</td>
-                    <td>Otro ¿Cuál?</td>
+                    <td>Otro: ¿Cuál?</td>
                 </tr>
                 <tr>
                     <td><input type="checkbox"> Sí <input type="checkbox"> No</td>
@@ -385,8 +394,8 @@
                     <td></td>
                 </tr>
             </table>
-            <div class="section-title"> Tipo de Familia a la que Pertenece la Persona Mayor</div>
-            <p><strong>Familia nuclear:</strong> Compuesta por madre, padre e hijo(s), y viven bajo el mismo techo.</p>
+          <div class="section-title"> Tipo de Familia a la que Pertenece la Persona Mayor</div>
+             <!-- <p><strong>Familia nuclear:</strong> Compuesta por madre, padre e hijo(s), y viven bajo el mismo techo.</p>
             <p><strong>Familia extensa:</strong> Conformada por una familia nuclear más otros parientes pertenecientes a distintas generaciones, con lazos consanguíneos, comparten techo y funciones.</p>
             <p><strong>Familia ampliada:</strong> Es una familia extensa con otros miembros que no tienen lazos de consanguinidad. Comparten techo y funciones.</p>
             <p><strong>Familia multiespecie:</strong> Una familia multiespecie es aquella que está conformada por seres humanos y animales.</p>
@@ -395,22 +404,57 @@
             <p><strong>Familia monoparental simple:</strong> Un progenitor (madre o padre) y uno o varios hijos.</p>
             <p><strong>Familia monoparental compuesta:</strong> Es una familia monoparental con otros miembros de la familia.</p>
             <p><strong>Familia homoparental:</strong> Familias formadas por una pareja del mismo sexo, criando hijos/as sean biológicos o adoptivos.</p>
-            <p><strong>Otros tipos de convivencia:</strong></p>
+            <p><strong>Otros tipos de convivencia:</strong> Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</p> -->
             <table>
                 <tr>
                     <th>Tipología Familiar:</th>
                     <td>
-                        <label><input type="checkbox"> Familia Nuclear</label><br>
-                        <label><input type="checkbox"> Familia Extensa</label><br>
-                        <label><input type="checkbox"> Familia Ampliada</label><br>
-                        <label><input type="checkbox"> Familia Multiespecie</label><br>
-                        <label><input type="checkbox"> Familia Compuesta</label><br>
-                        <label><input type="checkbox"> Familia Mixta o Reconstituida</label><br>
-                        <label><input type="checkbox"> Familia Monoparental Simple</label><br>
-                        <label><input type="checkbox"> Familia Monoparental Compuesta</label><br>
-                        <label><input type="checkbox"> Familia Homoparental</label><br>
-                        <label><input type="checkbox"> Otro tipo de convivencia: Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</label>
+                        <div style="display: inline-flex; align-items: center; gap: 6px;">
+                            <select class="tipologia_familiar" name="tipologia_familiar">
+                                        <option value="">Seleccione el tipo de familia a la que pertenece</option>
+                                        <option value="FN">Familia Nuclear</option>
+                                        <option value="FE">Familia Extensa</option>
+                                        <option value="FA">Familia Ampliada</option>
+                                        <option value="FME">Familia multieespecie</option>
+                                        <option value="FC">Familia Compuesta</option>
+                                        <option value="FMR">Familia Mixta o Reconstituida</option>
+                                        <option value="FMS">Familia Monoparental Simple</option>
+                                        <option value="FMC">Familia Monoparental Compuesta</option>
+                                        <option value="FH">Familia Homoparental</option>
+                                        <option value="O">Otro tipo de convivencia</option>
+                            </select>
+
+                            
+                        <!-- Ícono para abrir el modal -->
+                        <span onclick="document.getElementById('modalInfo').style.display='block'"
+                            style="cursor: pointer; color: #007bff; font-size: 20px; margin-left: 8px;">
+                        ℹ️
+                        </span>
+
+                        <!-- Modal -->
+                        <div id="modalInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+                        background-color: rgba(0,0,0,0.6); z-index:1000;">
+
+                        <div style="background:#fff; padding:20px; border-radius:8px; width:60%; margin:100px auto; position:relative;">
+                            <h3>Tipos de Familia</h3>
+                            <p><b>Familia nuclear:</b> Compuesta por madre, padre e hijos, bajo el mismo techo.</p>
+                            <p><b>Familia extensa:</b> Incluye una familia nuclear y otros parientes de distintas generaciones.</p>
+                            <p><b>Familia ampliada:</b> Familia extensa con miembros sin lazo de consanguinidad.</p>
+                            <p><b>Familia multiespecie:</b> Conformada por seres humanos y animales.</p>
+                            <p><b>Familia compuesta:</b> La madre o el padre no pertenecían originalmente a la familia nuclear.</p>
+                            <p><b>Familia mixta o reconstituida:</b> Cada padre aporta hijos de relaciones previas.</p>
+                            <p><b>Familia monoparental simple:</b> Un solo progenitor con uno o más hijos.</p>
+                            <p><b>Familia monoparental compuesta:</b> Monoparental con otros familiares.</p>
+                            <p><b>Familia homoparental:</b> Pareja del mismo sexo con hijos biológicos o adoptivos.</p>
+                            <p><b>Otros tipos de convivencia:</b> Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</p>
+
+                            <button onclick="document.getElementById('modalInfo').style.display='none'">Cerrar</button>
+                        </div>
+                        </div>
+
+                        </div>
                         <input type="text" placeholder="Especifique" style="width: 100%; margin-top: 5px;">
+
                     </td>
                 </tr>
             </table>
@@ -422,7 +466,7 @@
                         <label><input type="radio" name="regimen" value="Contributivo"> Contributivo</label>
                         <label><input type="radio" name="regimen" value="Subsidiado"> Subsidiado</label>
                         <label><input type="radio" name="regimen" value="Especiales"> Especiales</label>
-                        <label><input type="radio" name="regimen" value="Sin seguridad"> Sin seguridad</label>
+                        <label><input type="radio" name="regimen" value="Sin seguridad"> Sin seguridad social</label>
                     </td>
                 </tr>
                 <tr>
@@ -446,10 +490,10 @@
                 <td><input type="radio" name="relaciones_familia" value="Malas"></td>
             </tr>
             <tr>
-                <td colspan="6">Si son malas, ¿explique por qué?: <input type="text" style="width: 100%;"></td>
+                <td colspan="6">Si son malas, explique por qué: <input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
-                <td>¿Ha sufrido maltrato?:</td>
+                <td>¿Ha sufrido maltrato?</td>
                 <td>Sí <input type="radio" name="maltrato" value="Sí"></td>
                 <td>No <input type="radio" name="maltrato" value="No"></td>
                 <td>Tipo de maltrato:</td>
@@ -459,28 +503,28 @@
         <div class="section-title">Protección Exequial</div>
         <table>
             <tr>
-                <td>¿Tiene protección exequial?:</td>
+                <td>¿Cuenta con protección exequial?</td>
                 <td>Sí <input type="radio" name="proteccion_exequial" value="Sí"></td>
                 <td>No <input type="radio" name="proteccion_exequial" value="No"></td>
-                <td>¿Cuál?:</td>
+                <td>¿Cuál?</td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
         </table>
         <div class="section-title">Espiritualidad</div>
         <table>
             <tr>
-                <td>¿Pertenece a grupos religiosos?:</td>
+                <td>¿Pertenece a algún grupo religioso?</td>
                 <td>Sí <input type="radio" name="grupos_religiosos" value="Sí"></td>
                 <td>No <input type="radio" name="grupos_religiosos" value="No"></td>
-                <td>¿Cuáles?:</td>
+                <td>¿Cuál?</td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
-                <td>¿Qué religión practica?:</td>
+                <td>¿Qué religión practica?</td>
                 <td colspan="4"><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
-                <td>¿En qué actividades espirituales participa?:</td>
+                <td>¿En qué actividades espirituales participa?</td>
                 <td colspan="4">
                     <label><input type="checkbox"> Misa</label>
                     <label><input type="checkbox"> Culto</label>
@@ -490,10 +534,10 @@
                 </td>
             </tr>
         </table>
-        <div class="section-title"> Hábitos Rutinas</div>
+        <div class="section-title"> Hábitos y Rutinas</div>
         <table>
             <tr>
-                <td>¿Practica alguna actividad física?:</td>
+                <td>¿Practica alguna actividad física?</td>
                 <td>Sí <input type="radio" name="actividad_fisica" value="Sí"></td>
                 <td>No <input type="radio" name="actividad_fisica" value="No"></td>
                 <td>¿Cuál?:</td>
@@ -517,7 +561,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Si es malo, ¿explique por qué?:</td>
+                <td>Si es malo, explique por qué:</td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
         </table>
@@ -717,7 +761,7 @@
                 <td>EPOC</td>
                 <td><input type="checkbox"></td>
                 <td><input type="checkbox"></td>
-                <td>d. Sistema óseo muscular</td>
+                <td>d. Sistema óseo-muscular</td>
                 <td>Artritis</td>
                 <td><input type="checkbox"></td>
                 <td><input type="checkbox"></td>
@@ -939,7 +983,7 @@
             </tr>
             <tr>
                 <td>Piezas incompletas</td>
-                <td>Preguntar a la persona mayor si realizó control de salud bucal en el último año.</td>
+                <td>Preguntar a la persona mayor, si realizó control de salud bucal en el último año.</td>
             </tr>
             <tr>
                 <td>Prótesis</td>
@@ -953,14 +997,14 @@
                 <th>OBSERVACIONES</th>
             </tr>
             <tr>
-                <td>Vértigo-mareo</td>
+                <td>Vértigo / mareo</td>
                 <td rowspan="10"><textarea style="width: 100%; height: 200px;" placeholder="Escriba aquí sus observaciones..."></textarea></td>
             </tr>
             <tr>
                 <td>Delirio</td>
             </tr>
             <tr>
-                <td>Caídas: número de caídas con fracturas en el último año</td>
+                <td>Caídas (número de caídas con fracturas en el último año)</td>
             </tr>
             <tr>
                 <td>Síncope</td>
@@ -1000,14 +1044,14 @@
                 <td>Alimentación</td>
                 <td>Lleva el alimento a la boca desde el plato o equivalente. Se excluye cortar la carne.</td>
                 <td>Necesita ayuda para comer</td>
-                <td>No come en absoluto o requiere alimentación parenteral.</td>
+                <td>No se alimenta en absoluto o requiere alimentación parenteral.</td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
                 <td>Baño</td>
                 <td>Se baña enteramente solo o necesita ayuda para lavar una zona (como la espalda o una extremidad con minusvalía).</td>
                 <td>Necesita ayuda para lavar más de una zona del cuerpo.</td>
-                <td>Ayuda para salir o entrar en la bañera o no se baña solo.</td>
+                <td>Necesita ayuda para entar o salir de la bañera o no se baña solo.</td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
@@ -1025,7 +1069,7 @@
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
-                <td>Uso de sanitario WC</td>
+                <td>Uso de sanitario (WC)</td>
                 <td>Va al WC solo, se arregla la ropa y se asea los órganos excretores.</td>
                 <td>Precisa ayuda para ir al baño.</td>
                 <td>Requiere ayuda total para ir al baño.</td>
@@ -1357,11 +1401,11 @@
             </tr>
         </table>
         <p><strong>Calificación:</strong></p>
-        <p>Se asigna un punto por cada respuesta que coincida con la reflejada en la columna de la derecha, y la suma total se valora como sigue:</p>
+        <p>Se asigna un punto por cada respuesta que coincida con la reflejada en la columna de la derecha, y la suma total se valora de la siguiente manera:</p>
         <ul>
             <li>0-5: Normal.</li>
             <li>6-9: Depresión leve.</li>
-            <li>>10: Depresión establecida.</li>
+            <li>10: Depresión establecida.</li>
         </ul>
         <div class="section-title">DESCRIPCIÓN DE LA VALORACIÓN GERONTOLÓGICA DE LA PERSONA ADULTA MAYOR</div>
         <table>
@@ -1488,12 +1532,13 @@
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
-                <td>Registro profesional N°:</td>
+                <td>Registro profesional N.°:</td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
         </table>
         <button type="submit" class="submit-button">Guardar Historia</button>
     </div>
-    </form>
+  
+</form>
 </body>
 </html>
