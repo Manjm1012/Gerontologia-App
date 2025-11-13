@@ -1,13 +1,18 @@
 .image-container {
     position: relative;
-    width: 100%;  /* Asegura que el contenedor ocupe todo el ancho disponible */
-    display: block;
+    width: 100%;
+    height: 400px; /* ajusta según tu diseño */
+    overflow: hidden;
+    border-radius: 12px; /* opcional, da un efecto más elegante */
 }
 
-.image {
-    width: 100%;  /* Hace que la imagen ocupe todo el ancho del contenedor */
-    height: 500px;  /* Ajusta la altura proporcionalmente */
-    display: block;
+.image-container .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* mantiene proporciones sin distorsionar */
+    object-position: center; /* centra la parte importante */
+    filter: brightness(0.95); /* opcional: mejora el contraste */
+    transition: transform 0.5s ease; /* para animación suave */
 }
 
 .overlay-content {
@@ -16,8 +21,7 @@
     left: 30px;  /* Ajusta la distancia desde el borde izquierdo */
     transform: translateY(-50%);
     color: rgb(0, 0, 0);
-    font-size: 30px;
-    
+    font-size: 30px;    
 }
 
 .text-overlay {
@@ -37,3 +41,6 @@
     padding: 50px 0; /
 }
 
+.image-container:hover .image {
+    transform: scale(1.05); /* efecto de zoom al pasar el mouse */
+}

@@ -25,6 +25,25 @@ h1{
     border: 1px solid #EA7913 !important; /* !important para asegurarnos de que se aplique */
   }
   
+.btn-consulta {
+    background-color: #EA7913;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-consulta:hover {
+    background-color: #cf670e;
+    transform: scale(1.05);
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
 
 
