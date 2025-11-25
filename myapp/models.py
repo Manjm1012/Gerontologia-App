@@ -722,7 +722,7 @@ class ValoracionMental(models.Model):
     lugar_nacimiento = models.CharField(max_length=255, blank=True)
     presidente = models.CharField(max_length=100, blank=True)
     apellido_madre = models.CharField(max_length=100, blank=True)
-    restar_3_en_3 = models.CharField(max_length=100, blank=True)  # O IntegerField si guardas número de errores
+    restar_tres_en_tres = models.CharField(max_length=100, blank=True)  
 
     # Valoración cognitiva
     NIVEL_CHOICES = [

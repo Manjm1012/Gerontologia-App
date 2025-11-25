@@ -311,6 +311,170 @@ def historia_gerontologica(request):
             observaciones_paciente=request.POST.get('observaciones_paciente'),      
         )
         
+        # Guardar Evaluacion Bucal
+        
+        evaluacion_bucal = EvaluacionBucal.objects.create(
+            paciente=paciente,
+            piezas_dentales_completas=request.POST.get('piezas_dentales_completas', '0'),
+            piezas_dentales_incompletas=request.POST.get('piezas_dentales_incompletas', '0'),
+            protesis=request.POST.get('protesis', '0'),
+            observasiones=request.POST.get('observasiones'),
+        )
+        
+        # Guardar Sindromes y Problemas Geriatricos
+        
+        sindromes_geriatricos = SindromesProblemasGriatricos.objects.create(
+            paciente=paciente,
+            vertigo_mareo=request.POST.get('vertigo_mareo', '0'),
+            delirio=request.POST.get('delirio', '0'),
+            caidas=request.POST.get('caidas', '0'),
+            numero_caidas=request.POST.get('numero_caidas'),
+            sincopes=request.POST.get('sincopes', '0'),
+            dolor_cronico=request.POST.get('dolor_cronico', '0'),
+            depravacion_auditiva=request.POST.get('depravacion_auditiva', '0'),
+            depravacion_visual=request.POST.get('depravacion_visual', '0'),
+            insomio=request.POST.get('insomio', '0'),
+            incontinencia_urinaria=request.POST.get('incontinencia_urinaria', '0'),
+            otros_sindromes_problemas=request.POST.get('otros_sindromes_problemas'),
+            observaciones_generales=request.POST.get('observaciones_generales'),
+            observaciones_paciente=request.POST.get('observaciones_paciente'),      
+        )
+        
+        # Guardar Validacion diaria Katz
+        
+        valoracion_diaria_katz = ValoracionVidaDiariaKatz.objects.create(
+            paciente=paciente,
+            alimentacion=request.POST.get('alimentacion'),
+            bano=request.POST.get('bano'),
+            continencia=request.POST.get('continencia'),
+            movilidad=request.POST.get('movilidad'),
+            uso_sanitarios=request.POST.get('uso_sanitarios'),
+            vestido=request.POST.get('vestido'),
+            puntuacion_total=request.POST.get('puntuacion_total'),
+            observaciones=request.POST.get('observaciones'),
+        )
+        
+        # Guardar ayudas ortopedicas
+        
+        ayudas_ortopedicas = AyudasOrtopedicas.objects.create(
+            paciente=paciente,
+            caminador=request.POST.get('caminador', '0'),
+            caminador_observaciones=request.POST.get('caminador_observaciones', ''),
+            muletas=request.POST.get('muletas', '0'),
+            muletas_observaciones=request.POST.get('muletas_observaciones', ''),
+            silla_de_ruedas=request.POST.get('silla_de_ruedas', '0'),
+            silla_de_ruedas_observaciones=request.POST.get('silla_de_ruedas_observaciones', ''),
+            baston=request.POST.get('baston', '0'),
+            baston_observaciones=request.POST.get('baston_observaciones', ''),
+            gafas=request.POST.get('gafas', '0'),
+            gafas_observaciones=request.POST.get('gafas_observaciones', ''),
+            audifonos=request.POST.get('audifonos', '0'),
+            audifonos_observaciones=request.POST.get('audifonos_observaciones', ''),
+            protesis=request.POST.get('protesis', '0'),
+            protesis_observaciones=request.POST.get('protesis_observaciones', ''),
+            otros=request.POST.get('otros', '0'),
+            otros_observaciones=request.POST.get('otros_observaciones', ''),
+        )
+        
+        # Guardar aspectos mentales
+        
+        aspectos_mentales = AspectosMentales.objects.create(
+            paciente=paciente,
+            psicosis=request.POST.get('psicosis', '0'),
+            ansiedad=request.POST.get('ansiedad', '0'),
+            problemas_intergeneracionales=request.POST.get('problemas_intergeneracionales', '0'),
+            duelo=request.POST.get('duelo', '0'),
+            afectivo_bipolar=request.POST.get('afectivo_bipolar', '0'),
+            depresion=request.POST.get('depresion', '0'),
+        )
+        
+        # Guardar Ideas Suicidas
+        
+        ideas_suicidas = IdeasSuicidas.objects.create(
+            paciente=paciente,
+            ideas_suicidas=request.POST.get('ideas_suicidas', '0'),
+            explicacion_ideas_suicidas=request.POST.get('explicacion_ideas_suicidas'),
+        )
+        
+        # Guardar Valoracion mental
+        
+        valoracion_mental = ValoracionMental.objects.create(
+            paciente=paciente,
+            fecha_hoy=request.POST.get('fecha_hoy'),
+            dia_semana=request.POST.get('dia_semana'),
+            lugar_actual=request.POST.get('lugar_actual'),
+            numero_telefono=request.POST.get('numero_telefono'),
+            direccion=request.POST.get('direccion'),
+            edad=request.POST.get('edad'),
+            lugar_nacimiento=request.POST.get('lugar_nacimiento'),
+            apellido_madre=request.POST.get('apellido_madre'),
+            restar_tres_en_tres=request.POST.get('restar_tres_en_tres'),
+            # Valoracion cognitiva
+            nivel_cognitivo=request.POST.get('nivel_cognitivo'),
+            errores_totales=request.POST.get('errores_totales'),
+            observaciones=request.POST.get('observaciones'),
+        )
+        
+        # Guardar escala Yesavage
+        
+        escala_yesavage = EscalaYesavage.objects.create(
+            paciente=paciente,
+            satisfecho_vida=request.POST.get('satisfecho_vida', '0'),
+            satisfecho_vida_valor=request.POST.get('satisfecho_vida_valor', '0'),
+            renunciado_actividades=request.POST.get('renunciado_actividades', '0'),
+            renunciado_actividades_valor=request.POST.get('renunciado_actividades_valor', '0'),
+            vida_vacia=request.POST.get('vida_vacia', '0'),
+            vida_vacia_valor=request.POST.get('vida_vacia_valor', '0'),
+            aburrido=request.POST.get('aburrido', '0'),
+            aburrido_valor=request.POST.get('aburrido_valor', '0'),
+            alegre_optimista=request.POST.get('alegre_optimista', '0'),
+            alegre_optimista_valor=request.POST.get('alegre_optimista_valor', '0'),
+            temor_malo=request.POST.get('temor_malo', '0'),
+            temor_malo_valor=request.POST.get('temor_malo_valor', '0'),
+            feliz=request.POST.get('feliz', '0'),
+            feliz_valor=request.POST.get('feliz_valor', '0'),
+            desamparado=request.POST.get('desamparado', '0'),
+            desamparado_valor=request.POST.get('desamparado_valor', '0'),
+            quedarse_casa=request.POST.get('quedarse_casa', '0'),
+            quedarse_casa_valor=request.POST.get('quedarse_casa_valor', '0'),
+            fallos_memoria=request.POST.get('fallos_memoria', '0'),
+            fallos_memoria_valor=request.POST.get('fallos_memoria_valor', '0'),
+            agradable_vivo=request.POST.get('agradable_vivo', '0'),
+            agradable_vivo_valor=request.POST.get('agradable_vivo_valor', '0'),
+            duro_proyectos=request.POST.get('duro_proyectos', '0'),
+            duro_proyectos_valor=request.POST.get('duro_proyectos_valor', '0'),
+            lleno_energia=request.POST.get('lleno_energia', '0'),
+            lleno_energia_valor=request.POST.get('lleno_energia_valor', '0'),
+            situacion_angustiosa=request.POST.get('situacion_angustiosa', '0'),
+            situacion_angustiosa_valor=request.POST.get('situacion_angustiosa_valor', '0'),
+            economicamente_mejor=request.POST.get('economicamente_mejor', '0'),
+            economicamente_mejor_valor=request.POST.get('economicamente_mejor_valor', '0'),
+        )
+        
+        # Guardar Valoracion gerontologica general
+        
+        valoracion_gerontologica_general = ValoracionGerontologicaGeneral.objects.create(
+            paciente=paciente,
+            social_familiar=request.POST.get('social_familiar'),
+            salud_fisica=request.POST.get('salud_fisica'),
+            medicamentos_actuales=request.POST.get('medicamentos_actuales'),
+            actividades_vida_diaria=request.POST.get('actividades_vida_diaria'),
+            enfermedades_mentales=request.POST.get('enfermedades_mentales'),
+            estado_salud_mental=request.POST.get('estado_salud_mental'),
+            depresion=request.POST.get('depresion'),
+        )
+        
+        # Guardar Seguimiento Gerontologico
+        
+        seguimiento_gerontologico = SeguimientoControlGerontologico.objects.create(
+            paciente=paciente,
+            observaciones_seguimiento=request.POST.get('observaciones_seguimiento'),
+            fecha_seguimiento=request.POST.get('fecha_seguimiento'),
+            nombre_profesional=request.POST.get('nombre_profesional'),
+            firma_profesional=request.POST.get('firma_profesional'),
+            registro_profesional=request.POST.get('registro_profesional'),
+        )
+        
         # Crear HistoriaGerontologica
         historia = HistoriaGerontologica.objects.create(
             fk_identificacion=paciente,
@@ -330,8 +494,16 @@ def historia_gerontologica(request):
             fk_revision_por_sistemas=revision_por_sistemas,
             fk_evaluacion_bucal=evaluacion_bucal,
             fk_sindromes_geriatricos=sindromes_geriatricos,
+            fk_valoracion_diaria_katz=valoracion_diaria_katz,
+            fk_ayudas_ortopedicas=ayudas_ortopedicas,
+            fk_aspectos_mentales=aspectos_mentales,
+            fk_ideas_suicidas=ideas_suicidas,
+            fk_valoracion_mental=valoracion_mental,
+            fk_escala_yesavage=escala_yesavage,
+            fk_valoracion_gerontologica_general=valoracion_gerontologica_general,
+            fk_seguimiento_gerontologico=seguimiento_gerontologico,
             
-            # ⚠️ agregar todos los demás OneToOneField aquí
+            # Seccion solo para campos con relacion OneToOne
         )
 
         # Guardar medicamentos (ManyToManyField)
