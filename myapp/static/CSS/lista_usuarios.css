@@ -1,0 +1,58 @@
+/* Estilos específicos para la página Lista de Usuarios */
+/* Este archivo anula y afina reglas globales aplicadas por historia_gerontologica.css */
+
+.lista-usuarios .actions-cell {
+  width: 110px; /* menos ancho para la columna de acciones */
+  max-width: 110px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+}
+
+.lista-usuarios .action-buttons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.lista-usuarios .submit-button--small {
+  padding: 4px 6px !important;
+  font-size: 0.72rem !important;
+  min-width: 36px;
+  max-width: 72px;
+  height: 36px;
+  line-height: 1;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lista-usuarios .action-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.lista-usuarios .submit-button--small svg { display: inline-block; vertical-align: middle; }
+
+/* ocultar el texto visual si se necesita sólo icono; mantener accesibilidad */
+.lista-usuarios .visually-hidden { position: absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); }
+
+/* Asegurar que otras celdas usen wrapping normal para no dejar la columna de acciones sola */
+.lista-usuarios table td:not(.actions-cell) { white-space: normal; }
+
+/* Si hay overflow en la celda de acciones, centrar y cortar */
+.lista-usuarios .actions-cell .action-buttons { overflow: hidden; }
+
+/* pequeñas mejoras visuales para tooltips (opcional) */
+.lista-usuarios .submit-button--small[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  transform: translateY(-110%);
+  white-space: nowrap;
+}

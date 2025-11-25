@@ -4,8 +4,15 @@ from .models import *
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import re
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import Group
 
 
 #este metodo retorna a la vista principal
@@ -43,11 +50,11 @@ def loginup(request):
             return render(request,'login.html', {
                     'error': 'El usuario o contraseña son incorrectos' #si no coincide el usuario y contraseña, imprime el error y renderiza la vista de login nuevamente  
             })
-        elif user.is_superuser: #si el usuario existe en la base de datos y ademas coincide la contraseña, se redirige al usuario a la pagina de registro usuario
-            login(request, user)
-            return redirect('paciente')
         else:
             login(request, user)
+            # Si es staff o superuser, llevar a panel de administración de usuarios
+            if user.is_active and (user.is_superuser or user.is_staff):
+                return redirect('admin_users')
             return redirect('paciente')
         
     
@@ -441,3 +448,184 @@ def terminos(request):
 def cerrarSesion(request):
     logout(request)
     return redirect('home')
+
+
+# ------------------
+# Admin: CRUD de usuarios
+# ------------------
+
+
+def is_admin_user(user):
+    return user.is_active and (user.is_superuser or user.is_staff)
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_users(request):
+    User = get_user_model()
+    users = User.objects.all().order_by('id')
+    return render(request, 'lista_usuarios.html', {'users': users})
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_user_create(request):
+    User = get_user_model()
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        errors = {}
+        # validate basic form (password matching, etc.) first
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            email = request.POST.get('email', '').strip()
+            first_name = request.POST.get('first_name', '').strip()
+            telefono = request.POST.get('telefono', '').strip()
+
+            # username uniqueness (case-insensitive)
+            if User.objects.filter(username__iexact=username).exists():
+                errors['username'] = 'El nombre de usuario ya existe.'
+
+            # email validation and uniqueness
+            if email:
+                try:
+                    validate_email(email)
+                except ValidationError:
+                    errors['email'] = 'Correo electrónico inválido.'
+                else:
+                    if User.objects.filter(email__iexact=email).exists():
+                        errors['email'] = 'El correo ya está en uso.'
+            else:
+                errors['email'] = 'El correo electrónico es requerido.'
+
+            # first_name required
+            if not first_name:
+                errors['first_name'] = 'El nombre (Nombres) es requerido.'
+
+            # telefono basic format (digits, +, spaces, parentheses, dash)
+            if telefono:
+                if not re.match(r'^[0-9+\-\s()]{6,20}$', telefono):
+                    errors['telefono'] = 'Teléfono con formato inválido.'
+
+            if errors:
+                profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+                return render(request, 'formulario_usuario.html', {'form': form, 'create': True, 'profiles': profiles, 'errors': errors, 'prefill': request.POST})
+
+            # no errors: save user
+            user = form.save(commit=False)
+            user.email = email
+            user.first_name = first_name
+            user.last_name = request.POST.get('last_name', '').strip()
+            user.is_staff = 'is_staff' in request.POST
+            user.is_superuser = 'is_superuser' in request.POST
+            user.save()
+
+            # if telefono provided, try to save in Usuario related model
+            try:
+                if telefono:
+                    uobj = Usuario.objects.get(user=user)
+                    uobj.celular = telefono
+                    uobj.save()
+            except Exception:
+                pass
+
+            profile = request.POST.get('profile')
+            if profile:
+                grp, _ = Group.objects.get_or_create(name=profile)
+                user.groups.clear()
+                user.groups.add(grp)
+            messages.success(request, 'Usuario creado correctamente.')
+            return redirect('admin_users')
+        else:
+            # form invalid (password mismatch etc.)
+            errors = {'form': 'Revise los datos del formulario. Asegure que las contraseñas coincidan.'}
+            profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+            return render(request, 'formulario_usuario.html', {'form': form, 'create': True, 'profiles': profiles, 'errors': errors, 'prefill': request.POST})
+    else:
+        form = UserCreationForm()
+    profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+    return render(request, 'formulario_usuario.html', {'form': form, 'create': True, 'profiles': profiles})
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_user_edit(request, user_id):
+    User = get_user_model()
+    user_obj = get_object_or_404(User, pk=user_id)
+    profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+    if request.method == 'POST':
+        # actualizar username (permitir renombrar)
+        nuevo_username = request.POST.get('username', user_obj.username).strip()
+        if nuevo_username and nuevo_username != user_obj.username:
+            # verificar unicidad
+            if User.objects.filter(username__iexact=nuevo_username).exclude(pk=user_obj.pk).exists():
+                messages.error(request, 'El nombre de usuario ya está en uso. Elija otro.')
+                # volver a renderizar formulario con mensajes
+                profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+                current_group = user_obj.groups.first().name if user_obj.groups.first() else None
+                telefono = ''
+                try:
+                    uobj = Usuario.objects.get(user=user_obj)
+                    telefono = uobj.celular or ''
+                except Exception:
+                    telefono = ''
+                return render(request, 'formulario_usuario.html', {'create': False, 'user_obj': user_obj, 'profiles': profiles, 'current_group': current_group, 'telefono': telefono, 'errors': {'username':'El nombre de usuario ya está en uso.'}})
+        else:
+            nuevo_username = user_obj.username
+
+        # actualizar campos básicos
+        user_obj.username = nuevo_username
+        user_obj.email = request.POST.get('email', user_obj.email)
+        user_obj.first_name = request.POST.get('first_name', user_obj.first_name)
+        user_obj.last_name = request.POST.get('last_name', user_obj.last_name)
+        # telefono (se guarda en el modelo Usuario relacionado, si existe)
+        telefono = request.POST.get('telefono', '').strip()
+        # actualizar flags
+        user_obj.is_staff = 'is_staff' in request.POST
+        user_obj.is_superuser = 'is_superuser' in request.POST
+        # actualizar contraseña si se proporciona
+        nueva_password = request.POST.get('password')
+        if nueva_password:
+            user_obj.set_password(nueva_password)
+        user_obj.save()
+        messages.success(request, 'Usuario actualizado correctamente.')
+        # Guardar telefono en el modelo Usuario relacionado si existe
+        try:
+            uobj = Usuario.objects.get(user=user_obj)
+            if telefono:
+                uobj.celular = telefono
+                uobj.save()
+        except Exception:
+            # si no existe Usuario relacionado, no forzamos la creación porque requiere campos obligatorios
+            pass
+        # asignar grupo
+        profile = request.POST.get('profile')
+        if profile:
+            grp, _ = Group.objects.get_or_create(name=profile)
+            user_obj.groups.clear()
+            user_obj.groups.add(grp)
+        return redirect('admin_users')
+    else:
+        # obtener grupo actual si existe
+        current_group = None
+        g = user_obj.groups.first()
+        if g:
+            current_group = g.name
+    # obtener telefono si existe
+    telefono = ''
+    try:
+        uobj = Usuario.objects.get(user=user_obj)
+        telefono = uobj.celular or ''
+    except Exception:
+        telefono = ''
+    return render(request, 'formulario_usuario.html', {'create': False, 'user_obj': user_obj, 'profiles': profiles, 'current_group': current_group, 'telefono': telefono})
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_user_delete(request, user_id):
+    User = get_user_model()
+    user_obj = get_object_or_404(User, pk=user_id)
+    if request.method == 'POST':
+        user_obj.delete()
+        return redirect('admin_users')
+    return render(request, 'confirmar_borrado_usuario.html', {'user_obj': user_obj})
