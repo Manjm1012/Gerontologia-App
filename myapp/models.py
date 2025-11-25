@@ -71,7 +71,7 @@ class TipoDocumento(models.Model):
 
 class DatosSocioeconomico(models.Model):
     """Registra información económica del usuario."""
-    actividad_desempeñada = models.CharField(max_length=255)
+    actividad_desempenada = models.CharField(max_length=255)
     actividad_actual = models.CharField(max_length=255)
     tipo_ingreso = models.CharField(max_length=255)
     valor_mensual_promedio = models.FloatField()
@@ -216,7 +216,7 @@ class GradoEscolaridad(models.Model):
     
     #Educacion tecnica y superior
     tecnico = models.CharField(max_length=255, blank=True)
-    tecnologo = models.CharField(max_length=255, blank=True)
+    tenologo = models.CharField(max_length=255, blank=True) #Corregir ortografia, verificar vista tambien
     profesional = models.CharField(max_length=255, blank=True)
     maestria = models.CharField(max_length=255, blank=True)
     otros_estudios = models.CharField(max_length=500, blank=True)
@@ -230,9 +230,9 @@ class DatosSocioEconomicosForm(models.Model):
      
     paciente = models.ForeignKey('Identificacion', on_delete=models.CASCADE)
     
-    # Actividad laboral desempeñada
+    # Actividad laboral desempenada
     
-    actividad_desempeñada = models.CharField(max_length=255)
+    actividad_desempenada = models.CharField(max_length=255) #quitar la n
     ocupacion_actual = models.CharField(max_length=255)
     
     # Origen de los ingresos actuales

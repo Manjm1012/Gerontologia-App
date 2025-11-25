@@ -13,6 +13,7 @@
 </head>
 <body>
 <form method="post" action="{% url 'historia_gerontologica' %}">
+    {% csrf_token %}
     <div class="container">
         <h1 class="main-tittle" style="text-align: center;">Historia Clínica Gerontológica</h1>
         <div>
@@ -52,7 +53,7 @@
                     </td>
                     <td>Edad:</td>
                     <td>
-                        <input type="number" class="form-input" placeholder="Edad en años" name="edad_paciente">
+                        <input type="number" class="form-input" placeholder="Edad en años" name="edad">
                     </td>
                 </tr>
                 <tr>
@@ -65,28 +66,35 @@
                     </td> -->
 
                     <!-- Listados desplegables de pais, departamento y ciudad -->
-
-                    <td>
                         <!-- País (si quieres solo Colombia, puedes dejarlo fijo o deshabilitado) -->
-                        <label for="pais_nacimiento">País:</label><br>
-                        <select id="pais_nacimiento" name="pais_nacimiento" style="width: 100%;">
-                            <option value="Colombia" selected>Colombia</option>
-                        </select>
-                        <br><br>
+                        <td>
+                            <div>
+                                <label for="pais_nacimiento">País:</label>
+                                <select id="pais_nacimiento" name="pais_nacimiento">
+                                    <option value="Colombia" selected>Colombia</option>
+                                </select>
+                            </div>
+                        </td>
 
                         <!-- Departamento -->
-                        <label for="departamento_nacimiento">Departamento:</label><br>
-                        <select id="departamento_nacimiento" name="departamento_nacimiento" style="width: 100%;">
-                            <option value="">Seleccione un departamento</option>
-                        </select>
-                        <br><br>
+                        <td>
+                            <div>
+                                <label for="departamento_nacimiento">Departamento:</label>
+                                <select id="departamento_nacimiento" name="departamento_nacimiento">
+                                    <option value="">Seleccione un departamento</option>
+                                </select>
+                            </div>
+                        </td>
 
                         <!-- Ciudad -->
-                        <label for="ciudad_nacimiento">Ciudad:</label><br>
-                        <select id="ciudad_nacimiento" name="ciudad_nacimiento" style="width: 100%;">
-                            <option value="">Seleccione una ciudad</option>
-                        </select>
-                    </td>
+                        <td>
+                            <div>
+                                <label for="ciudad_nacimiento">Ciudad:</label>
+                                <select id="ciudad_nacimiento" name="ciudad_nacimiento">
+                                    <option value="">Seleccione una ciudad</option>
+                                </select>
+                            </div>
+                        </td>
                     <script>
                         const departamentosSelect = document.getElementById("departamento_nacimiento");
                         const ciudadesSelect = document.getElementById("ciudad_nacimiento");
@@ -118,20 +126,26 @@
                                 });
                             });
                     </script>
+                </tr>
+                <tr>
                     <td>Género:</td>
-                    <td class="gender-options-container">
+                    <td> <!--class="gender-options-container" -->
                         <div class="gender-select-group">
-                            <select class="gender-option" name="sexo">
+                            <select name="sexo"> <!-- class="gender-option" -->
                                 <option value="">Seleccione el género</option>
                                 <option value="masculino">Masculino</option>
                                 <option value="femenino">Femenino</option>
                                 <option value="otro">Otro</option>
                                 <option value="prefiero_no_decirlo">Prefiero no decirlo</option>
                             </select>
-                                <div class="other-gender-option">
-                                    <span>Otro:</span>
-                                    <input type="text" class="other-gender-input" placeholder="Especificar">
-                                </div>
+
+                                <td>
+                                    <div class="other-gender-option">
+                                        <span>Otro:</span>
+                                        <input type="text" class="other-gender-input" placeholder="Especificar">
+                                    </div> 
+                                    
+                                </td>
                         </div>
                         <!-- <div class="gender-radio-group">
                             <label class="gender-option">
@@ -146,6 +160,7 @@
                             <input type="text" class="other-gender-input" placeholder="Especificar">
                         </div>   -->
                     </td>
+                
                 </tr>
                 <tr>
                     <td>Documento de identidad:</td>
@@ -167,12 +182,17 @@
                                     <option value="FOREIGN_NIT">NIT de otro país</option>
                                 </select>
                             </div>
-                            <div class="cedula-input-group">
+
+                             <div class="cedula-input-group">
                                 <input type="text" class="form-input" name="numero_documento_paciente" placeholder="Número de documento">
+                            </div>
+                            
                         </div>
+                        <td>Grupo Sanguíneo:
+                        </td>
                     </td>
-                    <td>Grupo Sanguíneo:</td>
                     <td>
+                        <label for="departamento_nacimiento"></label>                   
                         <select class="grupo-sanguineo-select" name="grupo_sanguineo">
                             <option value="">Seleccione el grupo sanguíneo</option>
                             <option value="a+">A+</option>
@@ -191,7 +211,7 @@
                     <td>
                         <input type="text" class="form-input" placeholder="Ciudad actual de residencia" name="ciudad_residencia">
                     </td>
-                    <td>Zona:</td>
+                    <td >Zona:</td>
                     <td class="zona-options">
                         <label class="zona-option">
                             <input type="radio" name="zona" value="Rural"> Rural
@@ -373,11 +393,13 @@
                     <td>Otro: ¿Cuál?</td>
                 </tr>
                 <tr>
-                    <td><input type="checkbox"> Sí <input type="checkbox"> No</td>
-                    <td><input type="checkbox"> Sí <input type="checkbox"> No</td>
-                    <td><input type="checkbox"> Sí <input type="checkbox"> No</td>
+                    <td><input type="radio" name="aporte_familiar" value="si"> Sí <input type="radio" name="aporte_familiar" value="no"> No</td>
+                    <td><input type="radio" name="jubilacion" value="si"> Sí <input type="radio" name="jubilacion" value="no"> No</td>
+                    <td><input type="radio" name="renta_propia" value="si"> Sí <input type="radio" name="renta_propia" value="no"> No</td>
                     <td><input type="text" style="width: 100%;"></td>
                 </tr>
+                       <!-- <td><input type="radio" name="lee" value="si"> Sí</td>
+                        <td><input type="radio" name="lee" value="no"> No</td> -->
                 <tr>
                     <td colspan="4">Valor promedio mensual de los ingresos: <input type="text" style="width: 100%;"></td>
                 </tr>
@@ -432,25 +454,29 @@
                         </span>
 
                         <!-- Modal -->
-                        <div id="modalInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-                        background-color: rgba(0,0,0,0.6); z-index:1000;">
+                            <!-- <div id="modalInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+                            background-color: rgba(0,0,0,0.6); z-index:1000;">
 
-                        <div style="background:#fff; padding:20px; border-radius:8px; width:60%; margin:100px auto; position:relative;">
-                            <h3>Tipos de Familia</h3>
-                            <p><b>Familia nuclear:</b> Compuesta por madre, padre e hijos, bajo el mismo techo.</p>
-                            <p><b>Familia extensa:</b> Incluye una familia nuclear y otros parientes de distintas generaciones.</p>
-                            <p><b>Familia ampliada:</b> Familia extensa con miembros sin lazo de consanguinidad.</p>
-                            <p><b>Familia multiespecie:</b> Conformada por seres humanos y animales.</p>
-                            <p><b>Familia compuesta:</b> La madre o el padre no pertenecían originalmente a la familia nuclear.</p>
-                            <p><b>Familia mixta o reconstituida:</b> Cada padre aporta hijos de relaciones previas.</p>
-                            <p><b>Familia monoparental simple:</b> Un solo progenitor con uno o más hijos.</p>
-                            <p><b>Familia monoparental compuesta:</b> Monoparental con otros familiares.</p>
-                            <p><b>Familia homoparental:</b> Pareja del mismo sexo con hijos biológicos o adoptivos.</p>
-                            <p><b>Otros tipos de convivencia:</b> Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</p>
+                                <div style="background:#fff; padding:20px; border-radius:8px; width:60%; margin:100px auto; position:relative;">
+                                    <h3>Tipos de Familia</h3>
+                                    <p><b>Familia nuclear:</b> Compuesta por madre, padre e hijos, bajo el mismo techo.</p>
+                                    <p><b>Familia extensa:</b> Incluye una familia nuclear y otros parientes de distintas generaciones.</p>
+                                    <p><b>Familia ampliada:</b> Familia extensa con miembros sin lazo de consanguinidad.</p>
+                                    <p><b>Familia multiespecie:</b> Conformada por seres humanos y animales.</p>
+                                    <p><b>Familia compuesta:</b> La madre o el padre no pertenecían originalmente a la familia nuclear.</p>
+                                    <p><b>Familia mixta o reconstituida:</b> Cada padre aporta hijos de relaciones previas.</p>
+                                    <p><b>Familia monoparental simple:</b> Un solo progenitor con uno o más hijos.</p>
+                                    <p><b>Familia monoparental compuesta:</b> Monoparental con otros familiares.</p>
+                                    <p><b>Familia homoparental:</b> Pareja del mismo sexo con hijos biológicos o adoptivos.</p>
+                                    <p><b>Otros tipos de convivencia:</b> Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</p>
 
-                            <button onclick="document.getElementById('modalInfo').style.display='none'">Cerrar</button>
-                        </div>
-                        </div>
+
+                                    <button type="button" onclick="document.getElementById('modalInfo').style.display='none'">
+                                        Cerrar
+                                    </button>
+                                </div>
+                            </div> -->
+                        <!-- Fin Modal -->
 
                         </div>
                         <input type="text" placeholder="Especifique" style="width: 100%; margin-top: 5px;">
@@ -698,6 +724,7 @@
         </table>
 
         <div class="section-title">Revisión por Sistemas</div>
+     <!--  NOTA: Cuestionario con SI y NO de los diferentes sistemas y patolñogías
         <table>
             <tr>
                 <th>SISTEMAS</th>
@@ -712,42 +739,42 @@
             <tr>
                 <td>a. Alteraciones de los órganos de los sentidos</td>
                 <td>Cataratas</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="cataratas" value="Si"></td>
+                <td><input type="radio" name="cataratas" value="No"></td>
                 <td>b. Sistema Cardiovascular</td>
                 <td>Infarto del miocardio</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="infarto_miocardio" value="Si"></td>
+                <td><input type="radio" name="infarto_miocardio" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Ceguera</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="ceguera" value="Si"></td>
+                <td><input type="radio" name="ceguera" value="No"></td>
                 <td></td>
                 <td>HTA</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="hta" value="Si"></td>
+                <td><input type="radio" name="hta" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Glaucoma</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="glaucoma" value="Si"></td>
+                <td><input type="radio" name="glaucoma" value="No"></td>
                 <td></td>
                 <td>Insuficiencia cardíaca</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="insuficiencia_cardiaca" value="Si"></td>
+                <td><input type="radio" name="insuficiencia_cardiaca" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Presbiacusia</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="presbiacusia" value="Si"></td>
+                <td><input type="radio" name="presbiacusia" value="No"></td>
                 <td></td>
                 <td>Arteriosclerosis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="arteriosclerosis" value="Si"></td>
+                <td><input type="radio" name="arteriosclerosis" value="No"></td>
             </tr>
             <tr>
                 <td></td>
@@ -759,42 +786,42 @@
             <tr>
                 <td>c. Sistema respiratorio</td>
                 <td>EPOC</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="epoc" value="Si"></td>
+                <td><input type="radio" name="epoc" value="No"></td>
                 <td>d. Sistema óseo-muscular</td>
                 <td>Artritis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="artritis" value="Si"></td>
+                <td><input type="radio" name="artritis" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Bronquitis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="bronquitis" value="Si"></td>
+                <td><input type="radio" name="bronquitis" value="No"></td>
                 <td></td>
                 <td>Osteoporosis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="osteoporosis" value="Si"></td>
+                <td><input type="radio" name="osteoporosis" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Asma</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="asma" value="Si"></td>
+                <td><input type="radio" name="asma" value="No"></td>
                 <td></td>
                 <td>Osteoartrosis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="osteoartrosis" value="Si"></td>
+                <td><input type="radio" name="osteoartrosis" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Neumonía</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="neumonia" value="Si"></td>
+                <td><input type="radio" name="neumonia" value="No"></td>
                 <td></td>
                 <td>Lumbago</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="lumbago" value="Si"></td>
+                <td><input type="radio" name="lumbago" value="No"></td>
             </tr>
             <tr>
                 <td></td>
@@ -806,52 +833,52 @@
             <tr>
                 <td>e. Sistema urinario</td>
                 <td>Anuria</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="anuria" value="Si"></td>
+                <td><input type="radio" name="anuria" value="No"></td>
                 <td>f. Sistema Nervioso</td>
                 <td>Demencia senil</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="demencia_senil" value="Si"></td>
+                <td><input type="radio" name="demencia_senil" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Cistitis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="cistitis" value="Si"></td>
+                <td><input type="radio" name="cistitis" value="No"></td>
                 <td></td>
                 <td>Alzheimer</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="alzheimer" value="Si"></td>
+                <td><input type="radio" name="alzheimer" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Prostatitis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="prostatitis" value="Si"></td>
+                <td><input type="radio" name="prostatitis" value="No"></td>
                 <td></td>
                 <td>Parkinson</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="parkinson" value="Si"></td>
+                <td><input type="radio" name="parkinson" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Prolapso genital</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="prolapso_genital" value="Si"></td>
+                <td><input type="radio" name="prolapso_genital" value="No"></td>
                 <td></td>
                 <td>Esquizofrenia</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="esquizofrenia" value="Si"></td>
+                <td><input type="radio" name="esquizofrenia" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Incontinencia urinaria</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="incontinencia_urinaria" value="Si"></td>
+                <td><input type="radio" name="incontinencia_urinaria" value="No"></td>
                 <td></td>
                 <td>Epilepsia</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="epilepsia" value="Si"></td>
+                <td><input type="radio" name="epilepsia" value="No"></td>
             </tr>
             <tr>
                 <td></td>
@@ -863,42 +890,42 @@
             <tr>
                 <td>g. Sistema endocrino</td>
                 <td>Diabetes mellitus</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="diabetes_mellitus" value="Si"></td>
+                <td><input type="radio" name="diabetes_mellitus" value="No"></td>
                 <td>h. Sistema tegumentario</td>
                 <td>Prurito</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="prurito" value="Si"></td>
+                <td><input type="radio" name="prurito" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Hipertiroidismo</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="hipertiroidismo" value="Si"></td>
+                <td><input type="radio" name="hipertiroidismo" value="No"></td>
                 <td></td>
                 <td>Urticaria</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="urticaria" value="Si"></td>
+                <td><input type="radio" name="urticaria" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Hipotiroidismo</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="hipotiroidismo" value="Si"></td>
+                <td><input type="radio" name="hipotiroidismo" value="No"></td>
                 <td></td>
                 <td>Verrugas</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="verrugas" value="Si"></td>
+                <td><input type="radio" name="verrugas" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Bocio</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="bocio" value="Si"></td>
+                <td><input type="radio" name="bocio" value="No"></td>
                 <td></td>
                 <td>Quemaduras</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="quemaduras" value="Si"></td>
+                <td><input type="radio" name="quemaduras" value="No"></td>
             </tr>
             <tr>
                 <td></td>
@@ -910,42 +937,140 @@
             <tr>
                 <td>i. Sistema digestivo</td>
                 <td>Gastritis</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="gastritis" value="Si"></td>
+                <td><input type="radio" name="gastritis" value="No"></td>
                 <td>j. Tumores</td>
                 <td>Tejido mamario</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="tejido_mamario" value="Si"></td>
+                <td><input type="radio" name="tejido_mamario" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Diarrea</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="diarrea" value="Si"></td>
+                <td><input type="radio" name="diarrea" value="No"></td>
                 <td></td>
                 <td>Sistema digestivo</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="sistema_digestivo" value="Si"></td>
+                <td><input type="radio" name="sistema_digestivo" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Estreñimiento</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="estrenimiento" value="Si"></td>
+                <td><input type="radio" name="estrenimiento" value="No"></td>
                 <td></td>
                 <td>Sistema urinario</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="sistema_urinario" value="Si"></td>
+                <td><input type="radio" name="sistema_urinario" value="No"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Úlcera duodenal</td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
+                <td><input type="radio" name="ulcera_duodenal" value="Si"></td>
+                <td><input type="radio" name="ulcera_duodenal" value="No"></td>
                 <td></td>
                 <td>Otros ¿Cuáles?</td>
                 <td colspan="3"><input type="text" style="width: 100%;"></td>
             </tr>
+        </table> --> 
+        <table>
+            <tr>
+                <th>Sistemas</th>
+                <th colspan="7">Patologías</th>
+            </tr>
+            <tr>
+                <th>a. Alteraciones de los órganos de los sentidos</th>
+                <td><input type="checkbox">Cataratas</td>
+                <td><input type="checkbox">Ceguera</td>
+                <td><input type="checkbox">Glaucoma</td>
+                <td><input type="checkbox">Presbiacusia</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="2"><input type="text" style="width: 100%;"></td>
+            </tr>
+             <tr>
+                <th>b. Sistema Cardiovascular</th>
+                <td><input type="checkbox">Infarto del miocardio</td>
+                <td><input type="checkbox">HTA</td>
+                <td><input type="checkbox">Insuficiencia cardíaca</td>
+                <td><input type="checkbox">Arteriosclerosis</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="2"><input type="text" style="width: 100%;"></td>
+            </tr>
+            <tr>
+                <th>c. Sistema respiratorio</th>
+                <td><input type="checkbox">EPOC</td>
+                <td><input type="checkbox">Bronquitis</td>
+                <td><input type="checkbox">Asma</td>
+                <td><input type="checkbox">Neumonia</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="2"><input type="text" style="width: 100%;"></td>
+            </tr>
+            <tr>
+                <th>d. Sistema óseo-muscular</th>
+                <td><input type="checkbox">Artritis</td>
+                <td><input type="checkbox">Osteoporosis</td>
+                <td><input type="checkbox">Osteoartrosis</td>
+                <td><input type="checkbox">Lumbago</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="2"><input type="text" style="width: 100%;"></td>
+            </tr>
+             <tr>
+                <th>e. Sistema urinario</th>
+                <td><input type="checkbox">Anuria</td>
+                <td><input type="checkbox">Cistitis</td>
+                <td><input type="checkbox">Prostatitis</td>
+                <td><input type="checkbox">Prolapso Genital</td>
+                <td><input type="checkbox">Incontinencia urinaria</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td><input type="text" style="width: 100%;"></td>
+            </tr>
+             <tr>
+                <th>f. Sistema Nervioso</th>
+                <td><input type="checkbox">Demensia senil</td>
+                <td><input type="checkbox">Alzheimer</td>
+                <td><input type="checkbox">Parkinson</td>
+                <td><input type="checkbox">Esquizofrenia</td>
+                <td><input type="checkbox">Epilepsia</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td><input type="text" style="width: 100%;"></td>
+            </tr>
+            <tr>
+                <th>g. Sistema endocrino</th>
+                <td><input type="checkbox">Diabetes mellitus</td>
+                <td><input type="checkbox">Hipertiroidismo</td>
+                <td><input type="checkbox">Hipotiroidismo</td>
+                <td><input type="checkbox">Bocio</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="2"><input type="text" style="width: 100%;"></td>
+            </tr>
+            <tr>
+                <th>h. Sistema tegumentario</th>
+                <td><input type="checkbox">Prurito</td>
+                <td><input type="checkbox">Urticaria</td>
+                <td><input type="checkbox">Verrugas</td>
+                <td><input type="checkbox">Quemaduras</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="2"><input type="text" style="width: 100%;"></td>
+            </tr>
+            <tr>
+                <th>i. Sistema digestivo</th>
+                <td><input type="checkbox">Gastritis</td>
+                <td><input type="checkbox">Diarrea</td>
+                <td><input type="checkbox">Estreñimiento</td>
+                <td><input type="checkbox">Úlcera duodenal</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="2"><input type="text" style="width: 100%;"></td>
+            </tr>
+            <tr>
+                <th>j. Tumores</th>
+                <td><input type="checkbox">Tejido mamario</td>
+                <td><input type="checkbox">Sistema digestivo</td>
+                <td><input type="checkbox">Sistema urinaria</td>
+                <td><input type="checkbox">Otras ¿Cuáles?</td>
+                <td colspan="3"><input type="text" style="width: 100%;"></td>
+            </tr>
+            
         </table>
         <div class="section-title">Observaciones</div>
         <textarea style="width: 100%; height: 150px;" placeholder="Escriba aquí sus observaciones..."></textarea>
@@ -1158,7 +1283,7 @@
             </tr>
         </table>
         <div class="section-title">4. ASPECTOS PSICOGERONTOLÓGICOS</div>
-        <table>
+       <!-- <table>
             <tr>
                 <th>Enfermedades mentales</th>
                 <th>Sí</th>
@@ -1191,7 +1316,20 @@
                 <td><input type="radio" name="depresion" value="Sí"></td>
                 <td><input type="radio" name="depresion" value="No"></td>
             </tr>
+        </table> -->
+        <table>
+            <tr>
+                <th>Enfermedades mentales</th>
+                <td><input type="checkbox">Psicosis</td>
+                <td><input type="checkbox">Duelo patológico</td>
+                <td><input type="checkbox">Trastorno de ansiedad</td>
+                <td><input type="checkbox">Trastorno Afectivo Bipolar (TAB)</td>
+                <td><input type="checkbox">Problemas Intergeneracionales</td>
+                <td><input type="checkbox">Depresión</td>
+            
+            </tr>
         </table>
+
         <div class="section-title">¿Ha tenido ideas suicidas?</div>
         <table>
             <tr>
@@ -1218,16 +1356,16 @@
                 <td><input type="text" style="width: 100%;"></td>
                 <td rowspan="8">
                     DC: Deterioro Cognitivo<br>
-                    NORMAL<br>
+                    <br>
+                    DC NORMAL<br>
                     <label> <input type="text" style="width: 100%;"></label><br>
                     DC LEVE<br>
                     <label> <input type="text" style="width: 100%;"></label><br>
                     DC MODERADO<br>
                     <label> <input type="text" style="width: 100%;"></label><br>
                     DC SEVERO<br>
-                    <label><input type="text" style="width: 100%;"></label><br>
+                    <label><input type="text" style="width: 100%;"></label><br><br>
                     Nota: Colocar un punto por cada error. A las personas con primaria incompleta y analfabetas restar un punto a la suma total.<br>
-                    DC = Deterioro cognitivo<br>
                     E = errores<br>
                     <strong>No Deterioro Cognitivo:</strong> ≤ 2 E<br>
                     <strong>Deterioro Cognitivo Leve:</strong> 3 a 4 E<br>
@@ -1540,5 +1678,29 @@
     </div>
   
 </form>
+<!-- Modal -->
+<div id="modalInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background-color: rgba(0,0,0,0.6); z-index:1000;">
+
+    <div style="background:#fff; padding:20px; border-radius:8px; width:60%; margin:100px auto; position:relative;">
+        <h3>Tipos de Familia</h3>
+        <p><b>Familia nuclear:</b> Compuesta por madre, padre e hijos, bajo el mismo techo.</p>
+        <p><b>Familia extensa:</b> Incluye una familia nuclear y otros parientes de distintas generaciones.</p>
+        <p><b>Familia ampliada:</b> Familia extensa con miembros sin lazo de consanguinidad.</p>
+        <p><b>Familia multiespecie:</b> Conformada por seres humanos y animales.</p>
+        <p><b>Familia compuesta:</b> La madre o el padre no pertenecían originalmente a la familia nuclear.</p>
+        <p><b>Familia mixta o reconstituida:</b> Cada padre aporta hijos de relaciones previas.</p>
+        <p><b>Familia monoparental simple:</b> Un solo progenitor con uno o más hijos.</p>
+        <p><b>Familia monoparental compuesta:</b> Monoparental con otros familiares.</p>
+        <p><b>Familia homoparental:</b> Pareja del mismo sexo con hijos biológicos o adoptivos.</p>
+        <p><b>Otros tipos de convivencia:</b> Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</p>
+
+
+        <button type="button" onclick="document.getElementById('modalInfo').style.display='none'">
+            Cerrar
+        </button>
+    </div>
+</div>
+<!-- Fin Modal -->
 </body>
 </html>
