@@ -52,9 +52,15 @@ def loginup(request):
             })
         else:
             login(request, user)
-            # Si es staff o superuser, llevar a panel de administración de usuarios
-            if user.is_active and (user.is_superuser or user.is_staff):
-                return redirect('admin_users')
+            # Redirigir según flags:
+            # - superuser -> panel de administración de usuarios (lista_usuarios)
+            # - staff (pero NO superuser) -> historia gerontológica
+            # - resto de usuarios -> paciente
+            if user.is_active:
+                if user.is_superuser:
+                    return redirect('admin_users')
+                elif user.is_staff:
+                    return redirect('paciente')
             return redirect('paciente')
         
     

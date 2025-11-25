@@ -1536,9 +1536,14 @@
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
         </table>
-        <button type="submit" class="submit-button">Guardar Historia</button>
+</div>
+
+        <div style="margin-top: 12px; display:flex; gap:8px; align-items:center;">
+            <a href="{% url 'paciente' %}" class="back-button" style="padding:8px 12px; background:#cccccc; color:#000; border-radius:4px; text-decoration:none;">← Volver</a>
+            <button type="submit" class="submit-button">Guardar Historia</button>
+        </div>
     </div>
-  
+
 </form>
 </body>
 </html>
