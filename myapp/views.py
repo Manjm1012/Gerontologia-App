@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from .models import *
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse, Http404
+from django.conf import settings
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.core.validators import validate_email
@@ -52,15 +53,18 @@ def loginup(request):
             })
         else:
             login(request, user)
-            # Redirigir según flags:
-            # - superuser -> panel de administración de usuarios (lista_usuarios)
-            # - staff (pero NO superuser) -> historia gerontológica
-            # - resto de usuarios -> paciente
+            # Redirigir según el grupo del usuario
             if user.is_active:
-                if user.is_superuser:
+                # Verificar si pertenece al grupo Enfermeria
+                if user.groups.filter(name='Enfermeria').exists():
+                    return redirect('enfermeria')
+                # Si es superusuario, al panel de administración
+                elif user.is_superuser:
                     return redirect('admin_users')
+                # Si es staff, a paciente
                 elif user.is_staff:
                     return redirect('paciente')
+            # Por defecto, a paciente
             return redirect('paciente')
         
     
@@ -626,6 +630,103 @@ def terminos(request):
 def cerrarSesion(request):
     logout(request)
     return redirect('home')
+
+
+@login_required
+def enfermeria(request):
+    """Vista del módulo de enfermería - Dashboard con funcionalidades específicas"""
+    # Verificar si el usuario pertenece al grupo Enfermeria
+    if not request.user.groups.filter(name='Enfermeria').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    
+    # Obtener lista de pacientes (aquí puedes agregar filtros según tus necesidades)
+    pacientes = Identificacion.objects.all()[:10]  # Limitar a 10 pacientes para el ejemplo
+    
+    # Estadísticas de ejemplo (puedes calcularlas dinámicamente)
+    context = {
+        'pacientes': pacientes,
+        'pacientes_atendidos': pacientes.count(),
+        'consultas_pendientes': 5,  # Ejemplo estático, calcula según tu lógica
+        'signos_vitales': 12,  # Ejemplo estático
+        'medicamentos_admin': 8,  # Ejemplo estático
+    }
+    
+    return render(request, 'enfermeria.html', context)
+
+
+@login_required
+def evolucion_enfermeria(request):
+    """Vista para el registro de evolución diaria de enfermería"""
+    from datetime import date
+    from .models import EvolucionDiariaEnfermeria
+    
+    # Verificar si el usuario pertenece al grupo Enfermeria
+    if not request.user.groups.filter(name='Enfermeria').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    
+    if request.method == 'POST':
+        try:
+            # Obtener datos del formulario
+            paciente_id = request.POST.get('paciente_id')
+            paciente = Identificacion.objects.get(id=paciente_id)
+            
+            # Crear registro de evolución
+            evolucion = EvolucionDiariaEnfermeria.objects.create(
+                paciente=paciente,
+                fecha=request.POST.get('fecha'),
+                paso_el_dia=request.POST.get('paso_el_dia'),
+                alimentacion=request.POST.get('alimentacion'),
+                elimina=request.POST.get('elimina'),
+                exonera=request.POST.get('exonera'),
+                medicamentos=request.POST.get('medicamentos'),
+                frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', ''),
+                presion_arterial=request.POST.get('presion_arterial', ''),
+                temperatura=request.POST.get('temperatura', ''),
+                frecuencia_respiratoria=request.POST.get('frecuencia_respiratoria', ''),
+                novedad=request.POST.get('novedad'),
+                observacion=request.POST.get('observacion', ''),
+                nombre_profesional=request.POST.get('nombre_profesional'),
+                identificacion_profesional=request.POST.get('identificacion_profesional'),
+                firma=request.POST.get('firma', ''),
+                usuario_registro=request.user
+            )
+            
+            messages.success(request, 'Registro de evolución guardado exitosamente.')
+            return redirect('evolucion_enfermeria')
+            
+        except Exception as e:
+            messages.error(request, f'Error al guardar el registro: {str(e)}')
+    
+    # Obtener lista de pacientes para el selector
+    pacientes = Identificacion.objects.all().order_by('primer_nombre')
+    
+    # Obtener historial de evoluciones recientes
+    evoluciones = EvolucionDiariaEnfermeria.objects.select_related('paciente').order_by('-fecha', '-fecha_registro')[:20]
+    
+    context = {
+        'pacientes': pacientes,
+        'evoluciones': evoluciones,
+        'today': date.today().isoformat(),
+    }
+    
+    return render(request, 'evolucion_enfermeria.html', context)
+
+
+def descargar_manual_pdf(request):
+    import os
+    pdf_path = os.path.join(settings.BASE_DIR, 'manual_usuario.pdf')
+    if not os.path.exists(pdf_path):
+        # Respuesta amigable en lugar de 404 genérico
+        return HttpResponse(
+            "<h1>Manual PDF no encontrado</h1>"
+            "<p>Genera el archivo ejecutando:</p>"
+            "<pre>python scripts/build_manual_pdf.py --manual manual_usuario.md --images-dir docs/images --output manual_usuario.pdf --skip-missing</pre>"
+            "<p>Luego vuelve a esta URL: <code>/manual.pdf</code></p>",
+            status=404
+        )
+    return FileResponse(open(pdf_path, 'rb'), as_attachment=True, filename='manual_usuario.pdf')
 
 
 # ------------------

@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Enfermería - Gerontología App</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header con información del usuario -->
+        <div class="header-section">
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-user-nurse"></i>
+                    <span>Bienvenido(a), <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'home' %}" class="btn-secondary">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="main-title">MÓDULO DE ENFERMERÍA</h1>
+        <!-- Resumen de estadísticas -->
+        <div class="section-title">RESUMEN DEL DÍA</div>
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon pacientes">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pacientes Atendidos</h3>
+                        <p class="stat-number">{{ pacientes_atendidos|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pendientes">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Consultas Pendientes</h3>
+                        <p class="stat-number">{{ consultas_pendientes|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon signos">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Signos Vitales Tomados</h3>
+                        <p class="stat-number">{{ signos_vitales|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon medicamentos">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Medicamentos Admin.</h3>
+                        <p class="stat-number">{{ medicamentos_admin|default:"0" }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menú de acciones rápidas -->
+        <div class="section-title">ACCIONES RÁPIDAS</div>
+        <section class="actions-section">
+            <div class="actions-grid">
+                <a href="#registro-signos" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Registrar Signos Vitales</h3>
+                    <p>Tomar y registrar signos vitales de pacientes</p>
+                </a>
+
+                <a href="#control-medicamentos" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-prescription-bottle-alt"></i>
+                    </div>
+                    <h3>Control de Medicamentos</h3>
+                    <p>Administrar y registrar medicación</p>
+                </a>
+
+                <a href="{% url 'evolucion_enfermeria' %}" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-notes-medical"></i>
+                    </div>
+                    <h3>Evolución Diaria</h3>
+                    <p>Registrar evolución diaria del paciente</p>
+                </a>
+
+                <a href="#historial-paciente" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-file-medical-alt"></i>
+                    </div>
+                    <h3>Historial de Pacientes</h3>
+                    <p>Consultar historia clínica</p>
+                </a>
+
+                <a href="#citas-programadas" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Citas Programadas</h3>
+                    <p>Ver agenda del día</p>
+                </a>
+
+                <a href="#procedimientos" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-procedures"></i>
+                    </div>
+                    <h3>Procedimientos</h3>
+                    <p>Registro de curaciones y otros procedimientos</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Tabla de pacientes del día -->
+        <div class="section-title">PACIENTES DEL DÍA</div>
+        <section class="patients-section">
+            <div class="table-responsive">
+                <table class="patients-table">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Edad</th>
+                            <th>Última Atención</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if pacientes %}
+                            {% for paciente in pacientes %}
+                            <tr>
+                                <td>{{ paciente.numero_documento_paciente }}</td>
+                                <td>{{ paciente.primer_nombre }} {{ paciente.primer_apellido }}</td>
+                                <td>{{ paciente.edad }} años</td>
+                                <td>{{ paciente.ultima_atencion|default:"N/A" }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ paciente.estado|lower|default:'pendiente' }}">
+                                        {{ paciente.estado|default:"Pendiente" }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action btn-view" title="Ver Historial">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action btn-edit" title="Registrar Atención">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action btn-vitals" title="Signos Vitales">
+                                            <i class="fas fa-heartbeat"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="no-data">
+                                    <i class="fas fa-info-circle"></i>
+                                    No hay pacientes programados para hoy
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Alertas y Recordatorios -->
+        <div class="section-title">ALERTAS Y RECORDATORIOS</div>
+        <section class="alerts-section">
+            <div class="alerts-container">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="alert-content">
+                        <h4>Medicamentos por Administrar</h4>
+                        <p>Hay 3 pacientes pendientes de medicación a las 10:00 AM</p>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="alert-content">
+                        <h4>Recordatorio</h4>
+                        <p>Control de signos vitales cada 4 horas para pacientes en observación</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer-section">
+            <p>&copy; 2025 Gerontología App - Módulo de Enfermería</p>
+            <p>Sistema de Gestión de Atención Gerontológica</p>
+        </footer>
+    </div>
+
+    <script src="{% static 'js/enfermeria.js' %}"></script>
+</body>
+</html>

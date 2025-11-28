@@ -399,7 +399,7 @@ class AspectosFisicosSalud(models.Model):
         ('MALA', 'Mala'), 
     ]
     
-    estado_salud = models.CharField(max_length=11, choices=ESTADO_SALUD_CHOICES)
+    estado_salud = models.CharField(max_length=11, choices=ESTADO_SALUD_CHOICES, default='BUENA')
     explicacion_estado_salud = models.TextField(blank=True)
     
     def __str__(self):
@@ -722,7 +722,7 @@ class ValoracionMental(models.Model):
     lugar_nacimiento = models.CharField(max_length=255, blank=True)
     presidente = models.CharField(max_length=100, blank=True)
     apellido_madre = models.CharField(max_length=100, blank=True)
-    restar_tres_en_tres = models.CharField(max_length=100, blank=True)  
+    restar_tres_en_tres = models.CharField(max_length=100, blank=True)
 
     # Valoración cognitiva
     NIVEL_CHOICES = [
@@ -970,4 +970,73 @@ class HistoriaGerontologica(models.Model):
     
     def __str__(self):
         return f"Historia Gerontológica del Paciente: {self.fk_identificacion}"
+
+
+# ======================================================
+# MODELOS PARA MÓDULO DE ENFERMERÍA
+# ======================================================
+
+class EvolucionDiariaEnfermeria(models.Model):
+    """Modelo para el registro diario de evolución de enfermería para personas mayores"""
+    
+    # Información del Paciente
+    paciente = models.ForeignKey('Identificacion', on_delete=models.CASCADE, related_name='evoluciones_enfermeria')
+    
+    # Fecha del registro
+    fecha = models.DateField()
+    
+    # Estado del día
+    ESTADO_CHOICES = [
+        ('B', 'Bueno'),
+        ('R', 'Regular'),
+        ('M', 'Malo'),
+    ]
+    
+    paso_el_dia = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='B')
+    
+    # Alimentación
+    alimentacion = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='B')
+    
+    # Eliminación (orina)
+    elimina = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='B')
+    
+    # Exoneración (deposición)
+    exonera = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='B')
+    
+    # Medicamentos
+    SI_NO_CHOICES = [
+        ('1', 'Sí'),
+        ('0', 'No'),
+    ]
+    
+    medicamentos = models.CharField(max_length=1, choices=SI_NO_CHOICES, default='1')
+    
+    # Signos Vitales
+    frecuencia_cardiaca = models.CharField(max_length=10, blank=True, null=True, verbose_name='F.C.')
+    presion_arterial = models.CharField(max_length=10, blank=True, null=True, verbose_name='P.A.')
+    temperatura = models.CharField(max_length=10, blank=True, null=True, verbose_name='T')
+    frecuencia_respiratoria = models.CharField(max_length=10, blank=True, null=True, verbose_name='F.R.')
+    
+    # Novedad
+    novedad = models.CharField(max_length=1, choices=SI_NO_CHOICES, default='0')
+    
+    # Observaciones
+    observacion = models.TextField(blank=True, null=True)
+    
+    # Información del profesional que registra
+    nombre_profesional = models.CharField(max_length=255, verbose_name='Nombre de quien atiende')
+    identificacion_profesional = models.CharField(max_length=50, verbose_name='Identificación')
+    firma = models.CharField(max_length=255, blank=True, null=True)
+    
+    # Metadata
+    fecha_registro = models.DateTimeField(auto_now_add=True)
+    usuario_registro = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='evoluciones_registradas')
+    
+    class Meta:
+        ordering = ['-fecha', '-fecha_registro']
+        verbose_name = 'Evolución Diaria de Enfermería'
+        verbose_name_plural = 'Evoluciones Diarias de Enfermería'
+    
+    def __str__(self):
+        return f"Evolución {self.paciente.primer_nombre} {self.paciente.primer_apellido} - {self.fecha}"
     
