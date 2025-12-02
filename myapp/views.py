@@ -1,11 +1,19 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from .models import *
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse, Http404
+from django.conf import settings
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import re
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import Group
 
 
 #este metodo retorna a la vista principal
@@ -43,11 +51,20 @@ def loginup(request):
             return render(request,'login.html', {
                     'error': 'El usuario o contraseña son incorrectos' #si no coincide el usuario y contraseña, imprime el error y renderiza la vista de login nuevamente  
             })
-        elif user.is_superuser: #si el usuario existe en la base de datos y ademas coincide la contraseña, se redirige al usuario a la pagina de registro usuario
-            login(request, user)
-            return redirect('paciente')
         else:
             login(request, user)
+            # Redirigir según el grupo del usuario
+            if user.is_active:
+                # Verificar si pertenece al grupo Enfermeria
+                if user.groups.filter(name='Enfermeria').exists():
+                    return redirect('enfermeria')
+                # Si es superusuario, al panel de administración
+                elif user.is_superuser:
+                    return redirect('admin_users')
+                # Si es staff, a paciente
+                elif user.is_staff:
+                    return redirect('paciente')
+            # Por defecto, a paciente
             return redirect('paciente')
         
     
@@ -304,6 +321,170 @@ def historia_gerontologica(request):
             observaciones_paciente=request.POST.get('observaciones_paciente'),      
         )
         
+        # Guardar Evaluacion Bucal
+        
+        evaluacion_bucal = EvaluacionBucal.objects.create(
+            paciente=paciente,
+            piezas_dentales_completas=request.POST.get('piezas_dentales_completas', '0'),
+            piezas_dentales_incompletas=request.POST.get('piezas_dentales_incompletas', '0'),
+            protesis=request.POST.get('protesis', '0'),
+            observasiones=request.POST.get('observasiones'),
+        )
+        
+        # Guardar Sindromes y Problemas Geriatricos
+        
+        sindromes_geriatricos = SindromesProblemasGriatricos.objects.create(
+            paciente=paciente,
+            vertigo_mareo=request.POST.get('vertigo_mareo', '0'),
+            delirio=request.POST.get('delirio', '0'),
+            caidas=request.POST.get('caidas', '0'),
+            numero_caidas=request.POST.get('numero_caidas'),
+            sincopes=request.POST.get('sincopes', '0'),
+            dolor_cronico=request.POST.get('dolor_cronico', '0'),
+            depravacion_auditiva=request.POST.get('depravacion_auditiva', '0'),
+            depravacion_visual=request.POST.get('depravacion_visual', '0'),
+            insomio=request.POST.get('insomio', '0'),
+            incontinencia_urinaria=request.POST.get('incontinencia_urinaria', '0'),
+            otros_sindromes_problemas=request.POST.get('otros_sindromes_problemas'),
+            observaciones_generales=request.POST.get('observaciones_generales'),
+            observaciones_paciente=request.POST.get('observaciones_paciente'),      
+        )
+        
+        # Guardar Validacion diaria Katz
+        
+        valoracion_diaria_katz = ValoracionVidaDiariaKatz.objects.create(
+            paciente=paciente,
+            alimentacion=request.POST.get('alimentacion'),
+            bano=request.POST.get('bano'),
+            continencia=request.POST.get('continencia'),
+            movilidad=request.POST.get('movilidad'),
+            uso_sanitarios=request.POST.get('uso_sanitarios'),
+            vestido=request.POST.get('vestido'),
+            puntuacion_total=request.POST.get('puntuacion_total'),
+            observaciones=request.POST.get('observaciones'),
+        )
+        
+        # Guardar ayudas ortopedicas
+        
+        ayudas_ortopedicas = AyudasOrtopedicas.objects.create(
+            paciente=paciente,
+            caminador=request.POST.get('caminador', '0'),
+            caminador_observaciones=request.POST.get('caminador_observaciones', ''),
+            muletas=request.POST.get('muletas', '0'),
+            muletas_observaciones=request.POST.get('muletas_observaciones', ''),
+            silla_de_ruedas=request.POST.get('silla_de_ruedas', '0'),
+            silla_de_ruedas_observaciones=request.POST.get('silla_de_ruedas_observaciones', ''),
+            baston=request.POST.get('baston', '0'),
+            baston_observaciones=request.POST.get('baston_observaciones', ''),
+            gafas=request.POST.get('gafas', '0'),
+            gafas_observaciones=request.POST.get('gafas_observaciones', ''),
+            audifonos=request.POST.get('audifonos', '0'),
+            audifonos_observaciones=request.POST.get('audifonos_observaciones', ''),
+            protesis=request.POST.get('protesis', '0'),
+            protesis_observaciones=request.POST.get('protesis_observaciones', ''),
+            otros=request.POST.get('otros', '0'),
+            otros_observaciones=request.POST.get('otros_observaciones', ''),
+        )
+        
+        # Guardar aspectos mentales
+        
+        aspectos_mentales = AspectosMentales.objects.create(
+            paciente=paciente,
+            psicosis=request.POST.get('psicosis', '0'),
+            ansiedad=request.POST.get('ansiedad', '0'),
+            problemas_intergeneracionales=request.POST.get('problemas_intergeneracionales', '0'),
+            duelo=request.POST.get('duelo', '0'),
+            afectivo_bipolar=request.POST.get('afectivo_bipolar', '0'),
+            depresion=request.POST.get('depresion', '0'),
+        )
+        
+        # Guardar Ideas Suicidas
+        
+        ideas_suicidas = IdeasSuicidas.objects.create(
+            paciente=paciente,
+            ideas_suicidas=request.POST.get('ideas_suicidas', '0'),
+            explicacion_ideas_suicidas=request.POST.get('explicacion_ideas_suicidas'),
+        )
+        
+        # Guardar Valoracion mental
+        
+        valoracion_mental = ValoracionMental.objects.create(
+            paciente=paciente,
+            fecha_hoy=request.POST.get('fecha_hoy'),
+            dia_semana=request.POST.get('dia_semana'),
+            lugar_actual=request.POST.get('lugar_actual'),
+            numero_telefono=request.POST.get('numero_telefono'),
+            direccion=request.POST.get('direccion'),
+            edad=request.POST.get('edad'),
+            lugar_nacimiento=request.POST.get('lugar_nacimiento'),
+            apellido_madre=request.POST.get('apellido_madre'),
+            restar_tres_en_tres=request.POST.get('restar_tres_en_tres'),
+            # Valoracion cognitiva
+            nivel_cognitivo=request.POST.get('nivel_cognitivo'),
+            errores_totales=request.POST.get('errores_totales'),
+            observaciones=request.POST.get('observaciones'),
+        )
+        
+        # Guardar escala Yesavage
+        
+        escala_yesavage = EscalaYesavage.objects.create(
+            paciente=paciente,
+            satisfecho_vida=request.POST.get('satisfecho_vida', '0'),
+            satisfecho_vida_valor=request.POST.get('satisfecho_vida_valor', '0'),
+            renunciado_actividades=request.POST.get('renunciado_actividades', '0'),
+            renunciado_actividades_valor=request.POST.get('renunciado_actividades_valor', '0'),
+            vida_vacia=request.POST.get('vida_vacia', '0'),
+            vida_vacia_valor=request.POST.get('vida_vacia_valor', '0'),
+            aburrido=request.POST.get('aburrido', '0'),
+            aburrido_valor=request.POST.get('aburrido_valor', '0'),
+            alegre_optimista=request.POST.get('alegre_optimista', '0'),
+            alegre_optimista_valor=request.POST.get('alegre_optimista_valor', '0'),
+            temor_malo=request.POST.get('temor_malo', '0'),
+            temor_malo_valor=request.POST.get('temor_malo_valor', '0'),
+            feliz=request.POST.get('feliz', '0'),
+            feliz_valor=request.POST.get('feliz_valor', '0'),
+            desamparado=request.POST.get('desamparado', '0'),
+            desamparado_valor=request.POST.get('desamparado_valor', '0'),
+            quedarse_casa=request.POST.get('quedarse_casa', '0'),
+            quedarse_casa_valor=request.POST.get('quedarse_casa_valor', '0'),
+            fallos_memoria=request.POST.get('fallos_memoria', '0'),
+            fallos_memoria_valor=request.POST.get('fallos_memoria_valor', '0'),
+            agradable_vivo=request.POST.get('agradable_vivo', '0'),
+            agradable_vivo_valor=request.POST.get('agradable_vivo_valor', '0'),
+            duro_proyectos=request.POST.get('duro_proyectos', '0'),
+            duro_proyectos_valor=request.POST.get('duro_proyectos_valor', '0'),
+            lleno_energia=request.POST.get('lleno_energia', '0'),
+            lleno_energia_valor=request.POST.get('lleno_energia_valor', '0'),
+            situacion_angustiosa=request.POST.get('situacion_angustiosa', '0'),
+            situacion_angustiosa_valor=request.POST.get('situacion_angustiosa_valor', '0'),
+            economicamente_mejor=request.POST.get('economicamente_mejor', '0'),
+            economicamente_mejor_valor=request.POST.get('economicamente_mejor_valor', '0'),
+        )
+        
+        # Guardar Valoracion gerontologica general
+        
+        valoracion_gerontologica_general = ValoracionGerontologicaGeneral.objects.create(
+            paciente=paciente,
+            social_familiar=request.POST.get('social_familiar'),
+            salud_fisica=request.POST.get('salud_fisica'),
+            medicamentos_actuales=request.POST.get('medicamentos_actuales'),
+            actividades_vida_diaria=request.POST.get('actividades_vida_diaria'),
+            enfermedades_mentales=request.POST.get('enfermedades_mentales'),
+            estado_salud_mental=request.POST.get('estado_salud_mental'),
+            depresion=request.POST.get('depresion'),
+        )
+        
+        # Guardar Seguimiento Gerontologico
+        
+        seguimiento_gerontologico = SeguimientoControlGerontologico.objects.create(
+            paciente=paciente,
+            observaciones_seguimiento=request.POST.get('observaciones_seguimiento'),
+            fecha_seguimiento=request.POST.get('fecha_seguimiento'),
+            nombre_profesional=request.POST.get('nombre_profesional'),
+            firma_profesional=request.POST.get('firma_profesional'),
+            registro_profesional=request.POST.get('registro_profesional'),
+        )
+        
         # Crear HistoriaGerontologica
         historia = HistoriaGerontologica.objects.create(
             fk_identificacion=paciente,
@@ -323,8 +504,16 @@ def historia_gerontologica(request):
             fk_revision_por_sistemas=revision_por_sistemas,
             fk_evaluacion_bucal=evaluacion_bucal,
             fk_sindromes_geriatricos=sindromes_geriatricos,
+            fk_valoracion_diaria_katz=valoracion_diaria_katz,
+            fk_ayudas_ortopedicas=ayudas_ortopedicas,
+            fk_aspectos_mentales=aspectos_mentales,
+            fk_ideas_suicidas=ideas_suicidas,
+            fk_valoracion_mental=valoracion_mental,
+            fk_escala_yesavage=escala_yesavage,
+            fk_valoracion_gerontologica_general=valoracion_gerontologica_general,
+            fk_seguimiento_gerontologico=seguimiento_gerontologico,
             
-            # ⚠️ agregar todos los demás OneToOneField aquí
+            # Seccion solo para campos con relacion OneToOne
         )
 
         # Guardar medicamentos (ManyToManyField)
@@ -441,3 +630,281 @@ def terminos(request):
 def cerrarSesion(request):
     logout(request)
     return redirect('home')
+
+
+@login_required
+def enfermeria(request):
+    """Vista del módulo de enfermería - Dashboard con funcionalidades específicas"""
+    # Verificar si el usuario pertenece al grupo Enfermeria
+    if not request.user.groups.filter(name='Enfermeria').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    
+    # Obtener lista de pacientes (aquí puedes agregar filtros según tus necesidades)
+    pacientes = Identificacion.objects.all()[:10]  # Limitar a 10 pacientes para el ejemplo
+    
+    # Estadísticas de ejemplo (puedes calcularlas dinámicamente)
+    context = {
+        'pacientes': pacientes,
+        'pacientes_atendidos': pacientes.count(),
+        'consultas_pendientes': 5,  # Ejemplo estático, calcula según tu lógica
+        'signos_vitales': 12,  # Ejemplo estático
+        'medicamentos_admin': 8,  # Ejemplo estático
+    }
+    
+    return render(request, 'enfermeria.html', context)
+
+
+@login_required
+def evolucion_enfermeria(request):
+    """Vista para el registro de evolución diaria de enfermería"""
+    from datetime import date
+    from .models import EvolucionDiariaEnfermeria
+    
+    # Verificar si el usuario pertenece al grupo Enfermeria
+    if not request.user.groups.filter(name='Enfermeria').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    
+    if request.method == 'POST':
+        try:
+            # Obtener datos del formulario
+            paciente_id = request.POST.get('paciente_id')
+            paciente = Identificacion.objects.get(id=paciente_id)
+            
+            # Crear registro de evolución
+            evolucion = EvolucionDiariaEnfermeria.objects.create(
+                paciente=paciente,
+                fecha=request.POST.get('fecha'),
+                paso_el_dia=request.POST.get('paso_el_dia'),
+                alimentacion=request.POST.get('alimentacion'),
+                elimina=request.POST.get('elimina'),
+                exonera=request.POST.get('exonera'),
+                medicamentos=request.POST.get('medicamentos'),
+                frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', ''),
+                presion_arterial=request.POST.get('presion_arterial', ''),
+                temperatura=request.POST.get('temperatura', ''),
+                frecuencia_respiratoria=request.POST.get('frecuencia_respiratoria', ''),
+                novedad=request.POST.get('novedad'),
+                observacion=request.POST.get('observacion', ''),
+                nombre_profesional=request.POST.get('nombre_profesional'),
+                identificacion_profesional=request.POST.get('identificacion_profesional'),
+                firma=request.POST.get('firma', ''),
+                usuario_registro=request.user
+            )
+            
+            messages.success(request, 'Registro de evolución guardado exitosamente.')
+            return redirect('evolucion_enfermeria')
+            
+        except Exception as e:
+            messages.error(request, f'Error al guardar el registro: {str(e)}')
+    
+    # Obtener lista de pacientes para el selector
+    pacientes = Identificacion.objects.all().order_by('primer_nombre')
+    
+    # Obtener historial de evoluciones recientes
+    evoluciones = EvolucionDiariaEnfermeria.objects.select_related('paciente').order_by('-fecha', '-fecha_registro')[:20]
+    
+    context = {
+        'pacientes': pacientes,
+        'evoluciones': evoluciones,
+        'today': date.today().isoformat(),
+    }
+    
+    return render(request, 'evolucion_enfermeria.html', context)
+
+
+def descargar_manual_pdf(request):
+    import os
+    pdf_path = os.path.join(settings.BASE_DIR, 'manual_usuario.pdf')
+    if not os.path.exists(pdf_path):
+        # Respuesta amigable en lugar de 404 genérico
+        return HttpResponse(
+            "<h1>Manual PDF no encontrado</h1>"
+            "<p>Genera el archivo ejecutando:</p>"
+            "<pre>python scripts/build_manual_pdf.py --manual manual_usuario.md --images-dir docs/images --output manual_usuario.pdf --skip-missing</pre>"
+            "<p>Luego vuelve a esta URL: <code>/manual.pdf</code></p>",
+            status=404
+        )
+    return FileResponse(open(pdf_path, 'rb'), as_attachment=True, filename='manual_usuario.pdf')
+
+
+# ------------------
+# Admin: CRUD de usuarios
+# ------------------
+
+
+def is_admin_user(user):
+    return user.is_active and (user.is_superuser or user.is_staff)
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_users(request):
+    User = get_user_model()
+    users = User.objects.all().order_by('id')
+    return render(request, 'lista_usuarios.html', {'users': users})
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_user_create(request):
+    User = get_user_model()
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        errors = {}
+        # validate basic form (password matching, etc.) first
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            email = request.POST.get('email', '').strip()
+            first_name = request.POST.get('first_name', '').strip()
+            telefono = request.POST.get('telefono', '').strip()
+
+            # username uniqueness (case-insensitive)
+            if User.objects.filter(username__iexact=username).exists():
+                errors['username'] = 'El nombre de usuario ya existe.'
+
+            # email validation and uniqueness
+            if email:
+                try:
+                    validate_email(email)
+                except ValidationError:
+                    errors['email'] = 'Correo electrónico inválido.'
+                else:
+                    if User.objects.filter(email__iexact=email).exists():
+                        errors['email'] = 'El correo ya está en uso.'
+            else:
+                errors['email'] = 'El correo electrónico es requerido.'
+
+            # first_name required
+            if not first_name:
+                errors['first_name'] = 'El nombre (Nombres) es requerido.'
+
+            # telefono basic format (digits, +, spaces, parentheses, dash)
+            if telefono:
+                if not re.match(r'^[0-9+\-\s()]{6,20}$', telefono):
+                    errors['telefono'] = 'Teléfono con formato inválido.'
+
+            if errors:
+                profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+                return render(request, 'formulario_usuario.html', {'form': form, 'create': True, 'profiles': profiles, 'errors': errors, 'prefill': request.POST})
+
+            # no errors: save user
+            user = form.save(commit=False)
+            user.email = email
+            user.first_name = first_name
+            user.last_name = request.POST.get('last_name', '').strip()
+            user.is_staff = 'is_staff' in request.POST
+            user.is_superuser = 'is_superuser' in request.POST
+            user.save()
+
+            # if telefono provided, try to save in Usuario related model
+            try:
+                if telefono:
+                    uobj = Usuario.objects.get(user=user)
+                    uobj.celular = telefono
+                    uobj.save()
+            except Exception:
+                pass
+
+            profile = request.POST.get('profile')
+            if profile:
+                grp, _ = Group.objects.get_or_create(name=profile)
+                user.groups.clear()
+                user.groups.add(grp)
+            messages.success(request, 'Usuario creado correctamente.')
+            return redirect('admin_users')
+        else:
+            # form invalid (password mismatch etc.)
+            errors = {'form': 'Revise los datos del formulario. Asegure que las contraseñas coincidan.'}
+            profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+            return render(request, 'formulario_usuario.html', {'form': form, 'create': True, 'profiles': profiles, 'errors': errors, 'prefill': request.POST})
+    else:
+        form = UserCreationForm()
+    profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+    return render(request, 'formulario_usuario.html', {'form': form, 'create': True, 'profiles': profiles})
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_user_edit(request, user_id):
+    User = get_user_model()
+    user_obj = get_object_or_404(User, pk=user_id)
+    profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+    if request.method == 'POST':
+        # actualizar username (permitir renombrar)
+        nuevo_username = request.POST.get('username', user_obj.username).strip()
+        if nuevo_username and nuevo_username != user_obj.username:
+            # verificar unicidad
+            if User.objects.filter(username__iexact=nuevo_username).exclude(pk=user_obj.pk).exists():
+                messages.error(request, 'El nombre de usuario ya está en uso. Elija otro.')
+                # volver a renderizar formulario con mensajes
+                profiles = ['Administrativo', 'Doctor', 'Paciente', 'Enfermeria']
+                current_group = user_obj.groups.first().name if user_obj.groups.first() else None
+                telefono = ''
+                try:
+                    uobj = Usuario.objects.get(user=user_obj)
+                    telefono = uobj.celular or ''
+                except Exception:
+                    telefono = ''
+                return render(request, 'formulario_usuario.html', {'create': False, 'user_obj': user_obj, 'profiles': profiles, 'current_group': current_group, 'telefono': telefono, 'errors': {'username':'El nombre de usuario ya está en uso.'}})
+        else:
+            nuevo_username = user_obj.username
+
+        # actualizar campos básicos
+        user_obj.username = nuevo_username
+        user_obj.email = request.POST.get('email', user_obj.email)
+        user_obj.first_name = request.POST.get('first_name', user_obj.first_name)
+        user_obj.last_name = request.POST.get('last_name', user_obj.last_name)
+        # telefono (se guarda en el modelo Usuario relacionado, si existe)
+        telefono = request.POST.get('telefono', '').strip()
+        # actualizar flags
+        user_obj.is_staff = 'is_staff' in request.POST
+        user_obj.is_superuser = 'is_superuser' in request.POST
+        # actualizar contraseña si se proporciona
+        nueva_password = request.POST.get('password')
+        if nueva_password:
+            user_obj.set_password(nueva_password)
+        user_obj.save()
+        messages.success(request, 'Usuario actualizado correctamente.')
+        # Guardar telefono en el modelo Usuario relacionado si existe
+        try:
+            uobj = Usuario.objects.get(user=user_obj)
+            if telefono:
+                uobj.celular = telefono
+                uobj.save()
+        except Exception:
+            # si no existe Usuario relacionado, no forzamos la creación porque requiere campos obligatorios
+            pass
+        # asignar grupo
+        profile = request.POST.get('profile')
+        if profile:
+            grp, _ = Group.objects.get_or_create(name=profile)
+            user_obj.groups.clear()
+            user_obj.groups.add(grp)
+        return redirect('admin_users')
+    else:
+        # obtener grupo actual si existe
+        current_group = None
+        g = user_obj.groups.first()
+        if g:
+            current_group = g.name
+    # obtener telefono si existe
+    telefono = ''
+    try:
+        uobj = Usuario.objects.get(user=user_obj)
+        telefono = uobj.celular or ''
+    except Exception:
+        telefono = ''
+    return render(request, 'formulario_usuario.html', {'create': False, 'user_obj': user_obj, 'profiles': profiles, 'current_group': current_group, 'telefono': telefono})
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_user_delete(request, user_id):
+    User = get_user_model()
+    user_obj = get_object_or_404(User, pk=user_id)
+    if request.method == 'POST':
+        user_obj.delete()
+        return redirect('admin_users')
+    return render(request, 'confirmar_borrado_usuario.html', {'user_obj': user_obj})

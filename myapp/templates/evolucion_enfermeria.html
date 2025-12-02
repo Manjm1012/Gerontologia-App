@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolución Diaria de Enfermería - Personas Mayores</title>
+    <link rel="stylesheet" href="{% static 'CSS/historia_gerontologica.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/evolucion_enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header con información del usuario -->
+        <div class="header-section">
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-user-nurse"></i>
+                    <span>Enfermero(a): <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'enfermeria' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="main-title">EVOLUCIÓN DIARIA DE ENFERMERÍA PERSONAS MAYORES</h1>
+
+        <form method="post" action="{% url 'evolucion_enfermeria' %}">
+            {% csrf_token %}
+
+            <!-- Información del Paciente -->
+            <div class="section-title">INFORMACIÓN DEL PACIENTE</div>
+            <table class="identification-table">
+                <tr>
+                    <td style="width: 20%;">Nombre:</td>
+                    <td style="width: 30%;">
+                        <select name="paciente_id" class="form-input" required id="paciente_select">
+                            <option value="">Seleccione un paciente</option>
+                            {% for paciente in pacientes %}
+                            <option value="{{ paciente.id }}" 
+                                    data-edad="{{ paciente.edad }}"
+                                    data-diagnostico="">
+                                {{ paciente.primer_nombre }} {{ paciente.segundo_nombre }} {{ paciente.primer_apellido }} {{ paciente.segundo_apellido }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="width: 15%;">Edad:</td>
+                    <td style="width: 10%;">
+                        <input type="number" class="form-input" id="edad_display" readonly>
+                    </td>
+                    <td style="width: 15%;">Diagnóstico:</td>
+                    <td style="width: 10%;">
+                        <input type="text" name="diagnostico" class="form-input" placeholder="Diagnóstico">
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Tabla de Evolución Diaria -->
+            <div class="section-title">REGISTRO DIARIO</div>
+            
+            <div class="evolution-table-container">
+                <table class="evolution-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Fecha<br>D-M-A</th>
+                            <th rowspan="2">Pasó el Día<br>B-R-M</th>
+                            <th rowspan="2">Alimentación<br>B-R-M</th>
+                            <th rowspan="2">Elimina<br>B-R-M</th>
+                            <th rowspan="2">Exonera<br>B-R-M</th>
+                            <th rowspan="2">Medicamentos<br>SI-NO</th>
+                            <th colspan="4">Signos Vitales</th>
+                            <th rowspan="2">Novedad<br>SI-NO</th>
+                            <th rowspan="2">Observación</th>
+                            <th rowspan="2">Nombre de quien<br>atiende a la<br>persona mayor</th>
+                            <th rowspan="2">Identificación</th>
+                            <th rowspan="2">Firma</th>
+                        </tr>
+                        <tr>
+                            <th>F.C.</th>
+                            <th>P.A.</th>
+                            <th>T</th>
+                            <th>F.R.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evolution-tbody">
+                        <tr class="evolution-row">
+                            <td>
+                                <input type="date" name="fecha" class="form-input-small" required value="{{ today }}">
+                            </td>
+                            <td>
+                                <select name="paso_el_dia" class="form-select-small" required>
+                                    <option value="B">B</option>
+                                    <option value="R">R</option>
+                                    <option value="M">M</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="alimentacion" class="form-select-small" required>
+                                    <option value="B">B</option>
+                                    <option value="R">R</option>
+                                    <option value="M">M</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="elimina" class="form-select-small" required>
+                                    <option value="B">B</option>
+                                    <option value="R">R</option>
+                                    <option value="M">M</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="exonera" class="form-select-small" required>
+                                    <option value="B">B</option>
+                                    <option value="R">R</option>
+                                    <option value="M">M</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="medicamentos" class="form-select-small" required>
+                                    <option value="1">Sí</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="frecuencia_cardiaca" class="form-input-small" placeholder="FC">
+                            </td>
+                            <td>
+                                <input type="text" name="presion_arterial" class="form-input-small" placeholder="PA">
+                            </td>
+                            <td>
+                                <input type="text" name="temperatura" class="form-input-small" placeholder="T°">
+                            </td>
+                            <td>
+                                <input type="text" name="frecuencia_respiratoria" class="form-input-small" placeholder="FR">
+                            </td>
+                            <td>
+                                <select name="novedad" class="form-select-small" required>
+                                    <option value="0">No</option>
+                                    <option value="1">Sí</option>
+                                </select>
+                            </td>
+                            <td>
+                                <textarea name="observacion" class="form-textarea-small" rows="2" placeholder="Observaciones"></textarea>
+                            </td>
+                            <td>
+                                <input type="text" name="nombre_profesional" class="form-input-small" 
+                                       value="{{ user.first_name }} {{ user.last_name }}" required>
+                            </td>
+                            <td>
+                                <input type="text" name="identificacion_profesional" class="form-input-small" required>
+                            </td>
+                            <td>
+                                <input type="text" name="firma" class="form-input-small" placeholder="Firma">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Guardar Registro
+                </button>
+                <button type="button" class="btn-add-row" onclick="addRow()">
+                    <i class="fas fa-plus"></i> Agregar Fila
+                </button>
+                <a href="{% url 'enfermeria' %}" class="btn-cancel">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </form>
+
+        <!-- Historial de Evoluciones -->
+        {% if evoluciones %}
+        <div class="section-title">HISTORIAL DE EVOLUCIONES</div>
+        <div class="table-responsive">
+            <table class="patients-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Paciente</th>
+                        <th>Estado del Día</th>
+                        <th>Signos Vitales</th>
+                        <th>Novedad</th>
+                        <th>Profesional</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evolucion in evoluciones %}
+                    <tr>
+                        <td>{{ evolucion.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ evolucion.paciente.primer_nombre }} {{ evolucion.paciente.primer_apellido }}</td>
+                        <td>
+                            <span class="badge badge-{{ evolucion.paso_el_dia|lower }}">
+                                {% if evolucion.paso_el_dia == 'B' %}Bueno
+                                {% elif evolucion.paso_el_dia == 'R' %}Regular
+                                {% else %}Malo{% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            FC: {{ evolucion.frecuencia_cardiaca|default:"--" }}<br>
+                            PA: {{ evolucion.presion_arterial|default:"--" }}
+                        </td>
+                        <td>
+                            {% if evolucion.novedad == '1' %}
+                            <span class="badge badge-warning">Sí</span>
+                            {% else %}
+                            <span class="badge badge-success">No</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ evolucion.nombre_profesional }}</td>
+                        <td>
+                            <button class="btn-action btn-view" title="Ver Detalles" onclick="verDetalle({{ evolucion.id }})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Footer -->
+        <footer class="footer-section">
+            <p>&copy; 2025 Gerontología App - Módulo de Enfermería</p>
+            <p>Evolución Diaria de Personas Mayores</p>
+        </footer>
+    </div>
+
+    <script>
+        // Actualizar edad cuando se selecciona un paciente
+        document.getElementById('paciente_select').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const edad = selectedOption.getAttribute('data-edad');
+            document.getElementById('edad_display').value = edad || '';
+        });
+
+        // Función para agregar más filas de registro
+        function addRow() {
+            const tbody = document.getElementById('evolution-tbody');
+            const row = tbody.rows[0].cloneNode(true);
+            
+            // Limpiar valores de la nueva fila
+            const inputs = row.querySelectorAll('input[type="text"], textarea');
+            inputs.forEach(input => {
+                if (input.name !== 'nombre_profesional') {
+                    input.value = '';
+                }
+            });
+            
+            tbody.appendChild(row);
+        }
+
+        // Función para ver detalles (puedes expandir esto)
+        function verDetalle(id) {
+            alert('Funcionalidad de detalle en desarrollo. ID: ' + id);
+        }
+    </script>
+</body>
+</html>

@@ -504,3 +504,139 @@ select {
     outline: none;
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4); /* halo azul al enfocarse */
 }
+
+/* Botones de acción compactos para listas/tablas */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.action-btn--update {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3740c0 100%);
+}
+
+.action-btn--edit {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.action-btn--delete {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Variante más compacta para tablas pequeñas */
+.action-btn--small {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    border-radius: 7px;
+}
+
+/* Variante pequeña del botón principal (coherente con submit-button) */
+.submit-button--small {
+    display: inline-block;
+    width: auto; /* override width:100% */
+    padding: 3px 6px;
+    font-size: 0.78rem; /* aún más pequeño */
+    font-weight: 500;
+    line-height: 1;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    white-space: nowrap;
+    max-width: 76px; /* reducir ancho máximo para que quepan en la celda */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+/* Variantes de color para submit-button pequeñas */
+.submit-button--update {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3740c0 100%);
+}
+.submit-button--edit {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+.submit-button--delete {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+/* Variante secundaria (gris) para botones que no son primarios */
+.submit-button--secondary {
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+}
+
+/* ensure action buttons container doesn't force table expansion */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    /* ensure buttons don't push table width: allow them to shrink */
+    min-width: 0;
+}
+
+/* allow links inside action-buttons to shrink and not force column width */
+.action-buttons a {
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+/* specific rules for the actions cell to keep table layout stable */
+.actions-cell {
+    width: 140px; /* fixed column width for actions */
+    max-width: 140px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* allow other table cells to wrap content normally */
+table td:not(.actions-cell) {
+    white-space: normal;
+}
+
+/* Icon inside action buttons */
+.action-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap; /* added line */
+}
+
+/* make table cells allow content to wrap/clip nicely */
+table td {
+    word-break: break-word;
+    white-space: nowrap; /* keep buttons in one line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
