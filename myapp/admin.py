@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Usuario, EvolucionDiariaEnfermeria, Identificacion
+from .models import Usuario, EvolucionDiariaEnfermeria, Identificacion,ConsultaMedica,EnunciadoMedico
+
 
 # Register your models here.
 # Este metodo permite acceder a las tablas desde el panel de administración de Django.
@@ -21,3 +22,32 @@ class EvolucionDiariaEnfermeriaAdmin(admin.ModelAdmin):
 # Registro del modelo Identificacion si no está registrado
 if not admin.site.is_registered(Identificacion):
     admin.site.register(Identificacion) 
+
+    
+# ============================
+# Consulta médica (módulo del médico)
+# ============================
+
+@admin.register(ConsultaMedica)
+class ConsultaMedicaAdmin(admin.ModelAdmin):
+    list_display = ['fecha', 'paciente', 'medico']
+    list_filter = ['fecha', 'medico']
+    search_fields = [
+        'paciente__primer_nombre',
+        'paciente__primer_apellido',
+        'motivo_consulta',
+        'diagnostico',
+    ]
+
+
+# ============================
+# Enunciados del médico
+# ============================
+
+@admin.register(EnunciadoMedico)
+class EnunciadoMedicoAdmin(admin.ModelAdmin):
+    list_display = ['medico', 'fecha_registro']
+    list_filter = ['fecha_registro', 'medico']
+    search_fields = ['medico__first_name', 'medico__last_name', 'texto']
+
+

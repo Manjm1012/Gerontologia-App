@@ -10,6 +10,8 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
+
 # ======================================================
 # 🌎 MODELOS GEOGRÁFICOS
 # ======================================================
@@ -1039,4 +1041,78 @@ class EvolucionDiariaEnfermeria(models.Model):
     
     def __str__(self):
         return f"Evolución {self.paciente.primer_nombre} {self.paciente.primer_apellido} - {self.fecha}"
+    
+# ======================================================
+# MODELO PARA MÓDULO DEL MÉDICO
+# ======================================================
+
+from django.conf import settings  # si no está ya importado arriba, déjalo
+
+class ConsultaMedica(models.Model):
+    """
+    Modelo para guardar una CONSULTA MÉDICA realizada por el médico
+    a una persona mayor.
+    """
+
+    # Paciente al que se le hace la consulta (usa el modelo Identificacion)
+    paciente = models.ForeignKey(
+        Identificacion,
+        on_delete=models.CASCADE,
+        related_name='consultas_medicas'
+    )
+
+    # Fecha en la que se hace la consulta
+    fecha = models.DateField()
+
+    # Motivo de consulta (¿por qué vino el paciente?)
+    motivo_consulta = models.TextField()
+
+    # Diagnóstico médico (opcional al inicio)
+    diagnostico = models.TextField(blank=True)
+
+    # Plan de manejo (tratamiento, indicaciones, etc.)
+    plan_manejo = models.TextField(blank=True)
+
+    # Observaciones adicionales
+    observaciones = models.TextField(blank=True)
+
+    # Usuario que registra la consulta (Médico)
+    medico = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name='consultas_realizadas'
+    )
+
+    # Fecha y hora en que se guardó el registro
+    fecha_registro = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha', '-fecha_registro']
+        verbose_name = 'Consulta Médica'
+        verbose_name_plural = 'Consultas Médicas'
+
+    def __str__(self):
+        return f"Consulta {self.paciente.primer_nombre} {self.paciente.primer_apellido} - {self.fecha}" 
+    
+# ======================================================
+# ENUNCIADO - NOTAS GENERALES DEL MÉDICO
+# ======================================================
+
+class EnunciadoMedico(models.Model):
+    medico = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name='enunciados'
+    )
+    texto = models.TextField()
+    fecha_registro = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha_registro']
+        verbose_name = 'Enunciado Médico'
+        verbose_name_plural = 'Enunciados del Médico'
+
+    def __str__(self):
+        return f'Enunciado de {self.medico.first_name} - {self.fecha_registro.strftime("%Y-%m-%d")}'
+
     

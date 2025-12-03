@@ -14,6 +14,11 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
+from .models import Identificacion, ConsultaMedica
+
+
+
+
 
 
 #este metodo retorna a la vista principal
@@ -908,3 +913,122 @@ def admin_user_delete(request, user_id):
         user_obj.delete()
         return redirect('admin_users')
     return render(request, 'confirmar_borrado_usuario.html', {'user_obj': user_obj})
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Identificacion, ConsultaMedica, EnunciadoMedico
+from django.contrib.auth.decorators import login_required
+
+#from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Identificacion, ConsultaMedica, EnunciadoMedico
+from django.contrib.auth.decorators import login_required
+
+# ==========================
+# MÓDULO DEL MÉDICO
+# ==========================
+@login_required
+def medico(request):
+    """
+    Vista del MÓDULO DEL MÉDICO.
+
+    Aquí el médico puede:
+    - Ver la lista de pacientes (Identificacion).
+    - Registrar una CONSULTA MÉDICA para un paciente.
+    - Registrar un ENUNCIADO (nota general u observación propia).
+    """
+
+    # 1️ Traer la lista de pacientes para mostrar en un <select>
+    pacientes = Identificacion.objects.all().order_by('primer_nombre')
+
+    # 2️ Si el formulario fue enviado (método POST)
+    if request.method == 'POST':
+        # Este campo oculto nos dirá QUÉ formulario se envió:
+        # "consulta"  -> formulario de consulta médica
+        # "enunciado" -> formulario de enunciado del médico
+        tipo_form = request.POST.get('tipo_form')
+
+        # =======================
+        #  FORMULARIO CONSULTA
+        # =======================
+        if tipo_form == 'consulta':
+            return redirect('medico_consulta_nueva')  # Redirige a la vista para registrar la consulta
+
+        # =======================
+        #  FORMULARIO ENUNCIADO
+        # =======================
+        elif tipo_form == 'enunciado':
+            return redirect('medico_enunciado_nuevo')  # Redirige a la vista para registrar el enunciado
+
+    # 3️ Consultas recientes del médico logueado
+    consultas = ConsultaMedica.objects.filter(medico=request.user).select_related('paciente').order_by('-fecha')[:10]
+
+    # 4️ Enunciados recientes del médico logueado
+    enunciados = EnunciadoMedico.objects.filter(medico=request.user).order_by('-fecha_registro')[:5]
+
+    # 5️ Contexto para la plantilla
+    context = {
+        'pacientes': pacientes,
+        'consultas': consultas,
+        'enunciados': enunciados,
+    }
+
+    # 6️ Renderizar la vista medico.html
+    return render(request, 'medico.html', context)
+
+
+# =======================
+# VISTA PARA REGISTRAR CONSULTA MÉDICA
+# =======================
+@login_required
+def medico_consulta_nueva(request):        
+    """
+    Vista para registrar una nueva consulta médica para un paciente.
+    """
+    if request.method == 'POST':
+        try:
+            paciente_id = request.POST.get('paciente_id')
+            paciente = Identificacion.objects.get(id=paciente_id)
+
+            # Crear la consulta médica
+            ConsultaMedica.objects.create(
+                paciente=paciente,
+                fecha=request.POST.get('fecha'),
+                motivo_consulta=request.POST.get('motivo_consulta'),
+                diagnostico=request.POST.get('diagnostico', ''),
+                plan_manejo=request.POST.get('plan_manejo', ''),
+                observaciones=request.POST.get('observaciones', ''),
+                medico=request.user  # El usuario logueado
+            )
+            messages.success(request, 'Consulta médica registrada correctamente.')
+        except Exception as e:
+            messages.error(request, f'Error al guardar la consulta: {str(e)}')
+
+    # Redirigir al módulo médico después de guardar la consulta
+    return redirect('medico')  # Asegúrate de que el nombre de la URL sea correcto
+
+
+# =======================
+# VISTA PARA REGISTRAR ENUNCIADO
+# =======================
+@login_required
+def medico_enunciado_nuevo(request):
+    """
+    Vista para registrar un nuevo enunciado o nota del médico.
+    """
+    if request.method == 'POST':
+        try:
+            texto = request.POST.get('texto')
+            if texto and texto.strip():
+                EnunciadoMedico.objects.create(
+                    medico=request.user,
+                    texto=texto.strip()
+                )
+                messages.success(request, 'Enunciado guardado correctamente.')
+            else:
+                messages.error(request, 'El enunciado no puede estar vacío.')
+        except Exception as e:
+            messages.error(request, f'Error al guardar el enunciado: {str(e)}')
+
+    # Redirigir al módulo médico después de guardar el enunciado
+    return redirect('medico')  # Redirige al módulo del médico después de guardar el enunciado

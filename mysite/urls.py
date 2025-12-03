@@ -44,10 +44,19 @@ urlpatterns = [
     path('manual.pdf', views.descargar_manual_pdf, name='manual_pdf'),
     path('enfermeria/', views.enfermeria, name='enfermeria'),
     path('enfermeria/evolucion/', views.evolucion_enfermeria, name='evolucion_enfermeria'),
+    path('medico/', views.medico, name='medico'),
+    path('medico/consulta-nueva/', views.medico_consulta_nueva, name='medico_consulta_nueva'),  
+     path('medico/enunciado-nuevo/', views.medico_enunciado_nuevo, name='medico_enunciado_nuevo'),  
+]
+
+   
+
+
+
     
     
     
     
   
     
-    ]
+    

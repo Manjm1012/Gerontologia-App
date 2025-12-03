@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'django_extensions',
     
     
     
@@ -82,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Gerontologia',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '123456789A',
         'HOST': 'localhost',
         'PORT': '3306'
     }
