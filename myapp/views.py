@@ -127,7 +127,7 @@ def historia_gerontologica(request):
         # Guardar DatosSocioEconomicosForm
         socio = DatosSocioEconomicosForm.objects.create(
             paciente=paciente,
-            actividad_desempeñada=request.POST.get('actividad_desempeñada'),
+            actividad_desempenada=request.POST.get('actividad_desempenada'),
             ocupacion_actual=request.POST.get('ocupacion_actual'),
             aporte_familiar=request.POST.get('aporte_familiar', '1'),
             jubilacion=request.POST.get('jubilacion', '1'),
