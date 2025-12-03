@@ -35,6 +35,9 @@ urlpatterns = [
     path('somos/', views.somos, name='somos'),
     path('terminos/', views.terminos, name='terminos'),
     path('logout/', views.cerrarSesion, name='logout'),
+    path('manual.pdf', views.descargar_manual_pdf, name='manual_pdf'),
+    path('enfermeria/', views.enfermeria, name='enfermeria'),
+    path('enfermeria/evolucion/', views.evolucion_enfermeria, name='evolucion_enfermeria'),
     
     
     
