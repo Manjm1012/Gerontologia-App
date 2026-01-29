@@ -1,0 +1,67 @@
+CREATE TABLE pacientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_documento VARCHAR(20) NOT NULL,
+    numero_documento VARCHAR(30) UNIQUE NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    sexo ENUM('Femenino','Masculino','Otro') NOT NULL,
+    telefono VARCHAR(20),
+    direccion VARCHAR(150),
+    estado BOOLEAN DEFAULT TRUE,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE paciente_enfermeria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT NOT NULL,
+    presion_arterial VARCHAR(20),
+    frecuencia_cardiaca INT,
+    temperatura DECIMAL(4,2),
+    observacion TEXT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (fk_paciente) REFERENCES pacientes(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+INSERT INTO pacientes (
+    tipo_documento,
+    numero_documento,
+    nombre,
+    apellido,
+    fecha_nacimiento,
+    sexo,
+    telefono,
+    direccion
+) VALUES
+('CC','1023456789','María','López','1958-03-12','Femenino','3001234567','Medellín'),
+('CC','987654321','Carlos','Ramírez','1950-07-22','Masculino','3109876543','Envigado');
+
+INSERT INTO paciente_enfermeria (
+    fk_paciente,
+    presion_arterial,
+    frecuencia_cardiaca,
+    temperatura,
+    observacion
+) VALUES
+(1,'120/80',72,36.5,'Paciente estable, orientada y sin dolor'),
+(2,'130/85',78,36.8,'Paciente con leve hipertensión controlada');
+
+SELECT * FROM pacientes;
+
+-- Ver datos de enfermería
+SELECT * FROM paciente_enfermeria;
+
+-- Consulta completa paciente + enfermería
+SELECT 
+    p.nombre,
+    p.apellido,
+    p.numero_documento,
+    e.presion_arterial,
+    e.frecuencia_cardiaca,
+    e.temperatura,
+    e.observacion,
+    e.fecha_registro
+FROM pacientes p
+JOIN paciente_enfermeria e ON p.id = e.fk_paciente;
