@@ -1,0 +1,228 @@
+ MANUAL TÉCNICO DE TABLAS
+Sistema de Información de Gerontología
+ TABLA: personas
+ Descripción
+
+Tabla central del sistema. Almacena la información básica de identificación y contacto de cada persona adulta mayor registrada.
+Todas las tablas secundarias se relacionan con esta mediante clave foránea.
+
+ Estructura
+CREATE TABLE personas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(80),
+    primer_apellido VARCHAR(255),
+    segundo_apellido VARCHAR(255),
+    celular VARCHAR(15),
+    telefono VARCHAR(15),
+    correo VARCHAR(120),
+    ciudad VARCHAR(80),
+    direccion VARCHAR(180),
+    sexo VARCHAR(10),
+    fecha_nacimiento DATE,
+    fk_usuario INT,
+    fk_rol INT
+);
+
+ Claves
+
+PK: id
+
+FK: fk_usuario → usuario(id)
+
+FK: fk_rol → rol(id)
+
+ TABLA: rol
+Descripción
+
+Define el rol que cumple la persona dentro del sistema (adulto mayor, profesional de salud, cuidador, administrador).
+
+CREATE TABLE rol (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_rol VARCHAR(50),
+    tipo_profesional VARCHAR(50),
+    rol VARCHAR(45)
+);
+
+ TABLA: documento
+ Descripción
+
+Almacena los datos de identificación oficial de los usuarios del sistema.
+
+CREATE TABLE documento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_documento VARCHAR(50),
+    numero_documento VARCHAR(50),
+    descripcion VARCHAR(255)
+);
+
+TABLA: usuario
+ Descripción
+
+Contiene los datos de los usuarios que acceden al sistema.
+
+CREATE TABLE usuario (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(50),
+    correo VARCHAR(120),
+    fk_documento INT,
+    FOREIGN KEY (fk_documento) REFERENCES documento(id)
+);
+
+ TABLA: login
+ Descripción
+
+Gestiona las credenciales de autenticación del sistema.
+
+CREATE TABLE login (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    password VARCHAR(255),
+    fk_usuario INT,
+    FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
+);
+
+ TABLA: datos_socioeconomicos
+ Descripción
+
+Registra información socioeconómica del adulto mayor.
+
+CREATE TABLE datos_socioeconomicos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    actividad_desempenada VARCHAR(80),
+    actividad_actual VARCHAR(80),
+    tipo_ingreso VARCHAR(80),
+    vlr_mes_promedio DECIMAL(10,2),
+    clasif_ingresos VARCHAR(150),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: grado_escolaridad
+ Descripción
+
+Almacena el nivel educativo alcanzado por la persona.
+
+CREATE TABLE grado_escolaridad (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    lee TINYINT(1),
+    escribe TINYINT(1),
+    primaria VARCHAR(80),
+    primaria_terminada TINYINT(1),
+    secundaria VARCHAR(80),
+    secundaria_terminada TINYINT(1),
+    tecnico VARCHAR(80),
+    nombre_tecnico VARCHAR(150),
+    tecnologia VARCHAR(80),
+    nombre_tecnologia VARCHAR(120),
+    pregrado TINYINT(1),
+    nombre_pregrado VARCHAR(120),
+    otros_estudios VARCHAR(150),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: medicamentos
+ Descripción
+
+Registra medicamentos, dosis, frecuencia y alergias.
+
+CREATE TABLE medicamentos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(80),
+    dosis VARCHAR(50),
+    frecuencia VARCHAR(50),
+    alergia TINYINT(1),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: antecedentes_toxicos
+ Descripción
+
+Registra antecedentes de consumo de sustancias.
+
+CREATE TABLE antecedentes_toxicos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    sustancia VARCHAR(80),
+    frecuencia VARCHAR(50),
+    inicio_edad INT,
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: espiritualidades
+ Descripción
+
+Contiene información sobre creencias y prácticas espirituales.
+
+CREATE TABLE espiritualidades (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tendencia VARCHAR(80),
+    practica VARCHAR(80),
+    observaciones VARCHAR(150),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: seguridad_social
+ Descripción
+
+Información sobre afiliación a salud y protección social.
+
+CREATE TABLE seguridad_social (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_regimen VARCHAR(50),
+    eps VARCHAR(80),
+    ips_atencion VARCHAR(80),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: tipo_familias
+CREATE TABLE tipo_familias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_familia VARCHAR(50),
+    descripcion VARCHAR(150),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: relacion_familia
+CREATE TABLE relacion_familia (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_relacion VARCHAR(50),
+    descripcion VARCHAR(150),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: adversidades
+CREATE TABLE adversidades (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_adversidad VARCHAR(80),
+    descripcion VARCHAR(150),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: aspecto_fisico
+CREATE TABLE aspecto_fisico (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    descripcion VARCHAR(150),
+    observaciones VARCHAR(150),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ TABLA: tipo_proteccion
+CREATE TABLE tipo_proteccion (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    proteccion VARCHAR(50),
+    nombre VARCHAR(80),
+    fk_persona INT,
+    FOREIGN KEY (fk_persona) REFERENCES personas(id)
+);
+
+ CONCLUSIÓN TÉCNICA
+
+La base de datos está normalizada y estructurada con una entidad central (personas), permitiendo una gestión integral del adulto mayor 
+desde múltiples dimensiones: social, médica, familiar, educativa y económica, garantizando integridad referencial y escalabilidad del sistema.
