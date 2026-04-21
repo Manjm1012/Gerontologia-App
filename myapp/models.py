@@ -1117,7 +1117,7 @@ class EnunciadoMedico(models.Model):
     def __str__(self):
         return f'Enunciado de {self.medico.first_name} - {self.fecha_registro.strftime("%Y-%m-%d")}'
 
-    
+   
 # ======================================================
 # modelos para modulo de historial geriatoco y pdf
 # ======================================================
