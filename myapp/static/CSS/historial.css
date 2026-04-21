@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../img/fondo.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+/* Título principal */
+h1 {
+    text-align: center;
+    color: #1f5f8b;
+    margin-bottom: 25px;
+}
+
+/* Formulario de búsqueda */
+form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[name="cc"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 250px;
+    font-size: 15px;
+}
+
+button {
+    background-color: #2c7a4b;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #256f42;
+}
+
+/* Línea divisoria */
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 25px 0;
+}
+
+/* Tarjetas de pacientes */
+.patient-card {
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.patient-card h3 {
+    color: #1f5f8b;
+    margin-bottom: 8px;
+}
+
+.patient-card p {
+    margin: 5px 0;
+    font-size: 15px;
+}
+
+/* Botones de acción */
+.actions {
+    margin-top: 10px;
+}
+
+.actions a {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 8px;
+    transition: all 0.3s ease;
+}
+
+.actions a.ver {
+    background-color: #2c7a4b;
+    color: white;
+}
+
+.actions a.ver:hover {
+    background-color: #256f42;
+}
+
+.actions a.pdf {
+    background-color: #EA7913;
+    color: white;
+}
+
+.actions a.pdf:hover {
+    background-color: #d16910;
+}
+
+/* Modo impresión */
+@media print {
+    button, a {
+        display: none;
+    }
+    body {
+        background: white;
+    }
+}
