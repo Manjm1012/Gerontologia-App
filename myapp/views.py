@@ -28,7 +28,7 @@ from django.template.loader import render_to_string
 
 
 #======================================================
-# historial geriatico y pdf.
+# historial geriatico y pdf
 #======================================================
 
 from django.shortcuts import render, get_object_or_404
