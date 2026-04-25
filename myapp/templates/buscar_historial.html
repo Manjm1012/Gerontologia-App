@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 {% load static %}
 
-<title>buscar Historial Geriátrico</title>
+<title>Buscar Historial Geriátrico</title>
 
 <link rel="stylesheet" href="{% static 'css/historial.css' %}">
 
@@ -12,8 +12,8 @@
 
 <body>
 
-<div class="container">
-    <h1>buscar historial geriátrico</h1>
+<div class="container"> 
+    <h1>Buscar historial</h1>
 
     <form method="POST">
         {% csrf_token %}
@@ -23,15 +23,33 @@
 
     <hr>
 
-    {% for h in historias %}
-    <div class="patient-card">
-        <h3>{{ h.fk_identificacion.nombre }} (CC: {{ h.fk_identificacion.cc }})</h3><p>Edad: {{ h.fk_identificacion.edad }}</p>
-        <div class="actions">
-            <a href="/historia/{{ h.id }}" class="ver">Ver historia</a>
-            <a href="/pdf/{{ h.id }}" class="pdf">PDF</a>
+    <div class="resultados-historial">
+    {% for h in historias %} #se itera sobre las historias clínicas encontradas y se muestra la información relevante de cada paciente en una tarjeta. 
+    <div class="paciente-card">
+
+        <div class="card-header">
+            <strong>Nombre:</strong>
         </div>
+
+        <div class="card-body">
+            <a href="/historia/{{ h.id }}" class="nombre-link">
+                {{ h.fk_identificacion.nombre }}
+            </a>
+
+            <p><strong>Cédula:</strong> {{ h.fk_identificacion.cc }}</p>
+            <p><strong>Edad:</strong> {{ h.fk_identificacion.edad }} años</p>
+        </div>
+
+        <div class="card-actions">
+            <a href="/historia/{{ h.id }}" class="btn-ver">Ver historia</a>
+            <a href="/pdf/{{ h.id }}" class="btn-pdf">PDF</a>
+        </div>
+
     </div>
+    {% empty %}
+    <p class="sin-resultados">No se encontraron historias clínicas.</p> #si no se encuentran historias clínicas, se muestra un mensaje indicando que no hay resultados.
     {% endfor %}
+</div>
 </div>
 
 </body>
