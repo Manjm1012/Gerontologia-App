@@ -1,0 +1,5 @@
+PALABRA BUSCADA | ARCHIVO | QUÉ ENCONTRÉ
+Paciente | /home/runner/work/Gerontologia-App/Gerontologia-App/myapp/models.py | No existe class Paciente; el modelo relacionado vigente es class Usuario.
+Medicamento | /home/runner/work/Gerontologia-App/Gerontologia-App/myapp/models.py | No existe class Medicamento ni class Medicamentos en models.py actual.
+Kardex | /home/runner/work/Gerontologia-App/Gerontologia-App/myapp y /home/runner/work/Gerontologia-App/Gerontologia-App/mysite | No aparece la palabra "Kardex" en el código revisado.
+Historia | /home/runner/work/Gerontologia-App/Gerontologia-App/myapp/views.py | La función def historia_gerontologica(request) carga la vista historia_gerontologica.html.
