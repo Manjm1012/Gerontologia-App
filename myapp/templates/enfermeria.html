@@ -38,7 +38,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>Pacientes Atendidos</h3>
+                        <h3>Usuarios Atendidos</h3>
                         <p class="stat-number">{{ pacientes_atendidos|default:"0" }}</p>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                         <i class="fas fa-heartbeat"></i>
                     </div>
                     <h3>Registrar Signos Vitales</h3>
-                    <p>Tomar y registrar signos vitales de pacientes</p>
+                    <p>Tomar y registrar signos vitales de usuarios</p>
                 </a>
 
                 <a href="#control-medicamentos" class="action-card">
@@ -142,7 +142,7 @@
                         <i class="fas fa-prescription-bottle-alt"></i>
                     </div>
                     <h3>Control de Medicamentos</h3>
-                    <p>Administrar y registrar medicación</p>
+                    <p>Administrar y registrar medicación de usuarios</p>
                 </a>
 
                 <a href="{% url 'evolucion_enfermeria' %}" class="action-card">
@@ -150,14 +150,14 @@
                         <i class="fas fa-notes-medical"></i>
                     </div>
                     <h3>Evolución Diaria</h3>
-                    <p>Registrar evolución diaria del paciente</p>
+                    <p>Registrar evolución diaria de los usuarios</p>
                 </a>
 
                 <a href="{% url 'buscar_historial' %}" class="action-card">
                     <div class="action-icon">
                         <i class="fas fa-file-medical-alt"></i>
                     </div>
-                    <h3>Historial de Pacientes</h3>
+                    <h3>Historial de Usuarios</h3>
                     <p>Consultar historia clínica</p>
                 </a>
 
@@ -179,8 +179,8 @@
             </div>
         </section>
 
-        <!-- Tabla de pacientes del día -->
-        <div class="section-title">PACIENTES DEL DÍA</div>
+        <!-- Tabla de usuarios del día -->
+        <div class="section-title">USUARIOS DEL DÍA</div>
         <section class="patients-section">
             <div class="table-responsive">
                 <table class="patients-table">
@@ -226,7 +226,7 @@
                             <tr>
                                 <td colspan="6" class="no-data">
                                     <i class="fas fa-info-circle"></i>
-                                    No hay pacientes programados para hoy
+                                    No hay usuarios programados para hoy
                                 </td>
                             </tr>
                         {% endif %}
@@ -243,14 +243,14 @@
                     <i class="fas fa-exclamation-triangle"></i>
                     <div class="alert-content">
                         <h4>Medicamentos por Administrar</h4>
-                        <p>Hay 3 pacientes pendientes de medicación a las 10:00 AM</p>
+                        <p>Hay 3 usuarios pendientes de medicación a las 10:00 AM</p>
                     </div>
                 </div>
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle"></i>
                     <div class="alert-content">
                         <h4>Recordatorio</h4>
-                        <p>Control de signos vitales cada 4 horas para pacientes en observación</p>
+                        <p>Control de signos vitales cada 4 horas para usuarios en observación</p>
                     </div>
                 </div>
             </div>
