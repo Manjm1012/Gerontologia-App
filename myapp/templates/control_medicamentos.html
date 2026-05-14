@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Medicamentos - Enfermeria</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/control_medicamentos.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-user-nurse"></i>
+                    <span>Enfermero(a): <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'enfermeria' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesion
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA NUEVA: control_medicamentos.html
+             Creada para separar la funcionalidad de medicamentos del módulo de
+             Historia Clínica Gerontológica. Accesible desde la tarjeta
+             "Control de Medicamentos" en enfermeria.html.
+             Vista en views.py: control_medicamentos()
+             URL: /enfermeria/medicamentos/ (name='control_medicamentos') -->
+        <h1 class="main-title">CONTROL DE MEDICAMENTOS</h1>
+        <div class="section-title">BUSCAR MEDICAMENTOS O RECETAR</div>
+
+        {% if messages %}
+        <!-- Mensajes de éxito o error que devuelve la vista tras guardar o validar -->
+        <div class="messages">
+            {% for message in messages %}
+            <div class="msg {% if message.tags == 'success' %}msg-success{% else %}msg-error{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- SECCIÓN DE DOS COLUMNAS: búsqueda (GET) a la izquierda, receta (POST) a la derecha.
+             En móvil se apilan en columna única gracias al media query @media (max-width:900px). -->
+        <div class="med-grid">
+
+            <!-- BLOQUE BUSCAR: envía GET con ?q=nombre&paciente_id=id
+                 Filtra medicamentos en la tabla inferior sin recargar el formulario de receta.
+                 Modelo consultado: Medicamentos (myapp/models.py) -->
+            <section class="med-card">
+                <h3><i class="fas fa-search"></i> Buscar Medicamentos</h3>
+                <form method="get">
+                    <div class="form-row">
+                        <label for="q">Nombre del medicamento</label>
+                        <input type="text" id="q" name="q" value="{{ query }}" placeholder="Ej: Losartan">
+                    </div>
+                    <div class="form-row">
+                        <label for="paciente_id_buscar">Usuario</label>
+                        <select id="paciente_id_buscar" name="paciente_id">
+                            <option value="">Todos</option>
+                            {% for paciente in pacientes %}
+                            <option value="{{ paciente.id }}" {% if paciente_id_filtro == paciente.id|stringformat:'s' %}selected{% endif %}>
+                                {{ paciente.primer_nombre }} {{ paciente.primer_apellido }} - {{ paciente.numero_documento_paciente }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-filter"></i> Buscar</button>
+                    <a href="{% url 'control_medicamentos' %}" class="btn-secondary-light">Limpiar</a>
+                </form>
+            </section>
+
+            <!-- BLOQUE RECETAR: envía POST a la misma URL.
+                 Campos requeridos: paciente_id, nombre_medicamento, dosis.
+                 Empleado encargado es informativo.
+                 Observaciones es opcional.
+                  La vista valida y guarda el medicamento en base de datos, luego redirige con mensaje. -->
+            <section class="med-card">
+                <h3><i class="fas fa-prescription-bottle-alt"></i> Recetar Manualmente</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <label for="paciente_id">Usuario</label>
+                        <select id="paciente_id" name="paciente_id" required>
+                            <option value="">Seleccione usuario</option>
+                            {% for paciente in pacientes %}
+                            <option value="{{ paciente.id }}">
+                                {{ paciente.primer_nombre }} {{ paciente.primer_apellido }} - {{ paciente.numero_documento_paciente }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Campo agregado solo para registrar visualmente el empleado encargado.
+                         No modifica el guardado actual ni la estructura del formulario. -->
+                    <div class="form-row">
+                        <label for="empleado_encargado">Empleado encargado</label>
+                        <input type="text" id="empleado_encargado" name="empleado_encargado" placeholder="Nombre del empleado encargado">
+                    </div>
+                    <div class="form-row">
+                        <label for="nombre_medicamento">Nombre del medicamento</label>
+                        <input type="text" id="nombre_medicamento" name="nombre_medicamento" required>
+                    </div>
+                    <div class="form-row">
+                        <label for="dosis">Dosis</label>
+                        <input type="text" id="dosis" name="dosis" required placeholder="Ej: 1 tableta cada 12 horas">
+                    </div>
+                    <div class="form-row">
+                        <label for="observaciones">Observaciones</label>
+                        <textarea id="observaciones" name="observaciones" rows="3" placeholder="Indicaciones adicionales"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Guardar Receta</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- TABLA DE RESULTADOS: muestra hasta 100 medicamentos.
+             Se filtra dinámicamente con los parámetros GET de la sección de búsqueda.
+             Columnas: Usuario, Medicamento, Dosis, Observaciones.
+             Datos provienen del modelo Medicamentos (myapp/models.py línea 412).
+             Para revertir toda esta vista, eliminar:
+               - este archivo HTML
+               - la función control_medicamentos() en views.py
+               - la ruta 'enfermeria/medicamentos/' en urls.py -->
+        <div class="table-wrap">
+            <table class="med-table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Medicamento</th>
+                        <th>Dosis</th>
+                        <th>Empleado Encargado</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in medicamentos %}
+                    <tr>
+                        <td>{{ item.paciente.primer_nombre }} {{ item.paciente.primer_apellido }}</td>
+                        <td>{{ item.nombre_medicamento }}</td>
+                        <td>{{ item.dosis }}</td>
+                        <td>{{ item.empleado_encargado }}</td>
+                        <td>{{ item.observaciones }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">No hay medicamentos registrados con este filtro.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

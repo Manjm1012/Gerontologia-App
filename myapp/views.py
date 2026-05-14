@@ -13,6 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group
+from django.db.models import Q
+from .forms import MedicamentoManualForm
 from .models import Identificacion, ConsultaMedica
 from .models import Historia
 
@@ -46,17 +48,25 @@ from django.shortcuts import render
 from .models import HistoriaGerontologica
 
 def buscar(request):
-    historias = []
+    query = (request.GET.get("q") or request.POST.get("cc") or "").strip()
 
-    if request.method == "POST":
-        cc = request.POST.get("cc")
+    historias = HistoriaGerontologica.objects.select_related("fk_identificacion").order_by(
+        "fk_identificacion__primer_nombre",
+        "fk_identificacion__primer_apellido",
+    )
 
-        historias = HistoriaGerontologica.objects.filter(
-             fk_identificacion__numero_documento_paciente=cc
-             )
+    if query:
+        historias = historias.filter(
+            Q(fk_identificacion__primer_nombre__icontains=query)
+            | Q(fk_identificacion__segundo_nombre__icontains=query)
+            | Q(fk_identificacion__primer_apellido__icontains=query)
+            | Q(fk_identificacion__segundo_apellido__icontains=query)
+            | Q(fk_identificacion__numero_documento_paciente__icontains=query)
+        )
 
     return render(request, "buscar_historial.html", {
-        "historias": historias
+        "historias": historias,
+        "query": query,
     })
 #======================================================
 
@@ -784,6 +794,51 @@ def enfermeria(request):
     }
     
     return render(request, 'enfermeria.html', context)
+
+
+@login_required
+def control_medicamentos(request):
+    """Vista de enfermeria para buscar y recetar medicamentos manualmente."""
+    # Verificar si el usuario pertenece al grupo Enfermeria
+    if not request.user.groups.filter(name='Enfermeria').exists():
+        messages.error(request, 'No tiene permisos para acceder a este modulo.')
+        return redirect('home')
+
+    pacientes = Identificacion.objects.all().order_by('primer_nombre')
+
+    # Filtros de busqueda
+    query = (request.GET.get('q') or '').strip()
+    paciente_id_filtro = (request.GET.get('paciente_id') or '').strip()
+
+    medicamentos = Medicamentos.objects.select_related('paciente').order_by('-id')
+
+    if query:
+        medicamentos = medicamentos.filter(nombre_medicamento__icontains=query)
+
+    if paciente_id_filtro:
+        medicamentos = medicamentos.filter(paciente_id=paciente_id_filtro)
+
+    # Receta manual
+    if request.method == 'POST':
+        datos_medicamento = request.POST.copy()
+        datos_medicamento['paciente'] = datos_medicamento.get('paciente_id', '').strip()
+        formulario_medicamento = MedicamentoManualForm(datos_medicamento)
+
+        if formulario_medicamento.is_valid():
+            formulario_medicamento.save()
+            messages.success(request, 'Medicamento recetado correctamente.')
+            return redirect('control_medicamentos')
+
+        messages.error(request, 'Paciente, nombre de medicamento y dosis son obligatorios.')
+
+    context = {
+        'pacientes': pacientes,
+        'medicamentos': medicamentos[:100],
+        'query': query,
+        'paciente_id_filtro': paciente_id_filtro,
+    }
+
+    return render(request, 'control_medicamentos.html', context)
 
 
 @login_required

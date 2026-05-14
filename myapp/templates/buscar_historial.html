@@ -1,56 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-{% load static %}
-
-<title>Buscar Historial Geriátrico</title>
-
-<link rel="stylesheet" href="{% static 'css/historial.css' %}">
-
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Historial Geriátrico</title>
+    <link rel="stylesheet" href="{% static 'CSS/historial.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/buscar_historial.css' %}">
 </head>
-
 <body>
+    <div class="container historial-page">
+        <header class="page-header">
+            <h1>Buscar historial</h1>
+            <p>Busca pacientes por nombre o documento y revisa su historia en tarjetas.</p>
+        </header>
 
-<div class="container"> 
-    <h1>Buscar historial</h1>
+        <section class="search-panel">
+            <form method="get" action="{% url 'buscar_historial' %}" class="search-form">
+                <label for="q" class="sr-only">Buscar paciente</label>
+                <input
+                    id="q"
+                    name="q"
+                    value="{{ query }}"
+                    placeholder="Nombre, apellido o cédula del paciente"
+                    autocomplete="off"
+                >
+                <button type="submit">Buscar</button>
+            </form>
+        </section>
 
-    <form method="POST">
-        {% csrf_token %}
-        <input name="cc" placeholder="Ingrese cédula del paciente">
-        <button type="submit">Buscar</button>
-    </form>
+        <section class="results-section">
+            {% if query %}
+                <p class="results-meta">Resultados para: <strong>{{ query }}</strong></p>
+            {% else %}
+                <p class="results-meta">Escribe un nombre o documento para ver pacientes con historia registrada.</p>
+            {% endif %}
 
-    <hr>
+            <div class="results-grid">
+                {% for h in historias %}
+                <article class="historia-card">
+                    <div class="card-top">
+                        <div>
+                            <h2>{{ h.fk_identificacion.primer_nombre }} {{ h.fk_identificacion.primer_apellido }}</h2>
+                            <p class="card-subtitle">Historia gerontológica registrada</p>
+                        </div>
+                        <span class="card-badge">{{ h.fk_identificacion.edad }} años</span>
+                    </div>
 
-    <div class="resultados-historial">
-    {% for h in historias %} #se itera sobre las historias clínicas encontradas y se muestra la información relevante de cada paciente en una tarjeta. 
-    <div class="paciente-card">
+                    <div class="card-details">
+                        <p><strong>Cédula:</strong> {{ h.fk_identificacion.numero_documento_paciente }}</p>
+                        <p><strong>Ciudad:</strong> {{ h.fk_identificacion.ciudad_residencia }}</p>
+                        <p><strong>Sexo:</strong> {{ h.fk_identificacion.sexo }}</p>
+                    </div>
 
-        <div class="card-header">
-            <strong>Nombre:</strong>
+                    <div class="card-actions">
+                        <a href="{% url 'ver_historia' h.id %}" class="btn-ver">Ver historia</a>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="empty-state">
+                    <p>No se encontraron historias clínicas.</p>
+                    {% if query %}
+                        <p>Prueba con otro nombre o con el número de documento completo.</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <div class="back-section">
+            <a href="{% url 'enfermeria' %}" class="btn-back">Regresar</a>
         </div>
-
-        <div class="card-body">
-            <a href="/historia/{{ h.id }}" class="nombre-link">
-                {{ h.fk_identificacion.nombre }}
-            </a>
-
-            <p><strong>Cédula:</strong> {{ h.fk_identificacion.cc }}</p>
-            <p><strong>Edad:</strong> {{ h.fk_identificacion.edad }} años</p>
-        </div>
-
-        <div class="card-actions">
-            <a href="/historia/{{ h.id }}" class="btn-ver">Ver historia</a>
-            <a href="/pdf/{{ h.id }}" class="btn-pdf">PDF</a>
-        </div>
-
     </div>
-    {% empty %}
-    <p class="sin-resultados">No se encontraron historias clínicas.</p> #si no se encuentran historias clínicas, se muestra un mensaje indicando que no hay resultados.
-    {% endfor %}
-</div>
-</div>
-
 </body>
 </html>

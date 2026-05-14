@@ -152,6 +152,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Autenticacion: evitar redireccion por defecto a /accounts/login/
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'
+
 # ==================================
 # CONFIGURACIÓN LOCAL (settings_local.py)
 # ==================================

@@ -1,0 +1,208 @@
+.historial-page {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 28px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin: 0 0 8px;
+    color: #1f5f8b;
+}
+
+.page-header p {
+    margin: 0;
+    color: #475569;
+}
+
+.search-panel {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #dbe3ee;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.search-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 260px;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.search-form button {
+    background: #1f7a57;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    background: #e2e8f0;
+    color: #1f2937;
+}
+
+.back-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.results-section {
+    margin-top: 24px;
+}
+
+.results-meta {
+    margin: 0 0 14px;
+    color: #475569;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.historia-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.historia-card h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.05rem;
+}
+
+.card-subtitle {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 0.92rem;
+}
+
+.card-badge {
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+
+.card-details p {
+    margin: 0 0 8px;
+    color: #334155;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.btn-ver,
+.btn-pdf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn-ver {
+    background: #1f7a57;
+    color: #fff;
+}
+
+.btn-pdf {
+    background: #ea7913;
+    color: #fff;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 28px 16px;
+    color: #475569;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 640px) {
+    .historial-page {
+        padding: 16px;
+        margin: 12px auto;
+    }
+
+    .search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-form input {
+        min-width: 0;
+    }
+
+    .btn-back {
+        width: 100%;
+    }
+
+    .card-top {
+        flex-direction: column;
+    }
+
+    .back-section {
+        margin-top: 18px;
+    }
+}

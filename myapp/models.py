@@ -417,7 +417,8 @@ class Medicamentos(models.Model):
     
     nombre_medicamento = models.CharField(max_length=255)
     dosis = models.CharField(max_length=100)
-    observaciones = models.CharField(max_length=100)
+    observaciones = models.CharField(max_length=100, blank=True)
+    empleado_encargado = models.CharField(max_length=255, blank=True, null=True)
     
     def __str__(self):
         return f"{self.nombre_medicamento} - {self.dosis} - {self.observaciones}"

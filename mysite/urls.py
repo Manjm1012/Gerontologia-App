@@ -45,6 +45,7 @@ urlpatterns = [
     path('logout/', views.cerrarSesion, name='logout'),
     path('manual.pdf', views.descargar_manual_pdf, name='manual_pdf'),
     path('enfermeria/', views.enfermeria, name='enfermeria'),
+    path('enfermeria/medicamentos/', views.control_medicamentos, name='control_medicamentos'),
     path('enfermeria/evolucion/', views.evolucion_enfermeria, name='evolucion_enfermeria'),
     path('enfermeria/historial/', views.historial_evoluciones, name='historial_evoluciones'),
     # path('perfil_paciente/', views.perfil_paciente, name='perfil_paciente'),
