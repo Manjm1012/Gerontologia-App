@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Administrador - Gerontología App</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header con información del usuario -->
+        <div class="header-section">
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Bienvenido(a), <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'home' %}" class="btn-secondary">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="main-title">MÓDULO DE ADMINISTRADOR</h1>
+        
+        <!-- Mensajes -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="margin: 20px 0; padding: 15px; border-radius: 8px;">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Resumen de estadísticas -->
+        <div class="section-title">RESUMEN DEL SISTEMA - {{ fecha_hoy|date:"d/m/Y" }}</div>
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon Usuarios" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Empleados</h3>
+                        <p class="stat-number">{{ total_Empleados|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pendientes" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Empleados Activos</h3>
+                        <p class="stat-number">{{ Empleados_activos|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon signos" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Administradores</h3>
+                        <p class="stat-number">{{ Empleados_staff|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon medicamentos" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-procedures"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Usuarios</h3>
+                        <p class="stat-number">{{ total_Usuarios|default:"0" }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estadísticas por Grupo -->
+        {% if estadisticas_grupos %}
+        <div class="section-title">Empleados POR GRUPO</div>
+        <section class="recent-evolutions">
+            <div class="groups-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                {% for grupo in estadisticas_grupos %}
+                <div class="group-card" style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 48px; color: #667eea; margin-bottom: 10px;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 style="margin: 10px 0; color: #2d3748;">{{ grupo.nombre }}</h3>
+                    <p style="font-size: 32px; font-weight: bold; color: #667eea; margin: 0;">{{ grupo.count }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Menú de acciones rápidas -->
+        <div class="section-title">GESTIÓN DE EMPLEADOS</div>
+        <section class="actions-section">
+            <div class="actions-grid">
+                <a href="{% url 'admin_users' %}" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <h3>Lista de Empleados</h3>
+                    <p>Ver todos los empleados del sistema</p>
+                </a>
+
+                <a href="{% url 'admin_user_create' %}" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Crear Empleado</h3>
+                    <p>Agregar nuevo empleado al sistema</p>
+                </a>
+
+                <a href="#actividad-reciente" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Actividad Reciente</h3>
+                    <p>Ver actividad del sistema</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Últimos Empleados Registrados -->
+        {% if ultimos_Empleados %}
+        <div class="section-title">ÚLTIMOS EMPLEADOS REGISTRADOS</div>
+        <section class="recent-evolutions">
+            <div class="table-responsive">
+                <table class="evolution-summary-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-user"></i> Empleado</th>
+                            <th><i class="fas fa-id-badge"></i> Nombre Completo</th>
+                            <th><i class="fas fa-envelope"></i> Email</th>
+                            <th><i class="fas fa-users"></i> Grupo</th>
+                            <th><i class="fas fa-calendar"></i> Fecha Registro</th>
+                            <th><i class="fas fa-check-circle"></i> Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in ultimos_Empleados %}
+                        <tr>
+                            <td><strong>{{ usuario.username }}</strong></td>
+                            <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                            <td>{{ usuario.email|default:"Sin email" }}</td>
+                            <td>
+                                {% if usuario.groups.all %}
+                                    <span style="background: #667eea; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                                        {{ usuario.groups.first.name }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: #a0aec0;">Sin grupo</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ usuario.date_joined|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                {% if usuario.is_active %}
+                                    <span style="color: #38a169;"><i class="fas fa-check-circle"></i> Sí</span>
+                                {% else %}
+                                    <span style="color: #e53e3e;"><i class="fas fa-times-circle"></i> No</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Actividad Reciente del Sistema -->
+        <div class="section-title" id="actividad-reciente">ACTIVIDAD RECIENTE DEL SISTEMA</div>
+        
+        <!-- Consultas Médicas Recientes -->
+        {% if consultas_recientes %}
+        <section class="recent-evolutions">
+            <h3 style="color: #2d3748; margin-bottom: 15px;"><i class="fas fa-stethoscope"></i> Últimas Consultas Médicas</h3>
+            <div class="table-responsive">
+                <table class="evolution-summary-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Diagnóstico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for consulta in consultas_recientes %}
+                        <tr>
+                            <td>{{ consulta.fecha|date:"d/m/Y" }}</td>
+                            <td>{{ consulta.paciente.primer_nombre }} {{ consulta.paciente.primer_apellido }}</td>
+                            <td>Dr(a). {{ consulta.medico.first_name }} {{ consulta.medico.last_name }}</td>
+                            <td>{{ consulta.diagnostico|truncatewords:10|default:"Sin diagnóstico" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Evoluciones de Enfermería Recientes -->
+        {% if evoluciones_recientes %}
+        <section class="recent-evolutions" style="margin-top: 30px;">
+            <h3 style="color: #2d3748; margin-bottom: 15px;"><i class="fas fa-notes-medical"></i> Últimas Evoluciones de Enfermería</h3>
+            <div class="table-responsive">
+                <table class="evolution-summary-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Paciente</th>
+                            <th>Enfermero(a)</th>
+                            <th>Presión</th>
+                            <th>Temperatura</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evolucion in evoluciones_recientes %}
+                        <tr>
+                            <td>{{ evolucion.fecha|date:"d/m/Y" }}</td>
+                            <td>{{ evolucion.paciente.primer_nombre }} {{ evolucion.paciente.primer_apellido }}</td>
+                            <td>{{ evolucion.enfermero.first_name }} {{ evolucion.enfermero.last_name }}</td>
+                            <td>{{ evolucion.presion_arterial|default:"N/A" }}</td>
+                            <td>{{ evolucion.temperatura|default:"N/A" }}°C</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Footer -->
+        <footer class="footer-section">
+            <p>&copy; 2025 Gerontología App - Módulo de Administrador</p>
+            <p>Sistema de Gestión de Atención Gerontológica</p>
+        </footer>
+    </div>
+</body>
+</html>

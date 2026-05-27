@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Asegura que el body ocupe toda la pantalla */
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+h1, h2 {
+    color: #333;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+    
+
+}
+footer {
+    width: 100%;
+    background-color: #007bff; /* Cambia el color si lo necesitas */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    bottom: 0;
+    left: 0;
+}
+
+.text-justify {
+    text-align: justify;
+}
+.text-lowercase {
+    text-transform: lowercase;
+}
+.capitalize-first-letter::first-letter {
+    text-transform: capitalize;
+}
+.capitalize-title {
+    text-transform: capitalize;
+}

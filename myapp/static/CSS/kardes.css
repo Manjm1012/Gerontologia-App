@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../img/fondo.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.search-card {
+    border-radius: 12px;
+}
+
+.kardex-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.kardex-header {
+    background: linear-gradient(135deg, #2c7be5, #1a56db);
+    color: white;
+    font-weight: 600;
+}
+
+.section-title {
+    color: #1a56db;
+    font-weight: 600;
+}
+
+.obs-box {
+    background: #eef4ff;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #2c7be5;
+}
+
+.history-item {
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}

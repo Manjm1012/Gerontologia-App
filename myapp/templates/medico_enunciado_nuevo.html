@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Enunciado Médico - Gerontología App</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-user-md"></i>
+                    <span>Dr(a). <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'medico' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver al Módulo
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="main-title">NUEVO ENUNCIADO MÉDICO</h1>
+
+        <!-- Mensajes -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="margin: 20px 0; padding: 15px; border-radius: 8px;">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Información del enunciado -->
+        <section class="info-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas fa-info-circle" style="font-size: 32px;"></i>
+                <div>
+                    <h3 style="margin: 0; font-size: 18px;">Registrar Nota u Observación General</h3>
+                    <p style="margin: 5px 0 0 0; opacity: 0.9;">Los enunciados médicos son notas generales del médico que no están asociadas a un paciente específico.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formulario de Enunciado -->
+        <section class="form-section">
+            <form method="POST" id="form-enunciado">
+                {% csrf_token %}
+                
+                <div class="form-grid">
+                    <!-- Fecha (solo lectura, informativo) -->
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Fecha</label>
+                        <input type="text" value="{{ fecha_hoy|date:'d/m/Y' }}" readonly style="background: #f7fafc;">
+                    </div>
+
+                    <!-- Médico (solo lectura, informativo) -->
+                    <div class="form-group">
+                        <label><i class="fas fa-user-md"></i> Médico</label>
+                        <input type="text" value="Dr(a). {{ user.first_name }} {{ user.last_name }}" readonly style="background: #f7fafc;">
+                    </div>
+
+                    <!-- Texto del Enunciado -->
+                    <div class="form-group full-width">
+                        <label for="texto"><i class="fas fa-notes-medical"></i> Nota u Observación *</label>
+                        <textarea name="texto" id="texto" rows="8" required 
+                                  placeholder="Escriba aquí su nota u observación general. Por ejemplo: recordatorios, observaciones generales del servicio, notas administrativas, etc."></textarea>
+                        <small style="color: #718096; margin-top: 5px;">Este texto quedará registrado como un enunciado general del médico.</small>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="form-actions" style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button type="button" class="secondary-btn" onclick="limpiarFormulario()">
+                        <i class="fas fa-eraser"></i> Limpiar
+                    </button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-save"></i> Guardar Enunciado
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer-section">
+            <p>&copy; 2025 Gerontología App - Módulo Médico</p>
+        </footer>
+    </div>
+
+    <script>
+        function limpiarFormulario() {
+            if (confirm('¿Está seguro de que desea limpiar el formulario?')) {
+                document.getElementById('texto').value = '';
+                document.getElementById('texto').focus();
+            }
+        }
+    </script>
+
+    <style>
+        .info-section {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .submit-btn, .secondary-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .secondary-btn:hover {
+            background: #cbd5e0;
+        }
+    </style>
+</body>
+</html>

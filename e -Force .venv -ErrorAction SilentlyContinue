@@ -1,0 +1,20 @@
+[33mfccfc79[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32msave-untracked[m[33m)[m Corrige redirección post-login y añade botón 'Volver' en historia_gerontologica
+[33mf8e2bb7[m chore: add .gitignore
+[33m0f622ec[m Admin: CRUD Empleados — plantillas traducidas, estilos y ajustes de vistas
+[33m7d052cb[m chore: add .gitignore
+[33m828097a[m updated .gitignore to not upload the cache files
+[33m69ac8db[m Merge branch 'develop' of https://github.com/Manjm1012/Gerontologia-App into develop
+[33m41d7c6f[m finished the method to save the historia_gerontologica.html form in the DB
+[33m35b6e88[m Agregar dropdown de login con opciones para admin y usuario normal
+[33m7a275ad[m updated historia_gerontologica.html
+[33m83b0b58[m created new model for the form historia_gerontologica & created the method for the view to save the data from the form in the DB
+[33m820ce90[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Primer commit - Proyecto Django Gerontología
+[33m253390c[m Inicializa proyecto Django Gerontología App
+[33m17575bc[m Se inserta historia clinica
+[33mb27ad1e[m Se insertan todas las tablas menos las tablas de roles
+[33m4b29c6b[m Se adicionan primeras tablas al modelo
+[33me9d1be1[m Se configura inicio de3 sesion de administrador con superuser
+[33md08ecf1[m Se configura inicio de3 sesion de administrador y profesional de la salud
+[33meb53eb2[m Se integran tablas de Tusuario con User de Django y se elimina Tlogin
+[33ma146012[m Se organizan formularios de administrador y Usuarios
+[33m41ba0fd[m Se unifica con ultimos templates del front

@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Evoluciones - Enfermería</title>
+    <link rel="stylesheet" href="{% static 'css/evolucion_enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-user-nurse"></i>
+                    <span>Enfermero(a): <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'enfermeria' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver al Módulo
+                    </a>
+                    <a href="{% url 'evolucion_enfermeria' %}" class="btn-primary">
+                        <i class="fas fa-plus"></i> Nueva Evolución
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            <h1><i class="fas fa-history"></i> Historial de Evoluciones</h1>
+            <h2>Registros Diarios de Enfermería</h2>
+        </header>
+
+        <!-- Mensajes de éxito/error -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="margin: 20px 0; padding: 15px; border-radius: 8px;">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Estadísticas Generales -->
+        <div class="stats-summary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white; margin-bottom: 30px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
+                <div>
+                    <h3 style="font-size: 2.5em; margin: 0;"><i class="fas fa-clipboard-list"></i> {{ total }}</h3>
+                    <p style="margin: 5px 0 0 0;">Total de Registros</p>
+                </div>
+                <div>
+                    <h3 style="font-size: 2.5em; margin: 0;"><i class="fas fa-calendar-day"></i> {{ fecha_hoy|date:"d/m/Y" }}</h3>
+                    <p style="margin: 5px 0 0 0;">Fecha Actual</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h3 style="margin-top: 0;"><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <input type="text" id="filtro-paciente" placeholder="Buscar por nombre de paciente..." style="padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <input type="date" id="filtro-fecha" placeholder="Filtrar por fecha..." style="padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <select id="filtro-estado" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    <option value="">Todos los estados</option>
+                    <option value="B">Bueno</option>
+                    <option value="R">Regular</option>
+                    <option value="M">Malo</option>
+                </select>
+                <button onclick="limpiarFiltros()" style="padding: 10px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    <i class="fas fa-eraser"></i> Limpiar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabla de Historial -->
+        {% if evoluciones %}
+        <h3 class="section-title"><i class="fas fa-table"></i> Registros de Evolución Diaria</h3>
+        <div class="table-responsive">
+            <table class="history-table" id="tabla-evoluciones">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-calendar"></i> Fecha</th>
+                        <th><i class="fas fa-clock"></i> Hora</th>
+                        <th><i class="fas fa-user"></i> Paciente</th>
+                        <th><i class="fas fa-smile"></i> Día</th>
+                        <th><i class="fas fa-utensils"></i> Alim.</th>
+                        <th><i class="fas fa-tint"></i> Elim.</th>
+                        <th><i class="fas fa-toilet"></i> Exon.</th>
+                        <th><i class="fas fa-pills"></i> Kardex</th>
+                        <th><i class="fas fa-heartbeat"></i> Signos Vitales</th>
+                        <th><i class="fas fa-exclamation-triangle"></i> Nov.</th>
+                        <th><i class="fas fa-comment"></i> Observación</th>
+                        <th><i class="fas fa-user-nurse"></i> Profesional</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evolucion in evoluciones %}
+                    <tr>
+                        <td><strong>{{ evolucion.fecha|date:"d/m/Y" }}</strong></td>
+                        <td><strong>{{ evolucion.fecha_registro|date:"H:i" }}</strong></td>
+                        <td>{{ evolucion.paciente.primer_nombre }} {{ evolucion.paciente.primer_apellido }}</td>
+                        <td>
+                            <span class="badge badge-{{ evolucion.paso_el_dia|lower }}">
+                                {{ evolucion.paso_el_dia }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ evolucion.alimentacion|lower }}">
+                                {{ evolucion.alimentacion }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ evolucion.elimina|lower }}">
+                                {{ evolucion.elimina }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ evolucion.exonera|lower }}">
+                                {{ evolucion.exonera }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            {% if evolucion.medicamentos == 'K' %}
+                            <span style="background:#3b82f6;color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Kardex</span>
+                            {% elif evolucion.medicamentos == 'M' %}
+                            <span style="background:#f59e0b;color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Manual</span>
+                            {% elif evolucion.medicamentos == '1' %}
+                            <i class="fas fa-check-circle" style="color: #10b981; font-size: 1.2em;"></i>
+                            {% else %}
+                            <i class="fas fa-times-circle" style="color: #dc2626; font-size: 1.2em;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="vital-signs">
+                                <small>
+                                    <strong>FC:</strong> {{ evolucion.frecuencia_cardiaca|default:"--" }} |
+                                    <strong>PA:</strong> {{ evolucion.presion_arterial|default:"--" }}<br>
+                                    <strong>T°:</strong> {{ evolucion.temperatura|default:"--" }} |
+                                    <strong>FR:</strong> {{ evolucion.frecuencia_respiratoria|default:"--" }}
+                                </small>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            {% if evolucion.novedad == '1' %}
+                            <span class="badge badge-warning">SÍ</span>
+                            {% else %}
+                            <span class="badge badge-success">NO</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small>{{ evolucion.observacion|default:"Sin observaciones"|truncatewords:15 }}</small>
+                        </td>
+                        <td>
+                            <small>
+                                {{ evolucion.nombre_profesional }}<br>
+                                <em>ID: {{ evolucion.identificacion_profesional }}</em>
+                            </small>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="no-records" style="text-align: center; padding: 60px 20px; background: #f8f9fa; border-radius: 10px;">
+            <i class="fas fa-info-circle" style="font-size: 4em; color: #6c757d; margin-bottom: 20px;"></i>
+            <h3>No hay registros de evolución</h3>
+            <p>Aún no se han registrado evoluciones diarias.</p>
+            <a href="{% url 'evolucion_enfermeria' %}" class="btn-primary" style="display: inline-block; margin-top: 20px; padding: 12px 24px; text-decoration: none;">
+                <i class="fas fa-plus"></i> Crear Primera Evolución
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Footer -->
+        <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #6c757d;">
+            <p>© 2025 Sistema de Historias Clínicas Gerontológicas</p>
+        </footer>
+    </div>
+
+    <script>
+        // Filtros en tiempo real
+        document.getElementById('filtro-paciente').addEventListener('input', filtrarTabla);
+        document.getElementById('filtro-fecha').addEventListener('change', filtrarTabla);
+        document.getElementById('filtro-estado').addEventListener('change', filtrarTabla);
+
+        function filtrarTabla() {
+            const filtroPaciente = document.getElementById('filtro-paciente').value.toLowerCase();
+            const filtroFecha = document.getElementById('filtro-fecha').value;
+            const filtroEstado = document.getElementById('filtro-estado').value;
+            
+            const tabla = document.getElementById('tabla-evoluciones');
+            if (!tabla) return;
+            
+            const filas = tabla.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            
+            for (let fila of filas) {
+                let mostrar = true;
+                
+                // Filtro por paciente
+                if (filtroPaciente) {
+                    const nombrePaciente = fila.cells[2].textContent.toLowerCase();
+                    if (!nombrePaciente.includes(filtroPaciente)) {
+                        mostrar = false;
+                    }
+                }
+                
+                // Filtro por fecha
+                if (filtroFecha && mostrar) {
+                    const fechaRegistro = fila.cells[0].textContent;
+                    const [dia, mes, anio] = fechaRegistro.split('/');
+                    const fechaFormato = `${anio}-${mes}-${dia}`;
+                    if (fechaFormato !== filtroFecha) {
+                        mostrar = false;
+                    }
+                }
+                
+                // Filtro por estado
+                if (filtroEstado && mostrar) {
+                    const estadoDia = fila.cells[3].textContent.trim();
+                    if (estadoDia !== filtroEstado) {
+                        mostrar = false;
+                    }
+                }
+                
+                fila.style.display = mostrar ? '' : 'none';
+            }
+        }
+
+        function limpiarFiltros() {
+            document.getElementById('filtro-paciente').value = '';
+            document.getElementById('filtro-fecha').value = '';
+            document.getElementById('filtro-estado').value = '';
+            filtrarTabla();
+        }
+
+        // Imprimir tabla
+        function imprimirHistorial() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

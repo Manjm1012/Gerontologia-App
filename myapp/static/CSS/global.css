@@ -1,0 +1,30 @@
+/* Estilos globales para la aplicación web */
+
+/*Cuerpo de la pagina*/
+body {
+    background-color: #ffffff; /*Color de fondo blanco*/
+    font-family: 'Segoe UI', sans-serif; /*Fuente de texto*/
+}
+
+/*Estilo de las tarjetas*/
+.card {
+    height: auto; /* Se ajusta al contenido automaticamente */
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Mantiene proporciónes */
+}
+
+/*Estilo del texto de las tarjetas*/
+.card-text {
+    text-align: justify;         /* Justifica el texto */
+    text-justify: inter-word;    /* Ajusta los espacios entre palabras */
+    hyphens: auto;               /* Permite cortar palabras con guiones si es necesario */
+}
+
+/* Estilo de los parrafos */
+p {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+}

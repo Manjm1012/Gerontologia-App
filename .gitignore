@@ -1,0 +1,95 @@
+# ==================================
+# PYTHON & ENTORNO VIRTUAL
+# ==================================
+venv/
+ENV/
+env/
+.venv/
+*.virtualenv
+
+# ==================================
+# ARCHIVOS COMPILADOS DE PYTHON
+# ==================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.py[cod]
+*$py.class
+*.so
+
+# ==================================
+# DJANGO
+# ==================================
+# Base de datos local (cada dev tiene la suya)
+db.sqlite3
+db_local.sqlite3
+*.sqlite3
+*.db
+
+# Archivos de media y estáticos
+media/
+staticfiles/
+*.log
+
+# Migraciones locales (comentar si quieres incluir migraciones en el repo)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# ==================================
+# CONFIGURACIONES SENSIBLES
+# ==================================
+# Archivo de variables de entorno (cada desarrollador tiene el suyo)
+.env
+*.env
+!.env.example
+
+# Configuración local de Django (cada desarrollador tiene la suya)
+settings_local.py
+*/settings_local.py
+!settings_local.py.example
+
+# NO ignorar settings.py - ahora es seguro subirlo
+# (Las credenciales están en .env)
+
+# ==================================
+# ARCHIVOS DEL SISTEMA OPERATIVO
+# ==================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ==================================
+# IDEs Y EDITORES
+# ==================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# ==================================
+# PYTEST Y TESTING
+# ==================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# ==================================
+# DISTRIBUCIÓN Y EMPAQUETADO
+# ==================================
+build/
+dist/
+*.egg-info/
+*.egg

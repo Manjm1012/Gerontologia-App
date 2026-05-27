@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo del Médico - Gerontología App</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header con información del usuario -->
+        <div class="header-section">
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-user-md"></i>
+                    <span>Bienvenido(a), <strong>Dr(a). {{ user.first_name }} {{ user.last_name }}</strong></span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'home' %}" class="btn-secondary">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="main-title">MÓDULO MÉDICO</h1>
+        
+        <!-- Mensajes -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="margin: 20px 0; padding: 15px; border-radius: 8px;">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Resumen de estadísticas -->
+        <div class="section-title">RESUMEN - {{ fecha_hoy|date:"d/m/Y" }}</div>
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon Usuarios" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Usuarios</h3>
+                        <p class="stat-number">{{ total_Usuarios|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pendientes" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Consultas Hoy</h3>
+                        <p class="stat-number">{{ consultas_hoy|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon signos" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Consultas</h3>
+                        <p class="stat-number">{{ total_consultas|default:"0" }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon medicamentos" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-notes-medical"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Enunciados</h3>
+                        <p class="stat-number">{{ enunciados_recientes.count|default:"0" }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Últimas Consultas -->
+        {% if ultimas_consultas %}
+        <div class="section-title">ÚLTIMAS CONSULTAS MÉDICAS</div>
+        <section class="recent-evolutions">
+            <div class="table-responsive">
+                <table class="evolution-summary-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-calendar"></i> Fecha</th>
+                            <th><i class="fas fa-user"></i> Paciente</th>
+                            <th><i class="fas fa-diagnoses"></i> Diagnóstico</th>
+                            <th><i class="fas fa-notes-medical"></i> Observaciones</th>
+                            <th><i class="fas fa-clock"></i> Registrado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for consulta in ultimas_consultas %}
+                        <tr>
+                            <td><strong>{{ consulta.fecha|date:"d/m/Y" }}</strong></td>
+                            <td>{{ consulta.paciente.primer_nombre }} {{ consulta.paciente.primer_apellido }}</td>
+                            <td><small>{{ consulta.diagnostico|truncatewords:10 }}</small></td>
+                            <td><small>{{ consulta.observaciones|default:"Sin observaciones"|truncatewords:10 }}</small></td>
+                            <td><small>{{ consulta.fecha_registro|date:"d/m/Y H:i" }}</small></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Menú de acciones rápidas -->
+        <div class="section-title">ACCIONES RÁPIDAS</div>
+        <section class="actions-section">
+            <div class="actions-grid">
+                <a href="{% url 'medico_consulta_nueva' %}" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3>Nueva Consulta Médica</h3>
+                    <p>Registrar consulta y diagnóstico</p>
+                </a>
+
+                <a href="{% url 'medico_enunciado_nuevo' %}" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Nuevo Enunciado</h3>
+                    <p>Registrar nota u observación general</p>
+                </a>
+
+                <a href="{% url 'paciente_registro' %}" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Registrar Paciente</h3>
+                    <p>Agregar nuevo paciente al sistema</p>
+                </a>
+
+                <a href="#lista-Usuarios" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Lista de Usuarios</h3>
+                    <p>Ver y buscar Usuarios</p>
+                </a>
+
+                <a href="#historial-consultas" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Historial de Consultas</h3>
+                    <p>Revisar consultas anteriores</p>
+                </a>
+
+                <a href="#agenda" class="action-card">
+                    <div class="action-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Agenda Médica</h3>
+                    <p>Programar citas y seguimientos</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Tabla de Usuarios -->
+        <div class="section-title" id="lista-Usuarios">Usuarios RECIENTES</div>
+        <section class="patients-section">
+            <div class="search-bar" style="margin-bottom: 20px;">
+                <input type="text" id="buscar-paciente" placeholder="🔍 Buscar paciente por nombre o documento..." 
+                       style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px;"
+                       onkeyup="filtrarUsuarios()">
+            </div>
+            <div class="table-responsive">
+                <table class="patients-table" id="tabla-Usuarios">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre Completo</th>
+                            <th>Edad</th>
+                            <th>Sexo</th>
+                            <th>Ciudad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if Usuarios %}
+                            {% for paciente in Usuarios %}
+                            <tr>
+                                <td>{{ paciente.numero_documento_paciente }}</td>
+                                <td>{{ paciente.primer_nombre }} {{ paciente.segundo_nombre }} {{ paciente.primer_apellido }} {{ paciente.segundo_apellido }}</td>
+                                <td>{{ paciente.edad }} años</td>
+                                <td>{{ paciente.sexo }}</td>
+                                <td>{{ paciente.ciudad_residencia }}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="{% url 'perfil_paciente' paciente.id %}" class="btn-action btn-view" title="Ver Historial">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'medico_consulta_nueva' %}?paciente={{ paciente.id }}" class="btn-action btn-edit" title="Nueva Consulta">
+                                            <i class="fas fa-stethoscope"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="no-data">
+                                    <i class="fas fa-info-circle"></i>
+                                    No hay Usuarios registrados
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="view-all-link" style="margin-top: 20px; text-align: center;">
+                <a href="{% url 'paciente_registro' %}" class="btn-view-all">
+                    <i class="fas fa-user-plus"></i> Registrar Nuevo Paciente
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer-section">
+            <p>&copy; 2025 Gerontología App - Módulo Médico</p>
+            <p>Sistema de Gestión de Atención Gerontológica</p>
+        </footer>
+    </div>
+
+    <script>
+        function filtrarUsuarios() {
+            const filtro = document.getElementById('buscar-paciente').value.toLowerCase();
+            const tabla = document.getElementById('tabla-Usuarios');
+            const filas = tabla.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            
+            for (let fila of filas) {
+                const documento = fila.cells[0].textContent.toLowerCase();
+                const nombre = fila.cells[1].textContent.toLowerCase();
+                
+                if (documento.includes(filtro) || nombre.includes(filtro)) {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

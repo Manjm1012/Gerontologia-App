@@ -1,0 +1,262 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro Geriátrico - Atenciones Profesionales</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'CSS/atencion.css' %}">
+    
+    <!-- Aplicacion de estilos globales -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+    <link rel="icon" href="{% static 'img/Logo.png' %}">
+</head>
+<body>
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white mt-1">
+      <div class="container d-flex justify-content-center">
+          <a class="navbar-brand d-flex flex-column align-items-center text-center" href="{% url 'home' %}">
+              <img src="{% static 'img/Logo.png' %}" alt="Logo" width="300" height="300" class="mb-2">
+          </a>
+      </div>
+    </nav>
+
+    
+    <hr class="my-0">
+
+    <!-- Secondary Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+      <div class="container">
+          <!-- Mobile Menu Button -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <!-- Navigation Menu -->
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mx-auto">
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'home' %}">Inicio</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'somos' %}">Quiénes Somos</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'servicios' %}">Servicios</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'contactenos' %}">Contáctenos</a>
+                  </li>
+              </ul>
+          </div>
+
+          <!-- User and Search Buttons -->
+          <div class="d-flex">
+              <a href="{% url 'login' %}" class="btn btn-outline-light me-2 btn-sm">
+                  <i class="bi bi-person text-white"></i>
+              </a>
+              <button class="btn btn-outline-light btn-sm">
+                  <i class="bi bi-search text-white"></i>
+              </button>
+          </div>
+      </div>
+    </nav>
+
+    <hr>
+
+    <main>
+        <section class="py-5 text-center container">
+          <div class="row py-lg-5">
+            <div class="col-lg-8 col-md-10 mx-auto">
+              <h1 class="fw-light text-center text-dark fw-bold">Atención Profesional</h1>
+              <p class="lead text-body-secondary text-center text-dark">En nuestra clínica de gerontología ofrecemos atención especializada, humanizada y personalizada para mejorar la calidad de vida de los adultos mayores. Nos enfocamos en su bienestar físico, emocional y social, brindando cuidados médicos, acompañamiento y un trato digno que promueve su autonomía e integración.</p>
+              <p class="text-center">
+               
+              </p>
+            </div>
+          </div>
+        </section>
+  
+        <div class="album py-5 bg-body-tertiary">
+          <div class="container">
+            <div class="card-container">
+              <!-- Card 1 -->
+              <div class="card shadow-sm custom-border">
+                <img src="{% static 'img/gerontologo.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                <h5 class="professional-title">Gerontólogo</h5>
+                <div class="card-body">
+                  <p class="card-text">Brindamos atención integral enfocada en el envejecimiento saludable, promoviendo el bienestar físico, mental y social del adulto mayor. 
+                    A través de estrategias de prevención y cuidado, ayudamos a mejorar su calidad de vida y autonomía.</p>
+                  <div class="card-footer">
+                    <div class="btn-group">
+                      <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                    </div>
+                  </div>
+                </div>
+            </div>
+              
+              <!-- Card 2 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/geriatra.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Geriatra Médico General</h5>
+                  <div class="card-body">
+                    <p class="card-text">Ofrecemos atención médica especializada en la prevención, diagnóstico y tratamiento de enfermedades en adultos mayores. Nuestro enfoque es integral, abordando sus necesidades
+                       físicas y emocionales para garantizar un envejecimiento saludable y con calidad de vida.</p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- Card 3 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/enfermera.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Enfermera</h5>
+                  <div class="card-body">
+                    <p class="card-text">Brindamos cuidados especializados para adultos mayores, asegurando un monitoreo continuo de su salud,
+                       control de signos vitales, administración de medicamentos y apoyo en sus actividades diarias. Nuestro enfoque es ofrecer un trato cálido y humanizado para su bienestar integral.</p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- Card 4 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/nutricionista.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Nutricionista</h5>
+                  <div class="card-body">
+                    <p class="card-text">Elaboramos planes de alimentación adaptados a las necesidades de cada adulto mayor, promoviendo una nutrición equilibrada que ayude a prevenir enfermedades y mantener un estado de salud óptimo.
+                       Nuestro objetivo es mejorar su bienestar y calidad de vida a través de una dieta adecuada.
+                    </p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- Card 5 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/NEUROLOGO.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Neurólogo</h5>
+                  <div class="card-body">
+                    <p class="card-text">Ofrecemos atención neurológica especializada para la prevención, diagnóstico y tratamiento de trastornos como el Alzheimer, el Parkinson y otras afecciones del sistema nervioso en adultos mayores. 
+                      Trabajamos para mejorar su función cognitiva, memoria y calidad de vida con un enfoque integral.</p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- Card 6 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/fsioterapeuta.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Fisioterapeuta</h5>
+                  <div class="card-body">
+                    <p class="card-text">Proporcionamos terapias físicas diseñadas para mejorar la movilidad, aliviar el dolor y fortalecer los músculos y articulaciones de los adultos mayores.
+                       A través de ejercicios personalizados, ayudamos a mantener su independencia y prevenir limitaciones físicas.</p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- Card 7 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/psicologo.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Psicólogo</h5>
+                  <div class="card-body">
+                    <p class="card-text">Brindamos apoyo emocional y terapias especializadas para ayudar a los adultos mayores a afrontar cambios, reducir el estrés, mejorar su estado de ánimo y reforzar su bienestar mental.
+                       Nuestro objetivo es proporcionarles herramientas para una vida plena y equilibrada.</p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- Card 8 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/trabajadorS.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Trabajador Social</h5>
+                  <div class="card-body">
+                    <p class="card-text">Ofrecemos apoyo social y asesoría para adultos mayores y sus familias, ayudándolos a acceder a recursos y servicios que mejoren su calidad de vida. 
+                      Facilitamos la integración social y brindamos orientación en situaciones de vulnerabilidad.</p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- Card 9 -->
+              <div class="card shadow-sm custom-border">
+                  <img src="{% static 'img/terapeutaO.jpg' %}" class="card-img-top" alt="Descripción de la imagen" width="420" height="300">
+                  <h5 class="professional-title">Terapeuta Ocupacional</h5>
+                  <div class="card-body">
+                    <p class="card-text">Diseñamos actividades y ejercicios adaptados para mejorar la autonomía y habilidades diarias de los adultos mayores. Nuestro objetivo es promover su independencia y
+                       bienestar a través de terapias que refuercen su movilidad, coordinación y función cognitiva.</p>
+                    <div class="card-footer">
+                      <div class="btn-group">
+                        <a href="{% url 'atencion' %}" class="btn" style="background-color: #EA7913; color:#ffffff;">Solicitar Atención</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <p>&copy; 2025 Clínica Geriátrica | Todos los derechos reservados</p>
+            
+            <div class="mb-3">
+                <h5>Enlaces de Interés</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'terminos' %}" class="text-white">Términos y condiciones</a></li>
+                    <li><a href="#" class="text-white">Políticas de protección y tratamiento de datos</a></li>
+                    <li><a href="#" class="text-white">Trabaja con nosotros</a></li>
+                    <li><a href="#" class="text-white">Contáctanos</a></li>
+                    <li><a href="#" class="text-white">Preguntas frecuentes</a></li>
+                    <li><a href="#" class="text-white">Noticias</a></li>
+                    <li><a href="#" class="text-white">Mapa de sitio</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="text-white me-3"><i class="bi bi-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

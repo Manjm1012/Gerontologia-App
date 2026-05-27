@@ -1,0 +1,49 @@
+
+
+h1{
+    text-align: center;
+    padding: 10px;
+    
+
+
+}
+.descripcion{
+    text-align: center;
+    padding: 5px;
+
+
+}
+
+.seccion-servicios {
+    width: 100%; 
+    background-color: #ffffff; 
+    padding: 50px 0; /
+}
+
+.custom-border {
+  
+    border: 1px solid #EA7913 !important; /* !important para asegurarnos de que se aplique */
+  }
+  
+.btn-consulta {
+    background-color: #EA7913;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-consulta:hover {
+    background-color: #cf670e;
+    transform: scale(1.05);
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+

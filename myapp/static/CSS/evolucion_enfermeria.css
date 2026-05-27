@@ -1,0 +1,739 @@
+/* ====================================
+   ESTILOS PARA EVOLUCIÓN DIARIA DE ENFERMERÍA
+   Basado en el estilo de Usuarios.css (azul #1962bc)
+   Última actualización: 2026-01-08
+   ==================================== */
+
+/* Estilos base */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('../img/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Header con títulos */
+header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+h1 {
+    color: #1962bc;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #4a5568;
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin-top: 0;
+}
+
+/* Títulos de sección h3 */
+h3.section-title {
+    color: #1962bc;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 25px 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1962bc;
+}
+
+h3.section-title i {
+    margin-right: 8px;
+}
+
+/* Barra de información del usuario */
+.user-info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.user-welcome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-welcome i {
+    font-size: 1.5rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-secondary,
+.btn-logout {
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #1962bc;
+}
+
+.btn-secondary:hover {
+    background-color: #f0f0f0;
+}
+
+.btn-logout {
+    background-color: #dc2626;
+    color: white;
+}
+
+.btn-logout:hover {
+    background-color: #b91c1c;
+}
+
+/* Formulario */
+form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #1962bc;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-family: inherit;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #1962bc;
+    box-shadow: 0 0 0 3px rgba(25, 98, 188, 0.1);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* TABLA DE IDENTIFICACIÓN DEL PACIENTE */
+.identification-table {
+    background: white;
+    border-radius: 12px;
+    overflow: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 30px;
+    border: 1px solid #e2e8f0;
+}
+
+.identification-table th {
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #144a91;
+    padding: 14px 12px;
+    color: white;
+    font-size: 1rem;
+}
+
+.identification-table td {
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    vertical-align: middle;
+    background: white;
+    transition: background-color 0.3s ease;
+}
+
+.identification-table tr:hover td {
+    background-color: #f8fafc;
+}
+
+.identification-table td:first-child {
+    font-weight: 600;
+    color: #1962bc;
+    background-color: #f8fafc;
+    text-align: center;
+    border-right: 2px solid #e2e8f0;
+}
+
+.identification-table .form-input,
+.identification-table select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.identification-table .form-input:focus,
+.identification-table select:focus {
+    border-color: #1962bc;
+    box-shadow: 0 0 0 3px rgba(25, 98, 188, 0.1);
+}
+
+/* Tabla de Evolución Diaria */
+.evolution-table-container {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.evolution-card {
+    display: none;
+}
+
+.evolution-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 0.85rem;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.evolution-table thead {
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    color: white;
+}
+
+.evolution-table th {
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #144a91;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: white;
+    vertical-align: middle;
+}
+
+.evolution-table th i {
+    display: inline-block;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    margin-right: 0;
+    color: #ffffff;
+}
+
+.evolution-table th small {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.95;
+    margin-top: 3px;
+    font-style: italic;
+}
+
+.evolution-table td {
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+    vertical-align: middle;
+    background: white;
+    text-align: center;
+}
+
+.evolution-table tbody tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* Inputs pequeños para la tabla */
+.form-input-small {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    background: white;
+    box-sizing: border-box;
+}
+
+.form-input-small:focus {
+    outline: none;
+    border-color: #1962bc;
+    box-shadow: 0 0 0 3px rgba(25, 98, 188, 0.1);
+    background-color: #fafbfc;
+}
+
+.form-select-small {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    background: white;
+    cursor: pointer;
+}
+
+.form-select-small:focus {
+    outline: none;
+    border-color: #1962bc;
+    box-shadow: 0 0 0 3px rgba(25, 98, 188, 0.1);
+    background-color: #fafbfc;
+}
+
+.form-textarea-small {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    background: white;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-textarea-small:focus {
+    outline: none;
+    border-color: #1962bc;
+    box-shadow: 0 0 0 3px rgba(25, 98, 188, 0.1);
+    background-color: #fafbfc;
+}
+
+/* Botones de acción del formulario */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-add-row,
+.btn-cancel {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: #1962bc;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #144a91;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 98, 188, 0.3);
+}
+
+.btn-add-row {
+    background-color: #10b981;
+    color: white;
+}
+
+.btn-add-row:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-cancel {
+    background-color: #e2e8f0;
+    color: #4a5568;
+}
+
+.btn-cancel:hover {
+    background-color: #cbd5e0;
+    transform: translateY(-2px);
+}
+
+/* Badges para el historial */
+.badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-b {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.badge-r {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fbbf24;
+}
+
+.badge-m {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+}
+
+.badge-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fbbf24;
+}
+
+/* Tabla de historial de evoluciones */
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.patients-table,
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 0.9rem;
+}
+
+.patients-table thead,
+.history-table thead {
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    color: white;
+}
+
+.patients-table th,
+.history-table th {
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.patients-table th:last-child,
+.history-table th:last-child {
+    border-right: none;
+}
+
+.patients-table td,
+.history-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.patients-table tbody tr:hover,
+.history-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.history-table .vital-signs {
+    text-align: left;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.history-table .text-center {
+    text-align: center;
+}
+
+/* Mensaje cuando no hay registros */
+.no-records {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    padding: 40px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.no-records i {
+    font-size: 3rem;
+    color: #1962bc;
+    margin-bottom: 15px;
+}
+
+.no-records p {
+    color: #6b7280;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+
+/* Estilos para vista de cards (móvil) */
+.evolution-card {
+    display: none;
+    background: white;
+    border: 2px solid #1962bc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.evolution-card-header {
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    color: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.card-field {
+    margin-bottom: 15px;
+}
+
+.card-field label {
+    display: block;
+    font-weight: 600;
+    color: #1962bc;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-field label i {
+    font-size: 1rem;
+    color: #1962bc;
+}
+
+.card-field-group {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #1962bc;
+}
+
+.card-field-group h4 {
+    color: #1962bc;
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1962bc;
+}
+
+.card-field-group h4 i {
+    font-size: 1.2rem;
+}
+
+.signos-vitales-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* Footer */
+footer {
+    margin-top: 30px;
+    text-align: center;
+    color: #718096;
+    font-size: 0.9rem;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 20px;
+}
+
+i {
+    margin-right: 8px;
+}
+
+/* Responsive para tabla de evolución */
+@media (max-width: 1200px) {
+    .evolution-table {
+        font-size: 0.75rem;
+    }
+    
+    .evolution-table th,
+    .evolution-table td {
+        padding: 6px 4px;
+    }
+    
+    .form-input-small,
+    .form-select-small,
+    .form-textarea-small {
+        font-size: 0.75rem;
+        padding: 4px 6px;
+    }
+}
+
+@media (max-width: 968px) {
+    /* Ocultar tabla y mostrar cards */
+    
+    .evolution-table-container {
+        display: none;
+    }
+    
+    .evolution-card {
+        display: block;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-primary,
+    .btn-add-row,
+    .btn-cancel {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-input-small,
+    .form-select-small,
+    .form-textarea-small {
+        font-size: 1rem;
+        padding: 10px 12px;
+    }
+    
+    .user-info-bar {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-secondary,
+    .btn-logout {
+        width: auto;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .signos-vitales-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .container {
+        width: 98%;
+        padding: 15px 10px;
+        margin: 20px auto;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1rem;
+    }
+    
+    h3.section-title {
+        font-size: 1rem;
+    }
+    
+    /* Hacer tabla de historial scrollable en móvil */
+    .history-table {
+        font-size: 0.75rem;
+    }
+    
+    .history-table th,
+    .history-table td {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+    }
+    
+    .history-table th i {
+        display: none;
+    }
+}
+
+/* Estilos para mensajes de éxito/error */
+.message {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.message-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-left: 4px solid #10b981;
+}
+
+.message-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+}
+
+.message i {
+    font-size: 1.2rem;
+}
+

@@ -1,0 +1,17 @@
+.seccion-contactenos {
+    width: 100%;
+    background-color: #dadada;
+    padding: 50px 0;
+}
+
+.contact-form-section {
+    background-image: url('/img/fondo.jpg'); /* Reemplaza con la ruta de tu imagen */
+    background-size: cover;
+    background-position: center;
+    padding: 50px 0;
+}
+.contact-form-section .container {
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+    padding: 30px;
+    border-radius: 10px;
+}

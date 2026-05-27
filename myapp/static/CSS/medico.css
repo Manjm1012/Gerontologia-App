@@ -1,0 +1,130 @@
+/* ====================================
+   ESTILOS PARA EL MÓDULO DEL MÉDICO
+   ==================================== */
+
+/* Botón primario en el módulo médico */
+.btn-primary {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    border-color: #065f46;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+}
+
+/* Tabla de consultas médicas (usando gradiente similar) */
+.evolution-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #1e3a8a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-size: 0.85rem;
+}
+
+.evolution-table thead {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    color: white;
+}
+
+.evolution-table th {
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.evolution-table td {
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    vertical-align: middle;
+    background: white;
+    text-align: center;
+}
+
+.evolution-table tbody tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* Inputs pequeños para la tabla */
+.form-input-small {
+    width: 100%;
+    padding: 6px 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    background: white;
+    box-sizing: border-box;
+}
+
+.form-input-small:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
+}
+
+.form-select-small {
+    width: 100%;
+    padding: 6px 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    background: white;
+    cursor: pointer;
+}
+
+.form-select-small:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
+}
+
+/* Botones de acción del formulario */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-add-row,
+.btn-cancel {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    border-color: #065f46;
+}
+
+.btn-add-row {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    color: white;
+    border-color: #1e293b;
+}
+
+.btn-cancel {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    border-color: #991b1b;
+}

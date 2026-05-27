@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+{% load static %}
+
+    <title>Buscar Historial Geriátrico</title>
+
+<link rel="stylesheet" href="{% static 'css/historial.css' %}">
+
+</head>
+
+<body>
+
+<div class="container"> 
+    <h1>Buscar Historial Geriátrico</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input name="cc" placeholder="Ingrese cédula del paciente">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <hr>
+
+    <div class="resultados-historial">
+    {% for h in historias %} #se itera sobre las historias clínicas encontradas y se muestra la información relevante de cada paciente en una tarjeta. 
+    <div class="paciente-card">
+
+        <div class="card-header">
+            <strong>Nombre:</strong>
+        </div>
+
+        <div class="card-body">
+            <a href="/historia/{{ h.id }}" class="nombre-link">
+                {{ h.fk_identificacion.nombre }}
+            </a>
+
+            <p><strong>Cédula:</strong> {{ h.fk_identificacion.cc }}</p>
+            <p><strong>Edad:</strong> {{ h.fk_identificacion.edad }} años</p>
+        </div>
+
+        <div class="card-actions">
+            <a href="/historia/{{ h.id }}" class="btn-ver">Ver historia</a>
+            <a href="/pdf/{{ h.id }}" class="btn-pdf">PDF</a>
+        </div>
+
+    </div>
+    {% empty %}
+    <p class="sin-resultados">No se encontraron historias clínicas.</p> #si no se encuentran historias clínicas, se muestra un mensaje indicando que no hay resultados.
+    {% endfor %}
+</div>
+</div>
+
+</body>
+</html>

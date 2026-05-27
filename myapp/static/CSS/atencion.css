@@ -1,0 +1,71 @@
+.text-center {
+    text-align: center;
+  }
+  
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  
+  .card {
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .card-text {
+    text-align: center;
+  }
+  
+  .card-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .btn-group {
+    margin-bottom: 10px;
+  }
+  
+  /* Nuevo estilo para el título del profesional */
+  .professional-title {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+  }
+  section {
+    background-color: #ffffff; /* Un color claro */
+    padding: 50px 0; /* Espaciado superior e inferior */
+  }
+  
+  .custom-border {
+  
+    border: 1px solid #EA7913 !important; /* !important para asegurarnos de que se aplique */
+  }
+
+  .image-container {
+    position: relative;
+    width: 100%;
+    height: 400px; /* ajusta según tu diseño */
+    overflow: hidden;
+    border-radius: 12px; /* opcional, da un efecto más elegante */
+  }
+
+  .image-container .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* mantiene proporciones sin distorsionar */
+    object-position: center; /* centra la parte importante */
+    filter: brightness(0.95); /* opcional: mejora el contraste */
+    transition: transform 0.5s ease; /* para animación suave */
+  }
+
+  .image-container:hover .image {
+    transform: scale(1.05); /* efecto de zoom al pasar el mouse */
+  }

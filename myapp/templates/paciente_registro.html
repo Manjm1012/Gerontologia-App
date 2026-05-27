@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Registro - Historias Clínicas Gerontológicas</title>
+    <link rel="stylesheet" href="{% static 'CSS/pacientes.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-notes-medical"></i> Sistema de Registro</h1>
+            <h2>Formulario de Registro del Paciente</h2>
+        </header>
+        
+        <form action="{% url 'paciente_registro' %}" method="post" id="clinicalForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="nombre"><i class="fas fa-user"></i> Nombre del paciente:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="primer_apellido"><i class="fas fa-user"></i> Primer apellido:</label>
+                <input type="text" id="primer_apellido" name="primer_apellido" required>
+            </div>
+
+            <div class="form-group">
+                <label for="segundo_apellido"><i class="fas fa-user"></i> Segundo apellido:</label>
+                <input type="text" id="segundo_apellido" name="segundo_apellido" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha_nacimiento"><i class="fas fa-calendar-alt"></i> Fecha de Nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="genero"><i class="fas fa-venus-mars"></i> Género:</label>
+                <select id="genero" name="genero" required>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="otro">Otro</option>
+                    <option value="prefiero_no_decirlo">Prefiero no decirlo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo_documento"><i class="fas fa-id-card"></i> Tipo de Documento:</label>
+                <select id="tipo_documento" name="tipo_documento" required>
+                    <option value="RC">Registro civil</option>
+                    <option value="TI">Tarjeta de identidad</option>
+                    <option value="CC">Cédula de ciudadanía</option>
+                    <option value="TE">Tarjeta de extranjería</option>
+                    <option value="CE">Cédula de extranjería</option>
+                    <option value="NIT">Número de Identificación Tributaria(NIT)</option>
+                    <option value="PP">Pasaporte</option>
+                    <option value="PEP">Permiso especial de permanencia</option>
+                    <option value="DIE">Documento de identificación extranjero</option>
+                    <option value="NUIP">NUIP</option>
+                    <option value="FOREIGN_NIT">NIT de otro país</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="documento"><i class="fas fa-id-card"></i> Documento de Identidad:</label>
+                <input type="text" id="documento" name="documento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion"><i class="fas fa-home"></i> Dirección:</label>
+                <input type="text" id="direccion" name="direccion" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono"><i class="fas fa-phone"></i> Teléfono de Contacto:</label>
+                <input type="tel" id="telefono" name="telefono" required>
+            </div>
+
+            <div class="form-group">
+                <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico:</label>
+                <input type="email" id="correo" name="correo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="medico"><i class="fas fa-stethoscope"></i> Nombre del Médico de Cabecera:</label>
+                <input type="text" id="medico" name="medico" required>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="blue-btn" id="historiaClinicaBtn"><i class="fas fa-file-medical"></i>Generacion de Historia Clínica</button>
+        
+            </div>
+            <div id="historiaClinicaSection" style="display: none; margin-top: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9;">
+                <h3>Historia Clínica</h3>
+                <p>Este apartado está en blanco.</p>
+            </div>
+        
+            <div class="form-actions">
+                {% if user.is_authenticated %}
+                    {% if user.groups.all.0.name == 'Medico' %}
+                    <a href="{% url 'medico' %}" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i> Volver al Módulo Médico
+                    </a>
+                    {% elif user.groups.all.0.name == 'Enfermeria' %}
+                    <a href="{% url 'enfermeria' %}" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i> Volver a Enfermería
+                    </a>
+                    {% else %}
+                    <a href="{% url 'home' %}" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                    {% endif %}
+                {% endif %}
+                <button type="reset" class="secondary-btn"><i class="fas fa-undo"></i> Restablecer</button>
+                <button type="submit" class="primary-btn"><i class="fas fa-save"></i> Guardar registro</button>
+            </div>
+        </form>
+        
+        <footer>
+            <p>© 2025 Sistema de Historias Clínicas Gerontológicas</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.getElementById('clinicalForm').addEventListener('submit', function(event) {
+            const fechaNacimiento = new Date(document.getElementById('fecha_nacimiento').value);
+            const hoy = new Date();
+            const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+            if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+            if (edad < 60) {
+                alert('Este formulario es específico para Usuarios geriátricos (60+ años).');
+                event.preventDefault();
+            }
+        });
+           document.getElementById('historiaClinicaBtn').addEventListener('click', function() {
+            window.location.href = "/historia_gerontologica"; // Redirige a una nueva vista
+        });
+    </script>
+</body>
+</html>

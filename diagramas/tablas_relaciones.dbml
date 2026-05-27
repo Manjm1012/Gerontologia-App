@@ -1,0 +1,193 @@
+-- MÓDULO 1: DATOS BÁSICOS DEL PACIENTE
+CREATE TABLE Identificacion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    primer_nombre VARCHAR(80),
+    segundo_nombre VARCHAR(80),
+    primer_apellido VARCHAR(255),
+    segundo_apellido VARCHAR(255),
+    fecha_nacimiento DATE,
+    edad INT,
+    tipo_documento VARCHAR(50),
+    numero_documento_paciente VARCHAR(20),
+    ciudad_residencia VARCHAR(80),
+    sexo VARCHAR(10),
+    grupo_sanguineo VARCHAR(10),
+    pais_nacimiento VARCHAR(80),
+    departamento_nacimiento VARCHAR(80),
+    ciudad_nacimiento VARCHAR(80),
+    zona_residencia VARCHAR(50)
+);
+
+-- MÓDULO 2: CONTEXTO FAMILIAR Y SOCIAL
+CREATE TABLE FamiliaAcudientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    acudiente_nombre VARCHAR(255),
+    acudiente_parentesco VARCHAR(100),
+    acudiente_telefono VARCHAR(15),
+    acudiente_celular VARCHAR(15),
+    acudiente_direccion VARCHAR(255),
+    acudiente_email VARCHAR(120),
+    acudiente_estado_civil VARCHAR(50),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE TipoFamilia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    otro_razon_tipo_familia VARCHAR(255),
+    tipo_familia VARCHAR(100),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE RelacionesIntrafamiliares (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    tipo_relacion VARCHAR(100),
+    maltrato BOOLEAN,
+    explicacion_relacion TEXT,
+    tipo_maltrato VARCHAR(100),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+-- MÓDULO 3: EDUCACIÓN Y SOCIOECONOMÍA
+CREATE TABLE GradoEscolaridad (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    lee BOOLEAN,
+    escribe BOOLEAN,
+    primaria_completa BOOLEAN,
+    secundaria_completa BOOLEAN,
+    tecnico BOOLEAN,
+    tecnologo BOOLEAN,
+    profesional BOOLEAN,
+    maestria BOOLEAN,
+    otros_estudios VARCHAR(255),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE DatosSocioEconomicosForm (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    actividad_desempenada VARCHAR(255),
+    ocupacion_actual VARCHAR(255),
+    aporte_familiar BOOLEAN,
+    jubilacion BOOLEAN,
+    renta_propia BOOLEAN,
+    otros_ingresos VARCHAR(255),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+-- MÓDULO 4: SALUD Y SEGURIDAD SOCIAL
+CREATE TABLE SeguridadSocialSalud (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    regimen_seguridad_social VARCHAR(100),
+    afiliacion_salud VARCHAR(100),
+    ips VARCHAR(255),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE Medicamentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    nombre_medicamento VARCHAR(255),
+    dosis VARCHAR(100),
+    observaciones TEXT,
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE AdversidadesMedicamentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    reacciones_adversas BOOLEAN,
+    descripcion_reacciones TEXT,
+    alergias_medicamentos BOOLEAN,
+    descripcion_alergias TEXT,
+    autoprescripcion_medicamentos BOOLEAN,
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE AdversidadesAlimentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    adversidades_alimentos BOOLEAN,
+    descripcion_adversidad TEXT,
+    alergias_alimentos BOOLEAN,
+    descripcion_alergias TEXT,
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE AntecedentesToxicos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    consumo_sustancias BOOLEAN,
+    consumo_sustancias_tabaco BOOLEAN,
+    consumo_sustancias_cafe BOOLEAN,
+    consumo_sustancias_psicoactivas BOOLEAN,
+    cantidad_consumo VARCHAR(100),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+-- MÓDULO 5: ESPIRITUALIDAD Y HÁBITOS
+CREATE TABLE EspiritualidadReligion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    grupo_religioso BOOLEAN,
+    cual_grupo_religioso VARCHAR(255),
+    religion VARCHAR(100),
+    practica_religiosa BOOLEAN,
+    otros_practica_religiosa VARCHAR(255),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+CREATE TABLE HabitosRutinas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    actividad_fisica BOOLEAN,
+    tipo_actividad_fisica VARCHAR(255),
+    actividades_recreativas VARCHAR(255),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+-- MÓDULO 6: PROTECCIÓN Y SEGUROS
+CREATE TABLE ProteccionExequial (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_paciente INT,
+    proteccion_exequial BOOLEAN,
+    compania_proteccion_exequial VARCHAR(255),
+    FOREIGN KEY (fk_paciente) REFERENCES Identificacion(id)
+);
+
+-- MÓDULO 7: TABLA MAESTRA DE HISTORIA
+CREATE TABLE HistoriaGerontologica (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_identificacion INT,
+    fk_familia_acudientes INT,
+    fk_grado_escolaridad INT,
+    fk_datos_socio_economicos INT,
+    fk_tipo_familia INT,
+    fk_seguridad_social_salud INT,
+    fk_relaciones_intrafamiliares INT,
+    fk_proteccion_exequial INT,
+    fk_espiritualidad_religion INT,
+    fk_habitos_rutinas INT,
+    fk_medicamentos INT,
+    fk_adversidades_medicamentos INT,
+    fk_adversidades_alimentos INT,
+    fk_antecedentes_toxicos INT,
+    FOREIGN KEY (fk_identificacion) REFERENCES Identificacion(id),
+    FOREIGN KEY (fk_familia_acudientes) REFERENCES FamiliaAcudientes(id),
+    FOREIGN KEY (fk_grado_escolaridad) REFERENCES GradoEscolaridad(id),
+    FOREIGN KEY (fk_datos_socio_economicos) REFERENCES DatosSocioEconomicosForm(id),
+    FOREIGN KEY (fk_tipo_familia) REFERENCES TipoFamilia(id),
+    FOREIGN KEY (fk_seguridad_social_salud) REFERENCES SeguridadSocialSalud(id),
+    FOREIGN KEY (fk_relaciones_intrafamiliares) REFERENCES RelacionesIntrafamiliares(id),
+    FOREIGN KEY (fk_proteccion_exequial) REFERENCES ProteccionExequial(id),
+    FOREIGN KEY (fk_espiritualidad_religion) REFERENCES EspiritualidadReligion(id),
+    FOREIGN KEY (fk_habitos_rutinas) REFERENCES HabitosRutinas(id),
+    FOREIGN KEY (fk_medicamentos) REFERENCES Medicamentos(id),
+    FOREIGN KEY (fk_adversidades_medicamentos) REFERENCES AdversidadesMedicamentos(id),
+    FOREIGN KEY (fk_adversidades_alimentos) REFERENCES AdversidadesAlimentos(id),
+    FOREIGN KEY (fk_antecedentes_toxicos) REFERENCES AntecedentesToxicos(id)
+);

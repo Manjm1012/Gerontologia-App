@@ -1,0 +1,60 @@
+"""
+PLANTILLA DE CONFIGURACIÓN LOCAL - settings_local.py
+=====================================================
+
+Este archivo contiene configuraciones específicas de cada desarrollador.
+
+INSTRUCCIONES:
+1. Copia este archivo como 'settings_local.py' en el mismo directorio
+2. Configura tus valores personales (base de datos, rutas, etc.)
+3. El archivo settings_local.py está en .gitignore y NO se subirá a GitHub
+
+USO:
+Las configuraciones aquí sobrescriben las de settings.py
+"""
+
+# ==================================
+# CONFIGURACIÓN DE BASE DE DATOS
+# ==================================
+
+# Opción 1: MySQL (Recomendado para desarrollo colaborativo)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Gerontologia',
+        'USER': 'root',
+        'PASSWORD': '',  # Tu contraseña de MySQL
+        'HOST': 'localhost',
+        'PORT': '3306'
+    }
+}
+
+# Opción 2: SQLite (Para desarrollo local rápido)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db_local.sqlite3',
+#     }
+# }
+
+# ==================================
+# CONFIGURACIONES DE DESARROLLO
+# ==================================
+
+DEBUG = True
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# ==================================
+# SECRET KEY (¡CAMBIAR ESTE VALOR!)
+# ==================================
+# Genera una nueva en: https://djecrety.ir/
+SECRET_KEY = 'django-insecure-TU-CLAVE-SECRETA-AQUI'
+
+# ==================================
+# CONFIGURACIONES ADICIONALES
+# ==================================
+
+# Descomenta si necesitas configurar rutas específicas
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+# MEDIA_ROOT = BASE_DIR / 'media'
