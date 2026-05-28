@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedimientos Registrados</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .badge-interno { background:#dbeafe; color:#1e40af; padding:3px 10px; border-radius:12px; font-size:0.78rem; font-weight:700; white-space:nowrap; }
+        .badge-externo { background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:12px; font-size:0.78rem; font-weight:700; white-space:nowrap; }
+        .filter-bar { background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:16px 20px; margin-bottom:20px; display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end; }
+        .filter-bar label { font-size:0.8rem; font-weight:700; color:#374151; display:block; margin-bottom:5px; }
+        .filter-bar select { padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:0.9rem; }
+        .btn-filter { background:#1962bc; color:white; border:none; padding:9px 18px; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.87rem; }
+        table { width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; border:1px solid #e5e7eb; }
+        th { background:#1962bc; color:white; padding:11px 14px; text-align:left; font-size:0.82rem; text-transform:uppercase; letter-spacing:.5px; }
+        td { padding:11px 14px; border-bottom:1px solid #f3f4f6; font-size:0.88rem; vertical-align:middle; }
+        tr:hover td { background:#f0f7ff; }
+        .btn-ver { background:#1962bc; color:white; border:none; padding:5px 12px; border-radius:5px; cursor:pointer; font-size:0.8rem; text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
+        .empty-state { text-align:center; padding:50px 20px; color:#9ca3af; }
+        .empty-state i { font-size:3rem; display:block; margin-bottom:12px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header-section">
+        <div class="user-info-bar">
+            <div class="user-welcome">
+                <i class="fas fa-procedures"></i>
+                <span>Módulo de Procedimientos</span>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'medico_procedimiento_nuevo' %}" class="btn-secondary"><i class="fas fa-plus"></i> Nuevo Procedimiento</a>
+                <a href="{% url 'enfermeria' %}" class="btn-secondary"><i class="fas fa-arrow-left"></i> Volver al Módulo</a>
+                <a href="{% url 'logout' %}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content" style="max-width:1000px; margin:0 auto; padding:24px 16px;">
+
+        <h1 class="main-title"><i class="fas fa-list-alt"></i> Procedimientos Registrados</h1>
+
+        <!-- Filtro por paciente -->
+        <form method="get" class="filter-bar">
+            <div>
+                <label>Filtrar por paciente</label>
+                <select name="paciente_id">
+                    <option value="">— Todos los pacientes —</option>
+                    {% for p in pacientes %}
+                    <option value="{{ p.id }}" {% if paciente_id_sel == p.id|stringformat:"s" %}selected{% endif %}>
+                        {{ p.primer_apellido }}, {{ p.primer_nombre }} — {{ p.numero_documento_paciente }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn-filter"><i class="fas fa-search"></i> Filtrar</button>
+            {% if paciente_id_sel %}
+            <a href="{% url 'lista_procedimientos' %}" style="font-size:0.85rem; color:#6b7280; align-self:center;">✕ Limpiar filtro</a>
+            {% endif %}
+        </form>
+
+        {% if procedimientos %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Paciente</th>
+                    <th>Procedimiento</th>
+                    <th>Tipo</th>
+                    <th>Médico / Centro</th>
+                    <th>Registrado por</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proc in procedimientos %}
+                <tr>
+                    <td>{{ proc.fecha_registro|date:"d/m/Y" }}<br><small style="color:#9ca3af;">{{ proc.fecha_registro|date:"H:i" }}</small></td>
+                    <td>{{ proc.paciente.primer_apellido }}, {{ proc.paciente.primer_nombre }}</td>
+                    <td><strong>{{ proc.nombre_procedimiento }}</strong></td>
+                    <td>
+                        <span class="{% if proc.tipo_procedimiento == 'INTERNO' %}badge-interno{% else %}badge-externo{% endif %}">
+                            {{ proc.get_tipo_procedimiento_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if proc.tipo_procedimiento == 'INTERNO' %}
+                        {{ proc.medico_que_aplico|default:"—" }}
+                        {% else %}
+                        {{ proc.sitio_procedimiento|default:"—" }}
+                        {% endif %}
+                    </td>
+                    <td>{{ proc.profesional.get_full_name|default:proc.profesional.username }}</td>
+                    <td>
+                        <a href="{% url 'ver_procedimiento' proc.id %}" class="btn-ver">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-procedures"></i>
+            <p>No hay procedimientos registrados{% if paciente_id_sel %} para este paciente{% endif %}.</p>
+            <a href="{% url 'medico_procedimiento_nuevo' %}" style="color:#1962bc; font-weight:600;">
+                <i class="fas fa-plus"></i> Registrar primer procedimiento
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="footer-section">
+        <p>© 2026 Sistema de Historias Clínicas Gerontológicas</p>
+    </div>
+</div>
+</body>
+</html>

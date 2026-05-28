@@ -1,56 +1,213 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-{% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Historial - Módulo de Enfermería</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .search-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 28px 32px;
+            margin-bottom: 28px;
+        }
+        .search-form {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        .search-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-width: 200px;
+        }
+        .search-form label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        .search-form input {
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+        .search-form input:focus {
+            outline: none;
+            border-color: #1962bc;
+            box-shadow: 0 0 0 3px rgba(25, 98, 188, 0.1);
+        }
+        .btn-search {
+            background-color: #1962bc;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+        .btn-search:hover { background-color: #144fa0; }
 
-    <title>Buscar Historial Geriátrico</title>
+        .result-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid #1962bc;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .result-card .patient-info h4 {
+            color: #1962bc;
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+        }
+        .result-card .patient-info p {
+            margin: 3px 0;
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+        .result-card .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-ver {
+            background-color: #1962bc;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+        .btn-ver:hover { background-color: #144fa0; color: white; }
+        .btn-pdf {
+            background-color: #EA7913;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+        .btn-pdf:hover { background-color: #cf670e; color: white; }
 
-<link rel="stylesheet" href="{% static 'css/historial.css' %}">
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+            font-size: 1.05rem;
+        }
+        .no-results i { font-size: 2.5rem; margin-bottom: 12px; display: block; color: #9ca3af; }
 
+        .search-hint {
+            color: #6b7280;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
 
-<div class="container"> 
-    <h1>Buscar Historial Geriátrico</h1>
-
-    <form method="POST">
-        {% csrf_token %}
-        <input name="cc" placeholder="Ingrese cédula del paciente">
-        <button type="submit">Buscar</button>
-    </form>
-
-    <hr>
-
-    <div class="resultados-historial">
-    {% for h in historias %} #se itera sobre las historias clínicas encontradas y se muestra la información relevante de cada paciente en una tarjeta. 
-    <div class="paciente-card">
-
-        <div class="card-header">
-            <strong>Nombre:</strong>
+        <!-- Barra superior -->
+        <div class="header-section">
+            <div class="user-info-bar">
+                <div class="user-welcome">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <span>Buscar Historial Geriátrico</span>
+                </div>
+                <div class="header-actions">
+                    <a href="{% url 'enfermeria' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver al Módulo
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <div class="card-body">
-            <a href="/historia/{{ h.id }}" class="nombre-link">
-                {{ h.fk_identificacion.nombre }}
-            </a>
+        <h1 class="main-title">HISTORIAL DE PACIENTES</h1>
 
-            <p><strong>Cédula:</strong> {{ h.fk_identificacion.cc }}</p>
-            <p><strong>Edad:</strong> {{ h.fk_identificacion.edad }} años</p>
+        <!-- Formulario de búsqueda -->
+        <div class="section-title">BÚSQUEDA POR DOCUMENTO</div>
+        <div class="search-section">
+            <form method="POST" class="search-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="cc"><i class="fas fa-id-card"></i> Número de documento del paciente</label>
+                    <input type="text" id="cc" name="cc" placeholder="Ej: 1234567890"
+                           value="{{ request.POST.cc }}" autocomplete="off">
+                </div>
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </form>
+            <p class="search-hint"><i class="fas fa-info-circle"></i> Ingrese el número de cédula completo para consultar el historial clínico del paciente.</p>
         </div>
 
-        <div class="card-actions">
-            <a href="/historia/{{ h.id }}" class="btn-ver">Ver historia</a>
-            <a href="/pdf/{{ h.id }}" class="btn-pdf">PDF</a>
-        </div>
+        <!-- Resultados -->
+        {% if buscado %}
+        <div class="section-title">RESULTADOS DE LA BÚSQUEDA</div>
 
+        {% if pacientes %}
+            {% for p in pacientes %}
+            <div class="result-card">
+                <div class="patient-info">
+                    <h4><i class="fas fa-user-circle me-2"></i>{{ p.primer_nombre }} {{ p.segundo_nombre }} {{ p.primer_apellido }} {{ p.segundo_apellido }}</h4>
+                    <p><i class="fas fa-id-card"></i>&nbsp; <strong>Documento:</strong> {{ p.tipo_documento }} {{ p.numero_documento_paciente }}</p>
+                    <p><i class="fas fa-birthday-cake"></i>&nbsp; <strong>Edad:</strong> {{ p.edad }} años &nbsp;|&nbsp; <strong>Ciudad:</strong> {{ p.ciudad_residencia }}</p>
+                </div>
+                <div class="result-actions">
+                    <a href="{% url 'perfil_paciente' p.id %}" class="btn-ver">
+                        <i class="fas fa-eye"></i> Ver Historia
+                    </a>
+                    <a href="{% url 'pdf_paciente' p.id %}" class="btn-pdf">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                No se encontraron pacientes para el documento ingresado.
+            </div>
+        {% endif %}
+        {% endif %}
+
+        <!-- Footer -->
+        <footer class="footer-section">
+            <p>&copy; 2025 Gerontología App - Módulo de Enfermería</p>
+        </footer>
     </div>
-    {% empty %}
-    <p class="sin-resultados">No se encontraron historias clínicas.</p> #si no se encuentran historias clínicas, se muestra un mensaje indicando que no hay resultados.
-    {% endfor %}
-</div>
-</div>
-
 </body>
 </html>

@@ -1137,10 +1137,17 @@ Historia = HistoriaGerontologica
 # NUEVO: REGISTRO DE PROCEDIMIENTOS
 # ======================================================
 class ProcedimientoMedico(models.Model):
+    TIPO_CHOICES = [
+        ('INTERNO', 'Interno (realizado en el centro)'),
+        ('EXTERNO', 'Externo (realizado fuera del centro)'),
+    ]
+
     # Relaciones
     paciente = models.ForeignKey('Identificacion', on_delete=models.CASCADE)
     profesional = models.ForeignKey(User, on_delete=models.CASCADE)
-    tipo_procedimiento = models.CharField(max_length=100)
+
+    tipo_procedimiento = models.CharField(max_length=10, choices=TIPO_CHOICES, default='INTERNO')
+    nombre_procedimiento = models.CharField(max_length=200, verbose_name="Nombre del Procedimiento", default='')
 
     # Campos para Interno
     medico_que_aplico = models.CharField(max_length=200, blank=True, null=True)
@@ -1148,11 +1155,16 @@ class ProcedimientoMedico(models.Model):
     # Campos para Externo
     sitio_procedimiento = models.CharField(max_length=200, blank=True, null=True)
     archivo_adjunto = models.FileField(upload_to='procedimientos_externos/', blank=True, null=True)
-    
-    # Información específica de enfermería 
+
+    # Información específica de enfermería
     descripcion = models.TextField(verbose_name="Protocolo Aplicado")
     observaciones = models.TextField(blank=True, null=True, verbose_name="Novedades")
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-fecha_registro']
+        verbose_name = 'Procedimiento Médico'
+        verbose_name_plural = 'Procedimientos Médicos'
+
     def __str__(self):
-        return f"{self.tipo_procedimiento} - {self.paciente.primer_nombre}"
+        return f"{self.nombre_procedimiento} ({self.tipo_procedimiento}) - {self.paciente.primer_nombre}"

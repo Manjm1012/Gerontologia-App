@@ -21,38 +21,42 @@
 </head>
 <body>
 
-    <!-- Main Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white mt-1">
+    <!-- Logo - solo visible en escritorio -->
+    <nav class="navbar navbar-light bg-white mt-1 d-none d-lg-block">
         <div class="container d-flex justify-content-center">
-            <a class="navbar-brand d-flex flex-column align-items-center text-center" href="{% url 'home' %}">
-                <img src="{% static 'img/Logo.png' %}" alt="Logo" class="mb-2 img-fluid" style="max-width:200px; width:100%;">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'img/Logo.png' %}" alt="Logo" class="img-fluid" style="max-width:200px;">
             </a>
         </div>
     </nav>
+    <hr class="my-0 d-none d-lg-block">
 
-    <hr class="my-0">
-
+    <!-- Navbar principal -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fw-bold">
         <div class="container">
-            <!-- Botón de menú para dispositivos móviles -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <!-- Logo móvil -->
+            <a class="navbar-brand d-lg-none" href="{% url 'home' %}">
+                <img src="{% static 'img/Logo.png' %}" alt="Logo" height="45">
+            </a>
+            <!-- Botón menú lateral (solo móvil) -->
+            <button class="navbar-toggler border-0 d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#menuMovil">
                 <span class="navbar-toggler-icon"></span>
             </button>
-    
-            <!-- Contenido del menú de navegación -->
+            <!-- Menú escritorio -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}" role="button" style="color: white;">Inicio</a>
+                        <a class="nav-link text-white" href="{% url 'home' %}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'somos' %}" role="button" style="color: white;">Quiénes Somos</a>
+                        <a class="nav-link text-white" href="{% url 'somos' %}">Quiénes Somos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'servicios' %}" role="button" style="color: white;">Servicios</a>
+                        <a class="nav-link text-white" href="{% url 'servicios' %}">Servicios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contactenos' %}" role="button" style="color: white;">Contáctenos</a>
+                        <a class="nav-link text-white" href="{% url 'contactenos' %}">Contáctenos</a>
                     </li>
                 </ul>
             </div>
@@ -63,9 +67,48 @@
                 <button class="btn btn-outline-light btn-sm">
                     <i class="bi bi-search text-white"></i>
                 </button>
-            </div>            
+            </div>
         </div>
     </nav>
+
+    <!-- Menú lateral móvil (offcanvas) -->
+    <div class="offcanvas offcanvas-start bg-dark" id="menuMovil" tabindex="-1">
+        <div class="offcanvas-header border-bottom border-secondary py-3">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/Logo.png' %}" alt="Centro Geriátrico" height="65">
+            </a>
+            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column p-0">
+            <ul class="navbar-nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'home' %}">
+                        <i class="bi bi-house-door me-3"></i>Inicio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'somos' %}">
+                        <i class="bi bi-people me-3"></i>Quiénes Somos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'servicios' %}">
+                        <i class="bi bi-heart-pulse me-3"></i>Servicios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'contactenos' %}">
+                        <i class="bi bi-envelope me-3"></i>Contáctenos
+                    </a>
+                </li>
+            </ul>
+            <div class="p-4 mt-auto">
+                <a href="{% url 'login' %}" class="btn btn-outline-light w-100">
+                    <i class="bi bi-person me-2"></i>Iniciar Sesión
+                </a>
+            </div>
+        </div>
+    </div>
 
     <hr>
 

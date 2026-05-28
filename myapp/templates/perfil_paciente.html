@@ -138,7 +138,7 @@
                         <tbody>
                             {% for evolucion in evoluciones_enfermeria %}
                             <tr>
-                                <td>{{ evolucion.fecha|date:"d/m/Y H:i" }}</td>
+                                <td>{{ evolucion.fecha|date:"d/m/Y" }}</td>
                                 <td>{{ evolucion.presion_arterial|default:"N/A" }}</td>
                                 <td>{{ evolucion.frecuencia_cardiaca|default:"N/A" }}</td>
                                 <td>{{ evolucion.temperatura|default:"N/A" }}°C</td>

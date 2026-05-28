@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centro Geriátrico - Especializaciones</title>
+    <title>Centro Geriátrico - Servicios</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'CSS/servicios.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/servicios.css' %}?v=2">
 
     <!-- Aplicacion de estilos globales -->
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
@@ -22,44 +22,42 @@
 </head>
 <body>
 
-    <!-- Main Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white mt-1">
+    <!-- Logo - solo visible en escritorio -->
+    <nav class="navbar navbar-light bg-white mt-1 d-none d-lg-block">
         <div class="container d-flex justify-content-center">
-            <a class="navbar-brand d-flex flex-column align-items-center text-center" href="{% url 'home' %}">
-                <img src="{% static 'img/Logo.png' %}" alt="Logo" class="mb-2 img-fluid" style="max-width:200px; width:100%;">
-                
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'img/Logo.png' %}" alt="Logo" class="img-fluid" style="max-width:200px;">
             </a>
-        
         </div>
     </nav>
+    <hr class="my-0 d-none d-lg-block">
 
-    
-
-    <hr class="my-0">
-
-
+    <!-- Navbar principal -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <!-- Botón de menú para dispositivos móviles -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <!-- Logo móvil -->
+            <a class="navbar-brand d-lg-none" href="{% url 'home' %}">
+                <img src="{% static 'img/Logo.png' %}" alt="Logo" height="45">
+            </a>
+            <!-- Botón menú lateral (solo móvil) -->
+            <button class="navbar-toggler border-0 d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#menuMovil">
                 <span class="navbar-toggler-icon"></span>
             </button>
-    
-            <!-- Contenido del menú de navegación -->
+            <!-- Menú escritorio -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}" role="button" style="color: white;">Inicio</a>
+                        <a class="nav-link text-white" href="{% url 'home' %}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'somos' %}" role="button" style="color: white;">Quiénes Somos</a>
+                        <a class="nav-link text-white" href="{% url 'somos' %}">Quiénes Somos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'servicios' %}" role="button" style="color: white;">Servicios</a>
+                        <a class="nav-link text-white" href="{% url 'servicios' %}">Servicios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contactenos' %}" role="button" style="color: white;">Contáctenos</a>
+                        <a class="nav-link text-white" href="{% url 'contactenos' %}">Contáctenos</a>
                     </li>
                 </ul>
             </div>
@@ -70,171 +68,202 @@
                 <button class="btn btn-outline-light btn-sm">
                     <i class="bi bi-search text-white"></i>
                 </button>
-            </div>            
+            </div>
         </div>
     </nav>
 
+    <!-- Menú lateral móvil (offcanvas) -->
+    <div class="offcanvas offcanvas-start bg-dark" id="menuMovil" tabindex="-1">
+        <div class="offcanvas-header border-bottom border-secondary py-3">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/Logo.png' %}" alt="Centro Geriátrico" height="65">
+            </a>
+            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column p-0">
+            <ul class="navbar-nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'home' %}">
+                        <i class="bi bi-house-door me-3"></i>Inicio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'somos' %}">
+                        <i class="bi bi-people me-3"></i>Quiénes Somos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'servicios' %}">
+                        <i class="bi bi-heart-pulse me-3"></i>Servicios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white px-4 py-3 border-bottom border-secondary" href="{% url 'contactenos' %}">
+                        <i class="bi bi-envelope me-3"></i>Contáctenos
+                    </a>
+                </li>
+            </ul>
+            <div class="p-4 mt-auto">
+                <a href="{% url 'login' %}" class="btn btn-outline-light w-100">
+                    <i class="bi bi-person me-2"></i>Iniciar Sesión
+                </a>
+            </div>
+        </div>
+    </div>
+
     <hr>
 
-    
     <div class="seccion-servicios">
         <div class="container">
-            <h1 class="text-dark fw-bold">Servicios que prestamos en nuestro Centro</h1>
+            <h1 class="text-dark fw-bold text-center">Nuestros Servicios</h1>
             <p class="descripcion">
-                Estos servicios buscan mejorar la calidad de vida de las personas mayores, garantizando su bienestar físico, emocional y social. 
-                Para lograrlo, se enfocan en proporcionar atención médica adecuada, actividades recreativas y de integración, 
-                así como apoyo psicológico y emocional.
+                En el Centro Geriátrico ofrecemos atención integral orientada a mejorar la calidad de vida de las personas mayores,
+                garantizando su bienestar físico, emocional y social. Nuestro equipo multidisciplinario brinda acompañamiento
+                permanente, actividades recreativas y terapéuticas, así como apoyo especializado para residentes y sus familias.
             </p>
         </div>
     </div>
-    
+
     <hr>
-    
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- Tarjeta 1 -->
-        <div class="col d-flex align-items-stretch">
-            <div class="card h-100 custom-border">
-                <img src="{% static 'img/hospedaje.jpg' %}" class="card-img-top" alt="Hospedaje">
-                <div class="card-body">
-                    <h5 class="card-title">Hospedaje</h5>
-                    <p class="card-text">Habitaciones individuales o compartidas adaptadas a las necesidades de las personas mayores.</p>
-                    <p class="card-text">Espacios seguros y accesibles con medidas de seguridad como barandillas, iluminación adecuada y pisos antideslizantes.</p>
-                    <p class="card-text">Servicio de limpieza y mantenimiento para un ambiente higiénico y confortable.</p>
-                    
-                </div>
-                <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
+
+    <div class="container py-4">
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+
+            <!-- Tarjeta 1: Hospedaje -->
+            <div class="col d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/hospedaje.jpg' %}" class="card-img-top" alt="Hospedaje">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Hospedaje</h5>
+                        <p class="card-text">Habitaciones individuales o compartidas adaptadas a las necesidades de cada residente, con ambientes cómodos y personalizados.</p>
+                        <p class="card-text">Espacios seguros y accesibles, dotados de barandillas, iluminación adecuada y pisos antideslizantes para prevenir caídas.</p>
+                        <p class="card-text">Servicio permanente de limpieza y mantenimiento que garantiza un entorno higiénico y confortable.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
                 </div>
             </div>
+
+            <!-- Tarjeta 2: Alimentación -->
+            <div class="col d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/Alimentacion.jpg' %}" class="card-img-top" alt="Alimentación">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Alimentación</h5>
+                        <p class="card-text">Planes de alimentación balanceada diseñados por nutricionistas especializados en gerontología, adaptados a cada perfil de salud.</p>
+                        <p class="card-text">Tres comidas principales y refrigerios saludables diarios, asegurando una dieta completa y nutritiva.</p>
+                        <p class="card-text">Atención a requerimientos especiales como dietas blandas, hipocalóricas o de nutrición enteral según indicación médica.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3: Arreglo de Ropa -->
+            <div class="col d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/Arreglo-de-ropa.jpg' %}" class="card-img-top" alt="Arreglo de Ropa">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Arreglo de Ropa</h5>
+                        <p class="card-text">Lavado, planchado y mantenimiento de la ropa personal y de cama, asegurando prendas siempre limpias y en buen estado.</p>
+                        <p class="card-text">Reparaciones menores como costuras, remaches y cambio de botones para prolongar la vida útil de las prendas.</p>
+                        <p class="card-text">Organización de la vestimenta de acuerdo con la estación del año y las necesidades particulares de cada residente.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 4: Cuidados de Enfermería -->
+            <div class="col d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/cuidados.jpg' %}" class="card-img-top" alt="Cuidados de Enfermería">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Cuidados de Enfermería</h5>
+                        <p class="card-text">Atención a cargo de auxiliares de enfermería y técnicos cuidadores, incluyendo administración de medicamentos, control de signos vitales y curaciones simples.</p>
+                        <p class="card-text">Monitoreo continuo del estado de salud de cada residente, con registros de evolución y coordinación directa con el equipo médico.</p>
+                        <p class="card-text">Asistencia personalizada en actividades cotidianas como higiene personal, movilidad y alimentación.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 5: Recreación -->
+            <div class="col d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/recreacion.jpg' %}" class="card-img-top" alt="Recreación">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Recreación</h5>
+                        <p class="card-text">Actividades lúdicas y de entretenimiento como juegos de mesa, música, cine y lectura, fomentando la alegría y el disfrute diario.</p>
+                        <p class="card-text">Ejercicios físicos adaptados como yoga, gimnasia suave y caminatas supervisadas para mantener la movilidad y el bienestar corporal.</p>
+                        <p class="card-text">Espacios de socialización diseñados para fortalecer los vínculos entre residentes y prevenir el aislamiento.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 6: Terapia Ocupacional -->
+            <div class="col d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/terapia-ocupacional.jpg' %}" class="card-img-top" alt="Terapia Ocupacional">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Terapia Ocupacional</h5>
+                        <p class="card-text">Actividades especializadas orientadas a mejorar la autonomía y funcionalidad del residente en las tareas de la vida diaria.</p>
+                        <p class="card-text">Estimulación cognitiva mediante ejercicios de memoria, manualidades y terapias sensoriales para mantener las capacidades mentales.</p>
+                        <p class="card-text">Rehabilitación funcional con ejercicios adaptados para prevenir la pérdida de movilidad y fortalecer las habilidades motoras.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    
-        <!-- Tarjeta 2 -->
-        <div class="col d-flex align-items-stretch">
-            <div class="card h-100 custom-border">
-                <img src="{% static 'img/Alimentacion.jpg' %}" class="card-img-top" alt="Alimentación">
-                <div class="card-body">
-                    <h5 class="card-title">Alimentación</h5>
-                    <p class="card-text">Planes de alimentación balanceada diseñados por nutricionistas.</p>
-                    <p class="card-text">Tres comidas principales y refrigerios saludables, asegurando una dieta adecuada.</p>
-                    <p class="card-text">Atención a requerimientos especiales como dietas blandas o enterales.</p>
-                    
-                </div>
-                <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Tarjeta 3 -->
-        <div class="col d-flex align-items-stretch">
-            <div class="card h-100 custom-border">
-                <img src="{% static 'img/Arreglo-de-ropa.jpg' %}" class="card-img-top" alt="Arreglo de ropa">
-                <div class="card-body">
-                    <h5 class="card-title">Arreglo de ropa</h5>
-                    <p class="card-text">Lavado, planchado y mantenimiento de la ropa personal y de cama.</p>
-                    <p class="card-text">Reparaciones menores como costuras y cambios de botones.</p>
-                    <p class="card-text">Organización de la vestimenta según estación o necesidades individuales.</p>
-                    
-                </div>
-                <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
+
+        <!-- Última fila: 2 tarjetas centradas -->
+        <div class="row g-4 mb-5 justify-content-center">
+
+            <!-- Tarjeta 7: Orientación Psicogerontológica -->
+            <div class="col-12 col-md-4 d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/psicologia.jpg' %}" class="card-img-top" alt="Orientación Psicogerontológica">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Orientación Psicogerontológica</h5>
+                        <p class="card-text">Acompañamiento especializado en los procesos psicológicos, emocionales y sociales del envejecimiento, promoviendo el bienestar integral del residente.</p>
+                        <p class="card-text">Evaluación e intervención en áreas de memoria, atención y funciones cognitivas para fomentar la autonomía y la calidad de vida.</p>
+                        <p class="card-text">Apoyo dirigido a familias y cuidadores para prevenir la sobrecarga emocional y fortalecer el entorno de cuidado del usuario.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
                 </div>
             </div>
+
+            <!-- Tarjeta 8: Estimulación Cognitiva -->
+            <div class="col-12 col-md-4 d-flex align-items-stretch">
+                <div class="card h-100 custom-border">
+                    <img src="{% static 'img/puzzle_1.jpg' %}" class="card-img-top" alt="Estimulación Cognitiva">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Estimulación Cognitiva</h5>
+                        <p class="card-text">Ejercicios de reactivación neuromuscular enfocados en la precisión, el control cognitivo y la coordinación general, adaptados al nivel de cada residente.</p>
+                        <p class="card-text">Entrenamientos especializados que combinan elementos físicos y herramientas digitales de vanguardia para una estimulación integral.</p>
+                        <p class="card-text">Programa de bienestar neurológico orientado a preservar la salud mental y prevenir el deterioro cognitivo progresivo.</p>
+                    </div>
+                    <div class="mt-auto text-center pb-3">
+                        <a href="#" class="btn btn-consulta">Consulte Aquí</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-    
-    <hr>
-    
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- Tarjeta 4 -->
-        <div class="col d-flex align-items-stretch">
-            <div class="card h-100 custom-border">
-                <img src="{% static 'img/cuidados.jpg' %}" class="card-img-top" alt="Servicio 4">
-                <div class="card-body">
-                    <h5 class="card-title">Cuidados básicos de enfermería:</h5>
-                    <p class="card-text">Atención por parte de auxiliares de enfermería y técnicos cuidadores para la administración de medicamentos, control de signos vitales y curaciones simples.</p>
-                    <p class="card-text">Monitoreo constante de la salud de los residentes, con registros de evolución y comunicación con médicos en caso necesario.</p>
-                    <p class="card-text">Asistencia en actividades diarias como higiene personal, movilidad y alimentación.</p>
-                    
-                </div>
-                <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Tarjeta 5 -->
-        <div class="col d-flex align-items-stretch">
-            <div class="card h-100 custom-border">
-                <img src="{% static 'img/recreacion.jpg' %}" class="card-img-top" alt="Servicio 5">
-                <div class="card-body">
-                    <h5 class="card-title">Recreación</h5>
-                    <p class="card-text">Actividades lúdicas y de entretenimiento como juegos de mesa, música, cine y lectura.</p>
-                    <p class="card-text">Ejercicios físicos adaptados como yoga, gimnasia suave y caminatas supervisadas.</p>
-                    <p class="card-text">Espacios de socialización para fortalecer la convivencia y evitar el aislamiento.</p>
-                    
-                </div>
-                <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Tarjeta 6 -->
-        <div class="col d-flex align-items-stretch">
-            <div class="card h-100 custom-border">
-                <img src="{% static 'img/terapia-ocupacional.jpg' %}" class="card-img-top" alt="Servicio 6">
-                <div class="card-body">
-                    <h5 class="card-title">Terapia ocupacional</h5>
-                    <p class="card-text">Actividades diseñadas para mejorar la autonomía y funcionalidad en la vida diaria.</p>
-                    <p class="card-text">Estimulación cognitiva a través de ejercicios de memoria, manualidades y terapias sensoriales.</p>
-                    <p class="card-text">Rehabilitación mediante ejercicios adaptados para prevenir la pérdida de movilidad y fortalecer habilidades motoras.</p>
-                    
-                </div>
-                <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<!-- Un solo contenedor row para ambos, centrado con justify-content-center -->
-<div class="row row-cols-1 row-cols-md-3 g-4 mb-5 justify-content-center">
-    
-   
-    <div class="col d-flex align-items-stretch">
-        <div class="card h-100 custom-border">
-            <img src="{% static 'img/psicologia.jpg' %}" class="card-img-top" alt="Orientación Psicogerontológica">
-            <div class="card-body">
-                <h5 class="card-title">Orientación Psicogerontológica</h5>
-                <p class="card-text"><strong>Promoción del bienestar emocional:</strong> Acompañamiento especializado en procesos psicológicos, emocionales y sociales del envejecimiento.</p>
-                <p class="card-text">Evaluación e intervención en memoria, atención y funciones cognitivas para fomentar la autonomía.</p>
-                <p class="card-text">Apoyo a familias y cuidadores para evitar la sobrecarga y mejorar el entorno del usuario.</p>
-            </div>
-            <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
-            </div>
-        </div>
-    </div>
-
-  
-    <div class="col d-flex align-items-stretch">
-        <div class="card h-100 custom-border">
-            <img src="{% static 'img/puzzle_1.jpg' %}" class="card-img-top" alt="Estimulación Cognitiva">
-            <div class="card-body">
-                <h5 class="card-title">Estimulación Cognitiva</h5>
-                <p class="card-text"><strong>Reactivación neuromuscular:</strong> Ejercicios enfocados en la precisión, cuidado y control cognitivo general para el usuario.</p>
-                <p class="card-text">Entrenamientos específicos especializados utilizando elementos físicos y herramientas virtuales de vanguardia.</p>
-                <p class="card-text">Bienestar neurológico centrado en la salud mental y la prevención del deterioro cognitivo progresivo.</p>
-            </div>
-            <div class="mt-auto text-center pb-3">
-                <a href="#" class="btn btn-consulta" style="background-color: #EA7913; color:#ffffff;">Consulte Aquí</a>
-            </div>
-        </div>
-    </div>
-
-</div>
-
 
     <hr>
 

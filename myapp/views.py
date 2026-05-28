@@ -45,17 +45,21 @@ from django.shortcuts import render
 from .models import HistoriaGerontologica
 
 def buscar(request):
-    historias = []
+    pacientes = []
+    buscado = False
 
     if request.method == "POST":
-        cc = request.POST.get("cc")
+        cc = request.POST.get("cc", "").strip()
+        buscado = True
 
-        historias = HistoriaGerontologica.objects.filter(
-             fk_identificacion__numero_documento_paciente=cc
-             )
+        if cc:
+            pacientes = Identificacion.objects.filter(
+                numero_documento_paciente=cc
+            )
 
     return render(request, "buscar_historial.html", {
-        "historias": historias
+        "pacientes": pacientes,
+        "buscado": buscado,
     })
 #======================================================
 
@@ -929,7 +933,6 @@ def descargar_manual_pdf(request):
     import os
     pdf_path = os.path.join(settings.BASE_DIR, 'manual_usuario.pdf')
     if not os.path.exists(pdf_path):
-        # Respuesta amigable en lugar de 404 genérico
         return HttpResponse(
             "<h1>Manual PDF no encontrado</h1>"
             "<p>Genera el archivo ejecutando:</p>"
@@ -940,24 +943,36 @@ def descargar_manual_pdf(request):
     return FileResponse(open(pdf_path, 'rb'), as_attachment=True, filename='manual_usuario.pdf')
 
 
-def perfil_paciente(request, paciente_id=None):
-    if not paciente_id:
-        messages.error(request, 'No se especificó el ID del paciente.')
-        return redirect('medico')
-    
-    # Obtener el paciente del modelo Identificacion
+def pdf_paciente(request, paciente_id):
     paciente = get_object_or_404(Identificacion, id=paciente_id)
-    
-    # Obtener datos relacionados
     try:
         familia_acudiente = FamiliaAcudientes.objects.filter(paciente=paciente).first()
     except:
         familia_acudiente = None
-    
-    # Obtener consultas médicas del paciente
     consultas_medicas = ConsultaMedica.objects.filter(paciente=paciente).order_by('-fecha')
-    
-    # Obtener evoluciones de enfermería del paciente
+    evoluciones_enfermeria = EvolucionDiariaEnfermeria.objects.filter(paciente=paciente).order_by('-fecha')
+    return render(request, "pdf_paciente.html", {
+        "paciente": paciente,
+        "familia_acudiente": familia_acudiente,
+        "consultas_medicas": consultas_medicas,
+        "evoluciones_enfermeria": evoluciones_enfermeria,
+    })
+
+
+
+def perfil_paciente(request, paciente_id=None):
+    if not paciente_id:
+        messages.error(request, 'No se especificó el ID del paciente.')
+        return redirect('medico')
+
+    paciente = get_object_or_404(Identificacion, id=paciente_id)
+
+    try:
+        familia_acudiente = FamiliaAcudientes.objects.filter(paciente=paciente).first()
+    except:
+        familia_acudiente = None
+
+    consultas_medicas = ConsultaMedica.objects.filter(paciente=paciente).order_by('-fecha')
     evoluciones_enfermeria = EvolucionDiariaEnfermeria.objects.filter(paciente=paciente).order_by('-fecha')
 
     return render(request, "perfil_paciente.html", {
@@ -1324,31 +1339,48 @@ def medico_enunciado_nuevo(request):
 
 @login_required
 def medico_procedimiento_nuevo(request):
-    pacientes = Identificacion.objects.all()
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    pacientes = Identificacion.objects.all().order_by('primer_apellido', 'primer_nombre')
+    medicos_internos = User.objects.filter(is_active=True).order_by('first_name', 'last_name')
 
     if request.method == 'POST':
         tipo = request.POST.get('tipo_procedimiento')
-        
-        # 1. Guardamos en la base de datos primero
         procedimiento = ProcedimientoMedico.objects.create(
             paciente_id=request.POST.get('paciente_id'),
             profesional=request.user,
             tipo_procedimiento=tipo,
-            medico_que_aplico=request.POST.get('medico_que_aplico'),
-            sitio_procedimiento=request.POST.get('sitio_procedimiento'),
+            nombre_procedimiento=request.POST.get('nombre_procedimiento', ''),
+            medico_que_aplico=request.POST.get('medico_que_aplico', '') if tipo == 'INTERNO' else request.POST.get('medico_que_aplico_ext', ''),
+            sitio_procedimiento=request.POST.get('sitio_procedimiento', ''),
             archivo_adjunto=request.FILES.get('archivo_adjunto'),
-            descripcion=request.POST.get('descripcion'),
-            observaciones=request.POST.get('observaciones')
+            descripcion=request.POST.get('descripcion', ''),
+            observaciones=request.POST.get('observaciones', '')
         )
+        messages.success(request, f'Procedimiento "{procedimiento.nombre_procedimiento}" registrado correctamente.')
+        return redirect('ver_procedimiento', proc_id=procedimiento.id)
 
-        # 2. Lógica para el PDF
-        if tipo == 'INTERNO':
-            # Aquí llamarías a tu función de generar_pdf(procedimiento)
-            messages.success(request, 'Procedimiento guardado. Descargando reporte...')
-            # Puedes redirigir a una vista que genere el PDF
-            return redirect('generar_pdf_procedimiento', id=procedimiento.id)
-        
-        messages.success(request, 'Procedimiento externo guardado con soporte adjunto.')
-        return redirect('enfermeria')
+    return render(request, 'procedimientos.html', {
+        'pacientes': pacientes,
+        'medicos_internos': medicos_internos,
+    })
 
-    return render(request, 'medico_procedimiento_nuevo.html', {'pacientes': pacientes})
+
+@login_required
+def ver_procedimiento(request, proc_id):
+    procedimiento = get_object_or_404(ProcedimientoMedico, id=proc_id)
+    return render(request, 'ver_procedimiento.html', {'procedimiento': procedimiento})
+
+
+@login_required
+def lista_procedimientos(request):
+    procedimientos = ProcedimientoMedico.objects.select_related('paciente', 'profesional').order_by('-fecha_registro')
+    paciente_id = request.GET.get('paciente_id')
+    if paciente_id:
+        procedimientos = procedimientos.filter(paciente_id=paciente_id)
+    pacientes = Identificacion.objects.all().order_by('primer_apellido', 'primer_nombre')
+    return render(request, 'lista_procedimientos.html', {
+        'procedimientos': procedimientos,
+        'pacientes': pacientes,
+        'paciente_id_sel': paciente_id,
+    })

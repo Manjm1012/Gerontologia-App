@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from myapp import views
 from myapp.views import ver_historia
 
@@ -60,10 +62,11 @@ urlpatterns = [
     path('enfermeria/kardes/', views.kardes, name='kardes'),
 
     path('historia/<int:id>/', ver_historia, name='ver_historia'),
+    path('paciente/<int:paciente_id>/pdf/', views.pdf_paciente, name='pdf_paciente'),
+    path('enfermeria/procedimiento/<int:proc_id>/ver/', views.ver_procedimiento, name='ver_procedimiento'),
+    path('enfermeria/procedimientos/', views.lista_procedimientos, name='lista_procedimientos'),
 
-
-
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
     
     

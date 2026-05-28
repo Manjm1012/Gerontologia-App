@@ -28,3 +28,22 @@ p {
     text-justify: inter-word;
     hyphens: auto;
 }
+
+/* Menú lateral móvil (offcanvas) */
+#menuMovil .nav-link:hover,
+#menuMovil .nav-link:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding-left: 2rem !important;
+    transition: all 0.2s ease;
+}
+
+#menuMovil .nav-link {
+    transition: all 0.2s ease;
+    font-size: 1.05rem;
+}
+
+/* Asegura que el logo en el navbar móvil no exceda el área */
+.navbar-brand img {
+    max-height: 50px;
+    width: auto;
+}

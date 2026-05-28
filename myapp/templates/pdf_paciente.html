@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia Clínica - {{ paciente.primer_nombre }} {{ paciente.primer_apellido }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; font-size: 12px; color: #1a1a1a; background: #fff; }
+
+        .print-bar {
+            background: #1962bc; color: white; padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .print-bar span { font-weight: bold; font-size: 14px; }
+        .print-bar .actions { display: flex; gap: 10px; }
+        .btn-print { background: white; color: #1962bc; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .btn-back  { background: transparent; color: white; border: 1px solid white; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; }
+
+        .doc { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+
+        .header-doc {
+            text-align: center; border-bottom: 3px solid #1962bc;
+            padding-bottom: 16px; margin-bottom: 20px;
+        }
+        .header-doc h1 { font-size: 20px; color: #1962bc; letter-spacing: 1px; }
+        .header-doc p  { color: #555; font-size: 11px; margin-top: 4px; }
+
+        .section-title {
+            background: #1962bc; color: white; font-weight: bold;
+            font-size: 11px; padding: 6px 12px; margin: 18px 0 10px;
+            border-radius: 4px; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 16px; }
+        .field { margin-bottom: 6px; }
+        .field label { font-weight: bold; color: #374151; font-size: 10px; text-transform: uppercase; display: block; }
+        .field span  { color: #1a1a1a; font-size: 12px; border-bottom: 1px solid #e5e7eb; display: block; padding: 2px 0; min-height: 18px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
+        th { background: #e8eef8; color: #1962bc; padding: 6px 8px; text-align: left; font-size: 10px; text-transform: uppercase; }
+        td { padding: 6px 8px; border-bottom: 1px solid #e9ecef; vertical-align: top; }
+        tr:nth-child(even) td { background: #f9fafb; }
+        .no-data { text-align: center; color: #9ca3af; font-style: italic; padding: 14px; }
+
+        .footer-doc { text-align: center; margin-top: 30px; padding-top: 12px; border-top: 1px solid #ddd; color: #9ca3af; font-size: 10px; }
+
+        @media print {
+            .print-bar { display: none !important; }
+            body { font-size: 11px; }
+            .doc { margin: 0; padding: 10px; max-width: 100%; }
+            .header-doc h1 { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Barra de acciones (solo pantalla) -->
+<div class="print-bar">
+    <span>📋 Historia Clínica — {{ paciente.primer_nombre }} {{ paciente.primer_apellido }}</span>
+    <div class="actions">
+        <a href="javascript:history.back()" class="btn-back">← Volver</a>
+        <button class="btn-print" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+    </div>
+</div>
+
+<div class="doc">
+
+    <!-- Encabezado del documento -->
+    <div class="header-doc">
+        <h1>HISTORIA CLÍNICA GERONTOLÓGICA</h1>
+        <p>Centro Geriátrico — Sistema de Gestión de Atención Gerontológica</p>
+        <p style="margin-top:6px; color:#1962bc; font-weight:bold;">
+            Fecha de emisión: {% now "d/m/Y" %}
+        </p>
+    </div>
+
+    <!-- Identificación del Paciente -->
+    <div class="section-title">Datos de Identificación</div>
+    <div class="grid-2">
+        <div class="field"><label>Nombre completo</label>
+            <span>{{ paciente.primer_nombre }} {{ paciente.segundo_nombre }} {{ paciente.primer_apellido }} {{ paciente.segundo_apellido }}</span>
+        </div>
+        <div class="field"><label>Tipo y Nº de Documento</label>
+            <span>{{ paciente.tipo_documento }} {{ paciente.numero_documento_paciente }}</span>
+        </div>
+        <div class="field"><label>Fecha de Nacimiento</label>
+            <span>{{ paciente.fecha_nacimiento|date:"d/m/Y"|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Edad</label>
+            <span>{{ paciente.edad }} años</span>
+        </div>
+        <div class="field"><label>Sexo</label>
+            <span>{{ paciente.sexo|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Grupo Sanguíneo</label>
+            <span>{{ paciente.grupo_sanguineo|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Ciudad de Residencia</label>
+            <span>{{ paciente.ciudad_residencia|default:"—" }}</span>
+        </div>
+        <div class="field"><label>País de Nacimiento</label>
+            <span>{{ paciente.pais_nacimiento|default:"—" }}</span>
+        </div>
+    </div>
+
+    <!-- Acudiente / Familia -->
+    {% if familia_acudiente %}
+    <div class="section-title">Datos del Acudiente</div>
+    <div class="grid-2">
+        <div class="field"><label>Nombre del Acudiente</label>
+            <span>{{ familia_acudiente.acudiente_nombre|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Parentesco</label>
+            <span>{{ familia_acudiente.acudiente_parentesco|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Teléfono</label>
+            <span>{{ familia_acudiente.acudiente_telefono|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Celular</label>
+            <span>{{ familia_acudiente.acudiente_celular|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Dirección</label>
+            <span>{{ familia_acudiente.acudiente_direccion|default:"—" }}</span>
+        </div>
+        <div class="field"><label>Correo</label>
+            <span>{{ familia_acudiente.acudiente_email|default:"—" }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Consultas Médicas -->
+    <div class="section-title">Consultas Médicas ({{ consultas_medicas.count }})</div>
+    {% if consultas_medicas %}
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Motivo de Consulta</th>
+                <th>Diagnóstico</th>
+                <th>Profesional</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in consultas_medicas %}
+            <tr>
+                <td>{{ c.fecha|date:"d/m/Y" }}</td>
+                <td>{{ c.motivo_consulta|default:"—"|truncatechars:60 }}</td>
+                <td>{{ c.diagnostico|default:"—"|truncatechars:60 }}</td>
+                <td>{{ c.nombre_profesional|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-data">No hay consultas médicas registradas.</p>
+    {% endif %}
+
+    <!-- Evoluciones de Enfermería -->
+    <div class="section-title">Evoluciones de Enfermería ({{ evoluciones_enfermeria.count }})</div>
+    {% if evoluciones_enfermeria %}
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Estado del Día</th>
+                <th>FC</th>
+                <th>PA</th>
+                <th>Novedad</th>
+                <th>Profesional</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in evoluciones_enfermeria %}
+            <tr>
+                <td>{{ e.fecha|date:"d/m/Y" }}</td>
+                <td>{{ e.paso_el_dia|default:"—" }}</td>
+                <td>{{ e.frecuencia_cardiaca|default:"—" }}</td>
+                <td>{{ e.presion_arterial|default:"—" }}</td>
+                <td>{% if e.novedad == '1' %}Sí{% else %}No{% endif %}</td>
+                <td>{{ e.nombre_profesional|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-data">No hay evoluciones de enfermería registradas.</p>
+    {% endif %}
+
+    <div class="footer-doc">
+        <p>© 2025 Gerontología App — Documento generado el {% now "d/m/Y H:i" %}</p>
+        <p>Este documento es de uso interno y confidencial.</p>
+    </div>
+
+</div>
+
+</body>
+</html>

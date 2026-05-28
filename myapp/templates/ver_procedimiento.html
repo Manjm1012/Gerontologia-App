@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedimiento — {{ procedimiento.nombre_procedimiento }}</title>
+    <link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card-detail { background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:22px 26px; margin-bottom:18px; }
+        .badge-interno { background:#dbeafe; color:#1e40af; padding:4px 12px; border-radius:12px; font-size:0.8rem; font-weight:700; }
+        .badge-externo { background:#fef3c7; color:#92400e; padding:4px 12px; border-radius:12px; font-size:0.8rem; font-weight:700; }
+        .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px 28px; margin-top:14px; }
+        @media(max-width:600px){ .field-row{grid-template-columns:1fr;} }
+        .field label { font-size:0.78rem; font-weight:700; text-transform:uppercase; color:#6b7280; display:block; }
+        .field span  { font-size:0.95rem; color:#1a1a1a; border-bottom:1px solid #f3f4f6; display:block; padding:4px 0; min-height:22px; }
+        .desc-box { background:#f9fafb; border-radius:6px; padding:14px; font-size:0.9rem; line-height:1.6; white-space:pre-wrap; }
+        .file-preview { margin-top:10px; }
+        .file-preview img { max-width:100%; border-radius:6px; border:1px solid #e5e7eb; }
+        .btn-print { background:#1962bc; color:white; border:none; padding:10px 22px; border-radius:6px; cursor:pointer; font-weight:700; font-size:0.9rem; display:inline-flex; align-items:center; gap:7px; }
+        .btn-print:hover { background:#1450a0; }
+        .btn-new { background:#10b981; color:white; border:none; padding:10px 22px; border-radius:6px; cursor:pointer; font-weight:700; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:7px; }
+        @media print {
+            .header-section, .action-bar { display:none !important; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header-section">
+        <div class="user-info-bar">
+            <div class="user-welcome">
+                <i class="fas fa-procedures"></i>
+                <span>Módulo de Procedimientos</span>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'lista_procedimientos' %}" class="btn-secondary"><i class="fas fa-list"></i> Lista</a>
+                <a href="{% url 'enfermeria' %}" class="btn-secondary"><i class="fas fa-arrow-left"></i> Volver al Módulo</a>
+                <a href="{% url 'logout' %}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content" style="max-width:800px; margin:0 auto; padding:24px 16px;">
+
+        <!-- Barra de acciones -->
+        <div class="action-bar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+            <h1 class="main-title" style="margin:0;"><i class="fas fa-file-medical"></i> Detalle del Procedimiento</h1>
+            <div style="display:flex; gap:10px;">
+                <a href="{% url 'medico_procedimiento_nuevo' %}" class="btn-new">
+                    <i class="fas fa-plus"></i> Nuevo
+                </a>
+                <button class="btn-print" onclick="window.print()">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+            </div>
+        </div>
+
+        <!-- Encabezado del procedimiento -->
+        <div class="card-detail" style="border-left:4px solid #1962bc;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+                <div>
+                    <h2 style="margin:0; color:#1962bc; font-size:1.3rem;">{{ procedimiento.nombre_procedimiento }}</h2>
+                    <p style="margin:4px 0 0; color:#6b7280; font-size:0.85rem;">
+                        Registrado el {{ procedimiento.fecha_registro|date:"d/m/Y \a \l\a\s H:i" }}
+                        por <strong>{{ procedimiento.profesional.get_full_name|default:procedimiento.profesional.username }}</strong>
+                    </p>
+                </div>
+                <span class="{% if procedimiento.tipo_procedimiento == 'INTERNO' %}badge-interno{% else %}badge-externo{% endif %}">
+                    <i class="fas {% if procedimiento.tipo_procedimiento == 'INTERNO' %}fa-hospital{% else %}fa-ambulance{% endif %}"></i>
+                    {{ procedimiento.get_tipo_procedimiento_display }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Datos del paciente -->
+        <div class="card-detail">
+            <h3 class="section-title" style="margin-top:0;"><i class="fas fa-user-injured"></i> Paciente</h3>
+            <div class="field-row">
+                <div class="field">
+                    <label>Nombre completo</label>
+                    <span>{{ procedimiento.paciente.primer_nombre }} {{ procedimiento.paciente.segundo_nombre }} {{ procedimiento.paciente.primer_apellido }} {{ procedimiento.paciente.segundo_apellido }}</span>
+                </div>
+                <div class="field">
+                    <label>Documento</label>
+                    <span>{{ procedimiento.paciente.tipo_documento }} {{ procedimiento.paciente.numero_documento_paciente }}</span>
+                </div>
+                <div class="field">
+                    <label>Edad</label>
+                    <span>{{ procedimiento.paciente.edad }} años</span>
+                </div>
+                <div class="field">
+                    <label>Ver perfil completo</label>
+                    <span><a href="{% url 'perfil_paciente' procedimiento.paciente.id %}" style="color:#1962bc;">Ver historia clínica →</a></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Datos del procedimiento según tipo -->
+        {% if procedimiento.tipo_procedimiento == 'INTERNO' %}
+        <div class="card-detail">
+            <h3 class="section-title" style="margin-top:0;"><i class="fas fa-hospital"></i> Procedimiento Interno</h3>
+            <div class="field-row">
+                <div class="field">
+                    <label>Médico que recomendó</label>
+                    <span>{{ procedimiento.medico_que_aplico|default:"—" }}</span>
+                </div>
+                <div class="field">
+                    <label>Profesional de enfermería</label>
+                    <span>{{ procedimiento.profesional.get_full_name|default:procedimiento.profesional.username }}</span>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card-detail">
+            <h3 class="section-title" style="margin-top:0;"><i class="fas fa-ambulance"></i> Procedimiento Externo</h3>
+            <div class="field-row">
+                <div class="field">
+                    <label>Centro / Clínica / Hospital</label>
+                    <span>{{ procedimiento.sitio_procedimiento|default:"—" }}</span>
+                </div>
+                <div class="field">
+                    <label>Médico externo</label>
+                    <span>{{ procedimiento.medico_que_aplico|default:"—" }}</span>
+                </div>
+            </div>
+            {% if procedimiento.archivo_adjunto %}
+            <div style="margin-top:16px;">
+                <label style="font-size:0.78rem; font-weight:700; text-transform:uppercase; color:#6b7280; display:block; margin-bottom:8px;">Soporte adjunto</label>
+                {% if procedimiento.archivo_adjunto.name|slice:"-4:" == ".pdf" %}
+                <a href="{{ procedimiento.archivo_adjunto.url }}" target="_blank" class="btn-print" style="background:#dc2626;">
+                    <i class="fas fa-file-pdf"></i> Ver PDF adjunto
+                </a>
+                {% else %}
+                <div class="file-preview">
+                    <img src="{{ procedimiento.archivo_adjunto.url }}" alt="Soporte adjunto">
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Descripción y observaciones -->
+        <div class="card-detail">
+            <h3 class="section-title" style="margin-top:0;"><i class="fas fa-pen-nib"></i> Protocolo Aplicado</h3>
+            <div class="desc-box">{{ procedimiento.descripcion }}</div>
+
+            {% if procedimiento.observaciones %}
+            <h3 class="section-title" style="margin-top:18px;"><i class="fas fa-comment-medical"></i> Observaciones</h3>
+            <div class="desc-box" style="background:#fffbeb; border-left:3px solid #fbbf24;">{{ procedimiento.observaciones }}</div>
+            {% endif %}
+        </div>
+
+        <div class="footer-section">
+            <p>© 2026 Sistema de Historias Clínicas Gerontológicas — Documento generado el {% now "d/m/Y H:i" %}</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
