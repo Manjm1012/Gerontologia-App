@@ -6,3 +6,4 @@ db_local.sqlite3
 .env
 staticfiles/
 media/
+mysite/settings_local.py
