@@ -19,7 +19,7 @@ COPY requirements.txt .
 # v2 - force cache bust after adding whitenoise
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# v4 - fix somos css syntax error + hero img tag + servicios inline styles
+# v5 - somos hero inline styles + cuidados.jpg image
 COPY . .
 
 RUN python manage.py collectstatic --noinput
