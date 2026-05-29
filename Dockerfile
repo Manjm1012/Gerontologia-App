@@ -19,7 +19,7 @@ COPY requirements.txt .
 # v2 - force cache bust after adding whitenoise
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# v10 - STORAGES dict (Django 5.x) + collectstatic in build AND runtime
+# v11 - revert to STATICFILES_STORAGE string + flex-shrink fix on stat-icon
 COPY . .
 
 RUN python manage.py collectstatic --noinput
