@@ -19,7 +19,7 @@ COPY requirements.txt .
 # v2 - force cache bust after adding whitenoise
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# v7 - resilient startup: use ; instead of && so gunicorn always starts
+# v8 - fix static files: CompressedStaticFilesStorage instead of Manifest
 COPY . .
 
 RUN python manage.py collectstatic --noinput
