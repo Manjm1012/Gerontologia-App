@@ -19,8 +19,10 @@ COPY requirements.txt .
 # v2 - force cache bust after adding whitenoise
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# v9 - collectstatic at runtime so volume mounts don't hide static files
+# v10 - STORAGES dict (Django 5.x) + collectstatic in build AND runtime
 COPY . .
+
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
