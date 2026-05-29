@@ -44,3 +44,11 @@
 .image-container:hover .image {
     transform: scale(1.05); /* efecto de zoom al pasar el mouse */
 }
+
+/* Imagen uniforme en cards de Somos */
+.uniform-img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
