@@ -47,7 +47,7 @@ h1{
     height: 220px !important;
     width: 100% !important;
     object-fit: cover !important;
-    object-position: center top !important;
+    object-position: center center !important;
 }
 
 .card-title {
