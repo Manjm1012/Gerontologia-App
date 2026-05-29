@@ -19,11 +19,11 @@ COPY requirements.txt .
 # v2 - force cache bust after adding whitenoise
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# v5 - somos hero inline styles + cuidados.jpg image
+# v6 - seed_data command + migrate on startup
 COPY . .
 
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["gunicorn", "mysite.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py seed_data && gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 2"]
