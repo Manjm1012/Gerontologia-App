@@ -732,7 +732,7 @@ def terminos(request):
 
 def cerrarSesion(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
 ########################################
 # Vistas para módulos específicos (Kardex, Enfermería, Médico) #######
 #########################################
