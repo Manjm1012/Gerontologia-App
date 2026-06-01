@@ -19,8 +19,9 @@ COPY requirements.txt .
 # v2 - force cache bust after adding whitenoise
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# v12 - STORAGES dict (Django 5.2 correct) + collectstatic ONLY in CMD
+# v13 - RUN collectstatic baked in image + STORAGES dict (Django 5.2)
 COPY . .
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
