@@ -192,7 +192,8 @@
                         <!-- 2. Tarjeta Profesional: Bloqueado con readonly -->
                         <td>
                             <input type="text" name="identificacion_profesional" class="form-input-small bg-light" 
-                                value="{{ user.identificacion.registro_profesional }}" readonly placeholder="Sin R.P.">
+                                value="{{ matricula_profesional }}" readonly placeholder="Sin matrícula registrada"
+                                style="background:#f7fafc; color:#4a5568;">
                         </td>
 
                         <!-- 3. Firma: OCULTA COMPLETAMENTE -->
@@ -314,7 +315,8 @@
                 <div class="card-field">
                     <label>Tarjeta Profesional (R.P.)</label>
                     <input type="text" name="identificacion_profesional" class="form-input-small bg-light" 
-               value="{{ user.perfil.registro_profesional }}" readonly>
+               value="{{ matricula_profesional }}" readonly placeholder="Sin matrícula registrada"
+               style="background:#f7fafc; color:#4a5568;">
                 </div>
 
             <!-- El campo de firma se elimina visualmente -->

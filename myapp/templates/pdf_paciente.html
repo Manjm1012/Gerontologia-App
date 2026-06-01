@@ -149,7 +149,12 @@
                 <td>{{ c.fecha|date:"d/m/Y" }}</td>
                 <td>{{ c.motivo_consulta|default:"—"|truncatechars:60 }}</td>
                 <td>{{ c.diagnostico|default:"—"|truncatechars:60 }}</td>
-                <td>{{ c.nombre_profesional|default:"—" }}</td>
+                <td>
+                    {{ c.medico.get_full_name|default:c.medico.username }}
+                    {% if c.medico.perfil_profesional.matricula_profesional %}
+                    <br><small style="color:#6b7280;">Mat: {{ c.medico.perfil_profesional.matricula_profesional }}</small>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

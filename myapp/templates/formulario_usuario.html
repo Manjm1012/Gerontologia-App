@@ -70,6 +70,18 @@
             {% endfor %}
           </select>
         </div>
+        <div class="mb-3" id="matricula-container" style="display:none;">
+          <label class="form-label">Matrícula / Registro Profesional</label>
+          <input class="form-input" type="text" name="matricula_profesional" id="matricula_profesional"
+                 placeholder="Ej: MED-12345, ENF-67890" value="{{ prefill.matricula_profesional|default:'' }}">
+          <small style="color:#718096;">Número de registro profesional habilitante para el ejercicio.</small>
+          {% if errors.matricula_profesional %}<div class="field-error">{{ errors.matricula_profesional }}</div>{% endif %}
+        </div>
+        <div class="mb-3" id="especialidad-container" style="display:none;">
+          <label class="form-label">Especialidad</label>
+          <input class="form-input" type="text" name="especialidad"
+                 placeholder="Ej: Geriatría, Enfermería Geriátrica" value="{{ prefill.especialidad|default:'' }}">
+        </div>
       {% else %}
         <div class="mb-3">
           <label class="form-label">Nombre de usuario</label>
@@ -116,6 +128,19 @@
             {% endfor %}
           </select>
         </div>
+        <div class="mb-3" id="matricula-container-edit"
+             {% if current_group != 'Doctor' and current_group != 'Medico' and current_group != 'Enfermeria' and current_group != 'Administrativo' %}style="display:none;"{% endif %}>
+          <label class="form-label">Matrícula / Registro Profesional</label>
+          <input class="form-input" type="text" name="matricula_profesional"
+                 placeholder="Ej: MED-12345, ENF-67890" value="{{ matricula_profesional }}">
+          <small style="color:#718096;">Número de registro profesional habilitante para el ejercicio.</small>
+        </div>
+        <div class="mb-3" id="especialidad-container-edit"
+             {% if current_group != 'Doctor' and current_group != 'Medico' and current_group != 'Enfermeria' and current_group != 'Administrativo' %}style="display:none;"{% endif %}>
+          <label class="form-label">Especialidad</label>
+          <input class="form-input" type="text" name="especialidad"
+                 placeholder="Ej: Geriatría, Enfermería Geriátrica" value="{{ especialidad }}">
+        </div>
       {% endif %}
       <div class="mt-3" style="display:flex; gap:12px; align-items:center;">
         <button class="submit-button" type="submit">Guardar</button>
@@ -124,4 +149,31 @@
     </form>
   </div>
 </body>
+<script>
+(function() {
+    const profileSelect = document.getElementById('profile');
+    const ROLES_CON_MATRICULA = ['Doctor', 'Medico', 'Enfermeria', 'Administrativo'];
+
+    // Create mode containers
+    const matriculaCreate = document.getElementById('matricula-container');
+    const especialidadCreate = document.getElementById('especialidad-container');
+    // Edit mode containers
+    const matriculaEdit = document.getElementById('matricula-container-edit');
+    const especialidadEdit = document.getElementById('especialidad-container-edit');
+
+    function toggleMatricula() {
+        if (!profileSelect) return;
+        const show = ROLES_CON_MATRICULA.includes(profileSelect.value);
+        if (matriculaCreate) matriculaCreate.style.display = show ? '' : 'none';
+        if (especialidadCreate) especialidadCreate.style.display = show ? '' : 'none';
+        if (matriculaEdit) matriculaEdit.style.display = show ? '' : 'none';
+        if (especialidadEdit) especialidadEdit.style.display = show ? '' : 'none';
+    }
+
+    if (profileSelect) {
+        profileSelect.addEventListener('change', toggleMatricula);
+        toggleMatricula();
+    }
+})();
+</script>
 </html>

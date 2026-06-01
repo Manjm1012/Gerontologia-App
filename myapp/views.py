@@ -827,6 +827,7 @@ def enfermeria(request):
         'medicamentos_admin': medicamentos_administrados,
         'ultimas_evoluciones': ultimas_evoluciones,
         'fecha_hoy': hoy,
+        'matricula_profesional': _get_matricula(request.user),
     }
     
     return render(request, 'enfermeria.html', context)
@@ -884,6 +885,14 @@ def evolucion_enfermeria(request):
             
             paciente = Identificacion.objects.get(id=paciente_id)
             
+            # Auto-obtener matrícula del perfil profesional del enfermero
+            matricula = ''
+            try:
+                from .models import PerfilProfesional
+                matricula = request.user.perfil_profesional.matricula_profesional
+            except Exception:
+                matricula = request.POST.get('identificacion_profesional', '')
+
             # Crear registro de evolución
             evolucion = EvolucionDiariaEnfermeria.objects.create(
                 paciente=paciente,
@@ -900,7 +909,7 @@ def evolucion_enfermeria(request):
                 novedad=request.POST.get('novedad'),
                 observacion=request.POST.get('observacion', ''),
                 nombre_profesional=request.POST.get('nombre_profesional'),
-                identificacion_profesional=request.POST.get('identificacion_profesional'),
+                identificacion_profesional=matricula,
                 firma=request.POST.get('firma', ''),
                 usuario_registro=request.user
             )
@@ -919,11 +928,20 @@ def evolucion_enfermeria(request):
     
     # Obtener historial de evoluciones recientes
     evoluciones = EvolucionDiariaEnfermeria.objects.select_related('paciente').order_by('-fecha', '-fecha_registro')[:20]
-    
+
+    # Obtener matrícula profesional del enfermero logueado
+    matricula_profesional = ''
+    try:
+        from .models import PerfilProfesional
+        matricula_profesional = request.user.perfil_profesional.matricula_profesional
+    except Exception:
+        pass
+
     context = {
         'Usuarios': Usuarios,
         'evoluciones': evoluciones,
         'today': date.today().isoformat(),
+        'matricula_profesional': matricula_profesional,
     }
     
     return render(request, 'evolucion_enfermeria.html', context)
@@ -949,7 +967,7 @@ def pdf_paciente(request, paciente_id):
         familia_acudiente = FamiliaAcudientes.objects.filter(paciente=paciente).first()
     except:
         familia_acudiente = None
-    consultas_medicas = ConsultaMedica.objects.filter(paciente=paciente).order_by('-fecha')
+    consultas_medicas = ConsultaMedica.objects.filter(paciente=paciente).select_related('medico__perfil_profesional').order_by('-fecha')
     evoluciones_enfermeria = EvolucionDiariaEnfermeria.objects.filter(paciente=paciente).order_by('-fecha')
     return render(request, "pdf_paciente.html", {
         "paciente": paciente,
@@ -990,6 +1008,14 @@ def perfil_paciente(request, paciente_id=None):
 
 def is_admin_user(user):
     return user.is_active and (user.is_superuser or user.is_staff)
+
+
+def _get_matricula(user):
+    """Devuelve la matrícula profesional del usuario, o '' si no tiene perfil."""
+    try:
+        return user.perfil_profesional.matricula_profesional
+    except Exception:
+        return ''
 
 
 @login_required
@@ -1066,6 +1092,19 @@ def admin_user_create(request):
                 grp, _ = Group.objects.get_or_create(name=profile)
                 user.groups.clear()
                 user.groups.add(grp)
+
+            # Guardar matrícula profesional si aplica
+            matricula = request.POST.get('matricula_profesional', '').strip()
+            if matricula and profile in ['Doctor', 'Medico', 'Enfermeria', 'Administrativo']:
+                from .models import PerfilProfesional
+                PerfilProfesional.objects.update_or_create(
+                    user=user,
+                    defaults={
+                        'matricula_profesional': matricula,
+                        'especialidad': request.POST.get('especialidad', '').strip(),
+                    }
+                )
+
             messages.success(request, 'Usuario creado correctamente.')
             return redirect('admin_users')
         else:
@@ -1136,6 +1175,19 @@ def admin_user_edit(request, user_id):
             grp, _ = Group.objects.get_or_create(name=profile)
             user_obj.groups.clear()
             user_obj.groups.add(grp)
+
+        # Actualizar matrícula profesional
+        matricula = request.POST.get('matricula_profesional', '').strip()
+        if matricula:
+            from .models import PerfilProfesional
+            PerfilProfesional.objects.update_or_create(
+                user=user_obj,
+                defaults={
+                    'matricula_profesional': matricula,
+                    'especialidad': request.POST.get('especialidad', '').strip(),
+                }
+            )
+
         return redirect('admin_users')
     else:
         # obtener grupo actual si existe
@@ -1150,7 +1202,25 @@ def admin_user_edit(request, user_id):
         telefono = uobj.celular or ''
     except Exception:
         telefono = ''
-    return render(request, 'formulario_usuario.html', {'create': False, 'user_obj': user_obj, 'profiles': profiles, 'current_group': current_group, 'telefono': telefono})
+    # obtener matrícula profesional si existe
+    matricula_profesional = ''
+    especialidad = ''
+    try:
+        from .models import PerfilProfesional
+        pp = PerfilProfesional.objects.get(user=user_obj)
+        matricula_profesional = pp.matricula_profesional
+        especialidad = pp.especialidad
+    except Exception:
+        pass
+    return render(request, 'formulario_usuario.html', {
+        'create': False,
+        'user_obj': user_obj,
+        'profiles': profiles,
+        'current_group': current_group,
+        'telefono': telefono,
+        'matricula_profesional': matricula_profesional,
+        'especialidad': especialidad,
+    })
 
 
 @login_required
@@ -1249,6 +1319,7 @@ def medico(request):
         'ultimas_consultas': ultimas_consultas,
         'enunciados_recientes': enunciados_recientes,
         'fecha_hoy': hoy,
+        'matricula_profesional': _get_matricula(request.user),
     }
     
     return render(request, 'medico.html', context)
@@ -1293,13 +1364,22 @@ def medico_consulta_nueva(request):
     
     # Si viene un paciente_id por parámetro GET, pre-seleccionarlo
     paciente_seleccionado_id = request.GET.get('paciente')
+
+    # Obtener matrícula del médico logueado
+    matricula_medico = ''
+    try:
+        from .models import PerfilProfesional
+        matricula_medico = request.user.perfil_profesional.matricula_profesional
+    except Exception:
+        pass
     
     from datetime import date
     
     return render(request, 'medico_consulta_nueva.html', {
         'Usuarios': Usuarios,
         'paciente_seleccionado_id': paciente_seleccionado_id,
-        'fecha_hoy': date.today()
+        'fecha_hoy': date.today(),
+        'matricula_medico': matricula_medico,
     })
 
 
@@ -1363,6 +1443,7 @@ def medico_procedimiento_nuevo(request):
     return render(request, 'procedimientos.html', {
         'pacientes': pacientes,
         'medicos_internos': medicos_internos,
+        'matricula_profesional': _get_matricula(request.user),
     })
 
 

@@ -1129,6 +1129,32 @@ class EnunciadoMedico(models.Model):
 
    
 # ======================================================
+# PERFIL PROFESIONAL (médicos, enfermeros, administrativos)
+# ======================================================
+
+class PerfilProfesional(models.Model):
+    """Perfil extendido para profesionales de salud: médicos, enfermeros, contadores."""
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='perfil_profesional'
+    )
+    matricula_profesional = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name='Matrícula / Registro Profesional'
+    )
+    especialidad = models.CharField(max_length=150, blank=True, verbose_name='Especialidad')
+
+    class Meta:
+        verbose_name = 'Perfil Profesional'
+        verbose_name_plural = 'Perfiles Profesionales'
+
+    def __str__(self):
+        return f"{self.user.get_full_name()} — {self.matricula_profesional}"
+
+
+# ======================================================
 # modelos para modulo de historial geriatoco y pdf
 # ======================================================
 Historia = HistoriaGerontologica

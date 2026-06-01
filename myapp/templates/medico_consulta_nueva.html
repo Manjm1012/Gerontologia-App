@@ -15,7 +15,9 @@
             <div class="user-info-bar">
                 <div class="user-welcome">
                     <i class="fas fa-user-md"></i>
-                    <span>Dr(a). <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                    <span>Dr(a). <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                    {% if matricula_medico %}<span style="font-size:0.85em; color:#a0aec0; margin-left:8px;">Mat: {{ matricula_medico }}</span>{% endif %}
+                    </span>
                 </div>
                 <div class="header-actions">
                     <a href="{% url 'medico' %}" class="btn-secondary">
