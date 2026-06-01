@@ -5,10 +5,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if create %}Crear Usuario{% else %}Editar Usuario{% endif %}</title>
+  <link rel="stylesheet" href="{% static 'css/enfermeria.css' %}">
   <link rel="stylesheet" href="{% static 'css/historia_gerontologica.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
+    <!-- Header con navegación -->
+    <div class="header-section">
+      <div class="user-info-bar">
+        <div class="user-welcome">
+          <i class="fas fa-user-shield"></i>
+          <span><strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong></span>
+        </div>
+        <div class="header-actions">
+          <a href="{% url 'admin_users' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+          </a>
+          <a href="{% url 'logout' %}" class="btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </div>
     <h1 class="main-title">{% if create %}Crear Usuario{% else %}Editar Usuario: {{ user_obj.username }}{% endif %}</h1>
     <div class="section-title">Información del usuario</div>
     {% if messages %}
