@@ -1095,7 +1095,7 @@ def admin_user_create(request):
 
             # Guardar matrícula profesional si aplica
             matricula = request.POST.get('matricula_profesional', '').strip()
-            if matricula and profile in ['Doctor', 'Medico', 'Enfermeria', 'Administrativo']:
+            if matricula and profile in ['Doctor', 'Medico', 'Enfermeria']:
                 from .models import PerfilProfesional
                 PerfilProfesional.objects.update_or_create(
                     user=user,

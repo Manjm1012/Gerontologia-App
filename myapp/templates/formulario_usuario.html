@@ -129,14 +129,14 @@
           </select>
         </div>
         <div class="mb-3" id="matricula-container-edit"
-             {% if current_group != 'Doctor' and current_group != 'Medico' and current_group != 'Enfermeria' and current_group != 'Administrativo' %}style="display:none;"{% endif %}>
+             {% if current_group != 'Doctor' and current_group != 'Medico' and current_group != 'Enfermeria' %}style="display:none;"{% endif %}>
           <label class="form-label">Matrícula / Registro Profesional</label>
           <input class="form-input" type="text" name="matricula_profesional"
                  placeholder="Ej: MED-12345, ENF-67890" value="{{ matricula_profesional }}">
           <small style="color:#718096;">Número de registro profesional habilitante para el ejercicio.</small>
         </div>
         <div class="mb-3" id="especialidad-container-edit"
-             {% if current_group != 'Doctor' and current_group != 'Medico' and current_group != 'Enfermeria' and current_group != 'Administrativo' %}style="display:none;"{% endif %}>
+             {% if current_group != 'Doctor' and current_group != 'Medico' and current_group != 'Enfermeria' %}style="display:none;"{% endif %}>
           <label class="form-label">Especialidad</label>
           <input class="form-input" type="text" name="especialidad"
                  placeholder="Ej: Geriatría, Enfermería Geriátrica" value="{{ especialidad }}">
@@ -152,7 +152,7 @@
 <script>
 (function() {
     const profileSelect = document.getElementById('profile');
-    const ROLES_CON_MATRICULA = ['Doctor', 'Medico', 'Enfermeria', 'Administrativo'];
+    const ROLES_CON_MATRICULA = ['Doctor', 'Medico', 'Enfermeria'];
 
     // Create mode containers
     const matriculaCreate = document.getElementById('matricula-container');
