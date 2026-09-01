@@ -42,6 +42,27 @@ footer {
     right: auto !important;
 }
 
+/* Module topbar styles */
+.module-topbar {
+    background: linear-gradient(90deg, rgba(25,98,188,0.95), rgba(20,74,145,0.95));
+    color: white;
+}
+.module-topbar .module-topbar-title {
+    font-weight: 700;
+    color: white;
+}
+.module-topbar .module-topbar-actions .btn-outline-light {
+    border-color: rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.95);
+}
+.module-topbar .module-topbar-actions .btn-outline-light:hover {
+    background: rgba(255,255,255,0.06);
+}
+.module-topbar .module-topbar-actions .btn-danger {
+    background: #d9534f;
+    border-color: #d43f3a;
+}
+
 /*Estilo de las tarjetas*/
 .card {
     height: auto; /* Se ajusta al contenido automaticamente */
