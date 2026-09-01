@@ -2,17 +2,33 @@
    ESTILOS PARA EL MÓDULO DEL MÉDICO
    ==================================== */
 
-/* Botón primario en el módulo médico */
+/* Shared module refinements: typography and spacing */
+:root {
+    --brand-1: #0f172a;
+    --accent-1: #144a91;
+    --accent-2: #1962bc;
+    --success-1: #059669;
+    --muted: #6b7280;
+    --card-shadow: 0 4px 16px rgba(15,23,42,0.06);
+    --radius: 10px;
+}
+
+body {
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    color: var(--brand-1);
+}
+
+/* Button baseline */
 .btn-primary {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: linear-gradient(135deg, var(--success-1) 0%, #047857 100%);
     color: white;
-    border-color: #065f46;
+    border-color: rgba(0,0,0,0.06);
+    border-radius: var(--radius);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+    box-shadow: 0 8px 24px rgba(5,150,105,0.12);
 }
 
 /* Tabla de consultas médicas (usando gradiente similar) */

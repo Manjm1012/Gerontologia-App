@@ -14,54 +14,65 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('../img/fondo.jpg');
-    background-position: center center;
+    background-position: center top;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
     font-family: Arial, sans-serif;
+}
+
+/* Use a page wrapper to center the module content without affecting global layout */
+.module-wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
+    padding: 40px 0;
+}
+
+:root {
+    --brand-1: #0f172a;
+    --accent-1: #144a91;
+    --accent-2: #1962bc;
+    --success-1: #059669;
+    --muted: #6b7280;
+    --card-shadow: 0 4px 16px rgba(15,23,42,0.06);
+    --radius: 10px;
 }
 
 /* Contenedor Principal */
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     background-color: #fff;
     padding: 25px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--card-shadow);
     border-radius: 12px;
-    backdrop-filter: blur(10px);
-    margin: 20px auto;
+    margin: 0 auto;
 }
 
 /* TITULO PRINCIPAL */
 .main-title {
     text-align: center;
-    font-weight: bold;
-    font-size: 2rem;
-    color: #1962bc;
-    border-bottom: 3px solid #1962bc;
-    margin: 20px auto 35px;
-    padding-bottom: 12px;
-    width: 90%;
+    font-weight: 700;
+    font-size: 1.9rem;
+    color: var(--accent-1);
+    margin: 18px auto 24px;
+    padding-bottom: 6px;
 }
 
 /* TITULOS DE SECCIÓN */
 .section-title {
     text-transform: uppercase;
-    font-weight: bold;
-    color: #1f2937;
-    font-size: 1.3rem;
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    padding: 14px 20px;
-    border-left: 6px solid #1962bc;
-    margin: 35px 0 18px;
+    font-weight: 700;
+    color: var(--muted);
+    font-size: 1.05rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    padding: 10px 14px;
+    border: 1px solid rgba(15,23,42,0.04);
+    margin: 24px 0 12px;
     border-radius: 8px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 /* Header de usuario */
@@ -144,15 +155,15 @@ body {
 }
 
 .stat-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    padding: 1.5rem;
+    background: white;
+    padding: 1.2rem;
     border-radius: 10px;
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: all 0.3s ease;
-    border: 2px solid #e2e8f0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.28s ease;
+    border: 1px solid rgba(15,23,42,0.04);
+    box-shadow: var(--card-shadow);
 }
 
 .stat-card:hover {
