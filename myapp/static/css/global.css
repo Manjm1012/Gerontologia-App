@@ -21,6 +21,17 @@ body {
     color: var(--text);
 }
 
+/* Global app shell: navbar on top, footer at bottom */
+body.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-main {
+    flex: 1 0 auto;
+}
+
 /* Accessible button baseline */
 .btn-primary {
     background: var(--accent-2);

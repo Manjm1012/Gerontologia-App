@@ -18,7 +18,7 @@
         .no-module-topbar .module-wrapper{ margin-top: 0 !important; }
     </style>
 </head>
-<body class="{% block body_class %}{% endblock %}">
+<body class="app-shell {% block body_class %}{% endblock %}">
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg main-navbar">
         <div class="container">
             <a class="navbar-brand me-3" href="{% url 'home' %}">
@@ -78,7 +78,7 @@
         </div>
     </div>
 
-    <main>
+    <main class="app-main">
         <div class="module-wrapper">
             <div class="container my-4">
                 {% block content %}{% endblock %}
