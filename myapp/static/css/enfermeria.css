@@ -30,11 +30,9 @@ body {
     padding: 40px 0;
 }
 
-/* Make module panels slightly translucent over background to reduce visual noise */
+/* Keep module wrapper transparent so background image and corporate visuals remain visible */
 .module-wrapper {
-    background: rgba(250,250,250,0.6);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
+    background: transparent;
 }
 
 /* Hide mobile offcanvas and legacy sidebar on large screens to avoid overlapping widgets */
@@ -57,7 +55,7 @@ body {
 .container {
     width: 100%;
     max-width: 1200px;
-    background-color: #fff;
+    background-color: rgba(255,255,255,0.92);
     padding: 25px;
     box-shadow: var(--card-shadow);
     border-radius: 12px;
@@ -306,7 +304,7 @@ body {
 }
 
 .patients-table thead {
-    background: var(--accent-2);
+    background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent-1) 100%);
     color: white;
 }
 
@@ -409,10 +407,7 @@ body {
 
 /* Reduce background image prominence on smaller screens */
 @media (max-width: 900px) {
-    body {
-        background-image: none;
-        background-color: #f8fafc;
-    }
+    /* Keep background image but reduce its visual impact via container padding */
     .module-wrapper {
         background: transparent;
         padding: 18px 0;
