@@ -20,7 +20,7 @@ body {
 
 /* Button baseline */
 .btn-primary {
-    background: linear-gradient(135deg, var(--success-1) 0%, #047857 100%);
+    background: var(--accent-2);
     color: white;
     border-color: rgba(0,0,0,0.06);
     border-radius: var(--radius);
