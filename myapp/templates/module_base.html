@@ -12,8 +12,13 @@
     <link rel="stylesheet" href="{% static 'css/theme_professional.css' %}">
     <link rel="stylesheet" href="{% static 'css/theme_brand.css' %}">
     {% block extra_head %}{% endblock %}
+    <style>
+        /* Hide module topbar on pages that opt-out */
+        .no-module-topbar .module-topbar{ display: none !important; }
+        .no-module-topbar .module-wrapper{ margin-top: 0 !important; }
+    </style>
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <nav class="navbar navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
