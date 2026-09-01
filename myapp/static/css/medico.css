@@ -41,7 +41,7 @@ body {
 }
 
 .evolution-table thead {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    background: var(--accent-2);
     color: white;
 }
 
@@ -56,9 +56,9 @@ body {
 
 .evolution-table td {
     padding: 8px;
-    border: 1px solid #d1d5db;
+    border: 1px solid #e5e7eb;
     vertical-align: middle;
-    background: white;
+    background: var(--surface);
     text-align: center;
 }
 

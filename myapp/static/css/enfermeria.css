@@ -88,14 +88,14 @@ body {
 }
 
 .user-info-bar {
-    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    background: var(--accent-2);
     color: white;
     padding: 15px 25px;
-    border-radius: 10px;
+    border-radius: var(--radius);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: var(--card-shadow);
     flex-wrap: wrap;
     gap: 15px;
 }
@@ -205,21 +205,10 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.stat-icon.Usuarios {
-    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
-}
-
-.stat-icon.pendientes {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-}
-
-.stat-icon.signos {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
-}
-
-.stat-icon.medicamentos {
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-}
+.stat-icon.Usuarios { background: var(--accent-2); }
+.stat-icon.pendientes { background: var(--danger); }
+.stat-icon.signos { background: var(--success); }
+.stat-icon.medicamentos { background: #d97706; }
 
 .stat-info h3 {
     font-size: 0.9rem;
@@ -311,7 +300,7 @@ body {
 }
 
 .patients-table thead {
-    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    background: var(--accent-2);
     color: white;
 }
 
