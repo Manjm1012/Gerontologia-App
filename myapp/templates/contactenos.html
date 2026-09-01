@@ -11,19 +11,19 @@
     <div class="text-white">Contáctenos</div>
 {% endblock %}
 
+{% block body_class %}no-module-topbar{% endblock %}
+
 {% block content %}
     <div class="seccion-contactenos">
         <div class="container">
-            <h1 class="text-dark fw-bold text-center">Contáctenos</h1>
+            <h1 class="section-page-title">Contáctenos</h1>
         </div>
     </div>
 
-{% block body_class %}no-module-topbar{% endblock %}
-
     <div class="contact-form-section">
         <div class="container mt-5 mb-5">
-            <h2 class="text-dark fw-bold text-center">Tu contacto es importante</h2>
-            <h2 class="text-center fw-bold">Escríbenos un mensaje</h2>
+            <h2 class="section-subtitle">Tu contacto es importante</h2>
+            <h2 class="section-subtitle">Escríbenos un mensaje</h2>
             <h3 class="text-center fw-bold">Los campos con asterisco (*) son obligatorios.</h3>
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -63,10 +63,10 @@
                 <img src="{% static 'img/Logo.png' %}" alt="Logo" class="img-fluid mb-4">
             </div>
             <div class="col-md-9 text-center text-md-start">
-                <h2 class="mt-4 text-dark fw-bold">Protección de tu información</h2>
-                <h2> Tu información es valiosa y será gestionada conforme a nuestra política de privacidad.</h2>
+                <h2 class="section-subtitle mt-4">Protección de tu información</h2>
+                <p class="text-center text-md-start">Tu información es valiosa y será gestionada conforme a nuestra política de privacidad.</p>
                 <p class="mt-5">Entendemos la importancia de tu información y nos comprometemos a tratarla de manera segura y conforme a la ley de Habeas Data vigente en Colombia. Su uso será exclusivo de la Organización Centro Geriátrico. Para más detalles, te invitamos a visitar nuestra sección de <a href="{% url 'terminos' %}" class="text-dark fw-bold">Manejo de la Información</a>.</p>
-                <h2>Encuéntranos en</h2>
+                <h2 class="section-subtitle text-center text-md-start">Encuéntranos en</h2>
                 <div>
                     <a href="#" class="text-dark me-3"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="text-dark me-3"><i class="bi bi-twitter"></i></a>

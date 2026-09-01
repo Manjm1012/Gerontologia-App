@@ -14,11 +14,12 @@
     <div class="text-white">Términos y Condiciones</div>
 {% endblock %}
 
+{% block body_class %}no-module-topbar{% endblock %}
+
 {% block content %}
-    <div class="container text-justify text-lowercase">
-        <h1 class="text-center fw-bold capitalize-title">Términos del Servicio</h1>
+    <div class="container text-justify">
+        <h1 class="section-page-title">Términos del Servicio</h1>
         ...
     </div>
     <footer class="bg-dark text-white text-center py-4"><div class="container"><p>&copy; 2025 Clínica Geriátrica | Todos los derechos reservados</p><div class="mb-3"><h5>Enlaces de Interés</h5><ul class="list-unstyled"><li><a href="{% url 'terminos' %}" class="text-white">Términos y condiciones</a></li><li><a href="#" class="text-white">Políticas de protección y tratamiento de datos</a></li><li><a href="#" class="text-white">Trabaja con nosotros</a></li><li><a href="#" class="text-white">Contáctanos</a></li><li><a href="#" class="text-white">Preguntas frecuentes</a></li><li><a href="#" class="text-white">Noticias</a></li><li><a href="#" class="text-white">Mapa de sitio</a></li></ul></div><div><a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a><a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a><a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a><a href="#" class="text-white me-3"><i class="bi bi-whatsapp"></i></a></div></div></footer>
-    {% block body_class %}no-module-topbar{% endblock %}
 {% endblock %}
