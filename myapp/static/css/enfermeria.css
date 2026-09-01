@@ -30,6 +30,13 @@ body {
     padding: 40px 0;
 }
 
+/* Make module panels slightly translucent over background to reduce visual noise */
+.module-wrapper {
+    background: rgba(250,250,250,0.6);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
 :root {
     --brand-1: #0f172a;
     --accent-1: #144a91;
@@ -141,6 +148,18 @@ body {
 .btn-logout:hover {
     background: #b91c1c;
     transform: translateY(-2px);
+}
+
+/* Standardize button radius and padding across module */
+.btn-secondary,
+.btn-logout,
+.btn-action,
+.btn-view,
+.btn-edit,
+.btn-vitals,
+.btn-primary {
+    border-radius: var(--radius);
+    padding: 10px 16px;
 }
 
 /* Sección de Estadísticas */
@@ -391,6 +410,21 @@ body {
     display: block;
     margin-bottom: 0.5rem;
     color: #9ca3af;
+}
+
+/* Reduce background image prominence on smaller screens */
+@media (max-width: 900px) {
+    body {
+        background-image: none;
+        background-color: #f8fafc;
+    }
+    .module-wrapper {
+        background: transparent;
+        padding: 18px 0;
+    }
+    .container {
+        padding: 18px;
+    }
 }
 
 /* Sección de Alertas */

@@ -144,3 +144,11 @@ body {
     color: white;
     border-color: #991b1b;
 }
+
+/* Standardize module buttons */
+.btn-primary,
+.btn-add-row,
+.btn-cancel {
+    border-radius: var(--radius);
+    padding: 10px 16px;
+}
