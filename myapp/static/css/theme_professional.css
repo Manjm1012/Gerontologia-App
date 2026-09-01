@@ -1,0 +1,30 @@
+/* Professional theme: muted, conservative palette */
+body.theme-professional{
+    --bg: #f5f7fb;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --muted: #6b7280;
+    --accent-1: #08345a;
+    --accent-2: #0f5aa3;
+    --success: #059669;
+    --danger: #dc2626;
+    --radius: 10px;
+}
+
+body.theme-professional .module-topbar{
+    background: linear-gradient(90deg, rgba(15,90,163,0.96), rgba(8,52,90,0.96));
+    color: #fff;
+}
+
+body.theme-professional .module-topbar .module-topbar-actions .btn-outline-light{
+    color: rgba(255,255,255,0.95);
+    border-color: rgba(255,255,255,0.18);
+}
+
+body.theme-professional .btn-primary{
+    background: var(--accent-2) !important;
+    border-color: transparent !important;
+}
+
+/* subtle card accents */
+body.theme-professional .card{ box-shadow: 0 8px 24px rgba(8,36,66,0.06); }

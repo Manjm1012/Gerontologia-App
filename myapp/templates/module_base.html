@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme_professional.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme_brand.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -34,13 +36,23 @@
             <div class="module-topbar-title">
                 {% block module_title %}{% endblock %}
             </div>
-            <div class="module-topbar-actions">
+            <div class="module-topbar-actions d-flex align-items-center">
                 {% block module_actions %}
                     {% if user.is_authenticated %}
                         <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm me-2">← Volver al Módulo</a>
                         <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">Cerrar Sesión</a>
                     {% endif %}
                 {% endblock %}
+            </div>
+            <!-- Theme selector: always present (outside module_actions so templates can't remove it accidentally) -->
+            <div class="theme-switcher ms-3">
+                <div class="btn-group">
+                    <button id="themeToggle" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Tema</button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeToggle">
+                        <li><a class="dropdown-item theme-select" data-theme="theme-professional" href="#">Profesional</a></li>
+                        <li><a class="dropdown-item theme-select" data-theme="theme-brand" href="#">Corporativo</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -58,6 +70,24 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    {% block extra_scripts %}{% endblock %}
+    {% block extra_scripts %}
+    <script>
+        (function(){
+            const defaultTheme = 'theme-professional';
+            function applyTheme(theme){
+                document.body.classList.remove('theme-professional','theme-brand');
+                document.body.classList.add(theme);
+                try{ localStorage.setItem('site_theme', theme); }catch(e){}
+            }
+            document.addEventListener('DOMContentLoaded', function(){
+                const saved = (function(){ try{ return localStorage.getItem('site_theme'); }catch(e){return null;} })() || defaultTheme;
+                applyTheme(saved);
+                document.querySelectorAll('.theme-select').forEach(function(el){
+                    el.addEventListener('click', function(e){ e.preventDefault(); applyTheme(this.dataset.theme); });
+                });
+            });
+        })();
+    </script>
+    {% endblock %}
 </body>
 </html>

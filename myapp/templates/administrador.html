@@ -1,14 +1,23 @@
+{% extends 'module_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo de Administrador - Gerontología App</title>
+
+{% block title %}Módulo de Administrador - Gerontología App{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/enfermeria.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+{% endblock %}
+
+{% block module_title %}
+    <div class="text-white">Módulo Administrador</div>
+{% endblock %}
+
+{% block module_actions %}
+    <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm me-2"><i class="fas fa-home"></i> Inicio</a>
+    <a href="{% url 'logout' %}" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+{% endblock %}
+
+{% block content %}
     <div class="container">
         <!-- Header con información del usuario -->
         <div class="header-section">
@@ -16,14 +25,6 @@
                 <div class="user-welcome">
                     <i class="fas fa-user-shield"></i>
                     <span>Bienvenido(a), <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
-                </div>
-                <div class="header-actions">
-                    <a href="{% url 'home' %}" class="btn-secondary">
-                        <i class="fas fa-home"></i> Inicio
-                    </a>
-                    <a href="{% url 'logout' %}" class="btn-logout">
-                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </a>
                 </div>
             </div>
         </div>

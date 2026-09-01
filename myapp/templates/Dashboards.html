@@ -1,76 +1,66 @@
+{% extends 'module_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centro Geriátrico - Panel de Control</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
-   
-</head>
-<body>
-    <div class="sidebar">
-        <h4 class="text-center text-light">Centro Geriátrico</h4>
-        <a href="#">Usuarios</a>
-        <a href="#">Personal Médico</a>
-        <a href="#">Familiares</a>
-        <a href="#">Inventario</a>
-        <a href="#">Actividades</a>
-        <a href="#">Monitoreo de Salud</a>
-        <a href="#">Reportes</a>
-        <a href="#">Configuración</a>
-    </div>
 
-    <div class="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+{% block title %}Panel - Centro Geriátrico{% endblock %}
+
+{% block extra_head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
+{% endblock %}
+
+{% block module_title %}
+    <div class="text-white">Dashboard</div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 mb-3 d-flex justify-content-between align-items-center">
             <h1>Dashboard</h1>
             <div>
                 <input type="date" id="fechaFiltro" class="form-control d-inline" style="width: auto;">
                 <button class="btn btn-primary" onclick="actualizarDashboard()">Filtrar</button>
             </div>
         </div>
-        
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card text-center p-3 bg-primary text-white">
-                    <h5>Usuarios Activos</h5>
-                    <h3 id="UsuariosActivos">120</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3 bg-success text-white">
-                    <h5>Consultas Médicas Hoy</h5>
-                    <h3 id="consultasHoy">15</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3 bg-warning text-dark">
-                    <h5>Altas Registradas</h5>
-                    <h3 id="altasRegistradas">5</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3 bg-danger text-white">
-                    <h5>Alertas de Salud</h5>
-                    <h3 id="alertasSalud">3</h3>
-                </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-primary text-white">
+                <h5>Usuarios Activos</h5>
+                <h3 id="UsuariosActivos">120</h3>
             </div>
         </div>
-
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card p-3">
-                    <h5>Ocupación General</h5>
-                    <canvas id="ocupacionChart"></canvas>
-                </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-success text-white">
+                <h5>Consultas Médicas Hoy</h5>
+                <h3 id="consultasHoy">15</h3>
             </div>
-            <div class="col-md-6">
-                <div class="card p-3">
-                    <h5>Estado de Actividades</h5>
-                    <canvas id="actividadesChart"></canvas>
-                </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-warning text-dark">
+                <h5>Altas Registradas</h5>
+                <h3 id="altasRegistradas">5</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-danger text-white">
+                <h5>Alertas de Salud</h5>
+                <h3 id="alertasSalud">3</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h5>Ocupación General</h5>
+                <canvas id="ocupacionChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h5>Estado de Actividades</h5>
+                <canvas id="actividadesChart"></canvas>
             </div>
         </div>
     </div>
@@ -79,26 +69,20 @@
         let ocupacionChart = null;
         let actividadesChart = null;
 
-        // Función para generar números aleatorios en un rango
         function getRandom(min, max, seed) {
             let x = Math.sin(seed) * 10000;
             return Math.floor((x - Math.floor(x)) * (max - min) + min);
         }
 
         function generarDatosAleatorios(fecha) {
-            let seed = new Date(fecha).getTime() / 1000; // Convertir la fecha en un número único
-
+            let seed = new Date(fecha).getTime() / 1000;
             return {
                 UsuariosActivos: getRandom(80, 150, seed),
                 consultasHoy: getRandom(5, 30, seed + 1),
                 altasRegistradas: getRandom(0, 10, seed + 2),
                 alertasSalud: getRandom(1, 10, seed + 3),
                 ocupacion: [getRandom(70, 90, seed + 4), getRandom(10, 30, seed + 5)],
-                actividades: [
-                    getRandom(10, 30, seed + 6),
-                    getRandom(5, 20, seed + 7),
-                    getRandom(5, 15, seed + 8)
-                ]
+                actividades: [getRandom(10, 30, seed + 6), getRandom(5, 20, seed + 7), getRandom(5, 15, seed + 8)]
             };
         }
 
@@ -111,49 +95,27 @@
 
             let datos = generarDatosAleatorios(fechaSeleccionada);
 
-            // Actualizar valores en las tarjetas
             document.getElementById('UsuariosActivos').textContent = datos.UsuariosActivos;
             document.getElementById('consultasHoy').textContent = datos.consultasHoy;
             document.getElementById('altasRegistradas').textContent = datos.altasRegistradas;
             document.getElementById('alertasSalud').textContent = datos.alertasSalud;
 
-            // Destruir los gráficos anteriores antes de actualizarlos
             if (ocupacionChart) ocupacionChart.destroy();
             if (actividadesChart) actividadesChart.destroy();
 
-            // Crear gráficos nuevos con datos actualizados
             const ctx1 = document.getElementById('ocupacionChart').getContext('2d');
             ocupacionChart = new Chart(ctx1, {
                 type: 'doughnut',
-                data: {
-                    labels: ['Ocupado', 'Disponible'],
-                    datasets: [{
-                        data: datos.ocupacion,
-                        backgroundColor: ['#007bff', '#cccccc']
-                    }]
-                }
+                data: { labels: ['Ocupado', 'Disponible'], datasets: [{ data: datos.ocupacion, backgroundColor: ['#007bff', '#cccccc'] }] }
             });
 
             const ctx2 = document.getElementById('actividadesChart').getContext('2d');
             actividadesChart = new Chart(ctx2, {
                 type: 'bar',
-                data: {
-                    labels: ['Ejercicios', 'Terapias', 'Entretenimiento'],
-                    datasets: [{
-                        label: 'Cantidad',
-                        data: datos.actividades,
-                        backgroundColor: ['#28a745', '#ffc107', '#17a2b8']
-                    }]
-                }
+                data: { labels: ['Ejercicios', 'Terapias', 'Entretenimiento'], datasets: [{ label: 'Cantidad', data: datos.actividades, backgroundColor: ['#28a745', '#ffc107', '#17a2b8'] }] }
             });
         }
 
-        // Cargar datos iniciales al abrir la página
-        window.onload = () => {
-            document.getElementById("fechaFiltro").valueAsDate = new Date(); // Establece la fecha actual
-            actualizarDashboard();
-        };
+        window.onload = () => { document.getElementById("fechaFiltro").valueAsDate = new Date(); actualizarDashboard(); };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}
