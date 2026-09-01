@@ -52,7 +52,7 @@ body {
 }
 
 /* Contenedor Principal */
-.container {
+.module-wrapper .container {
     width: 100%;
     max-width: 1200px;
     background-color: rgba(255,255,255,0.92);
@@ -412,7 +412,7 @@ body {
         background: transparent;
         padding: 18px 0;
     }
-    .container {
+    .module-wrapper .container {
         padding: 18px;
     }
 }
