@@ -57,6 +57,9 @@ urlpatterns = [
     path('medico/', views.medico, name='medico'),
     path('medico/consulta-nueva/', views.medico_consulta_nueva, name='medico_consulta_nueva'),  
     path('medico/enunciado-nuevo/', views.medico_enunciado_nuevo, name='medico_enunciado_nuevo'),
+    path('psicologo/', views.psicologo, name='psicologo'),
+    path('fisioterapia/', views.fisioterapia, name='fisioterapia'),
+    path('fonoaudiologia/', views.fonoaudiologia, name='fonoaudiologia'),
     #hiatorial geriatico y pdf
     path('enfermeria/historia/', views.buscar, name='buscar_historial'),
 

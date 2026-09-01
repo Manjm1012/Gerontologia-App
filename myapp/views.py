@@ -61,6 +61,25 @@ def buscar(request):
         "pacientes": pacientes,
         "buscado": buscado,
     })
+
+
+# Simple role-specific module entry points
+def psicologo(request):
+    """Página de entrada para el módulo de Psicología (placeholder)."""
+    from django.http import HttpResponse
+    return HttpResponse("Módulo Psicólogo - Acceso correcto.")
+
+
+def fisioterapia(request):
+    """Página de entrada para el módulo de Fisioterapia (placeholder)."""
+    from django.http import HttpResponse
+    return HttpResponse("Módulo Fisioterapia - Acceso correcto.")
+
+
+def fonoaudiologia(request):
+    """Página de entrada para el módulo de Fonoaudiología (placeholder)."""
+    from django.http import HttpResponse
+    return HttpResponse("Módulo Fonoaudiología - Acceso correcto.")
 #======================================================
 
 
@@ -155,16 +174,21 @@ def loginup(request):
             login(request, user)
             # Redirigir según el perfil del usuario
             if user.is_active:
-                # Si es superusuario, al panel de administración
-                if user.is_superuser:
-                    return redirect('administrador')
-                # Verificar si pertenece al grupo Enfermeria
+                # Priorizar redirección por grupo específico
+                if user.groups.filter(name='Medico').exists():
+                    return redirect('medico')
                 elif user.groups.filter(name='Enfermeria').exists():
                     return redirect('enfermeria')
-                # Verificar si pertenece al grupo Medico
-                elif user.groups.filter(name='Medico').exists():
-                    return redirect('medico')
-                # Si es staff, redirigir según su rol
+                elif user.groups.filter(name='Psicologo').exists():
+                    return redirect('psicologo')
+                elif user.groups.filter(name='Fisioterapia').exists():
+                    return redirect('fisioterapia')
+                elif user.groups.filter(name='Fonoaudiologia').exists():
+                    return redirect('fonoaudiologia')
+                # Si es superusuario, al panel de administración
+                elif user.is_superuser:
+                    return redirect('administrador')
+                # Si es staff pero sin grupo, redirigir a administrador por defecto
                 elif user.is_staff:
                     return redirect('administrador')
             # Por defecto, al registro de paciente

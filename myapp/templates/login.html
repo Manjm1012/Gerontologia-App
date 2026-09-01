@@ -25,6 +25,12 @@
             <img class="mb-4" src="{% static 'img/Logo.png' %}" alt="Logo" width="72" height="57">
             <h1 class="h3 mb-3 fw-normal">Inicio de Sesión</h1>
 
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="usuario" name="usuario" placeholder="mao" required>
                 <label for="floatingInput">Usuario</label>
