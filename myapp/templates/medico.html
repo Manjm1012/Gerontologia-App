@@ -41,6 +41,7 @@
     {{ block.super }}
 {% endblock %}
 
+{% block extra_scripts %}
     <script>
         function filtrarUsuarios() {
             const filtro = document.getElementById('buscar-paciente').value.toLowerCase();
@@ -59,5 +60,4 @@
             }
         }
     </script>
-</body>
-</html>
+{% endblock %}

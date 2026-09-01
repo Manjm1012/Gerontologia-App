@@ -866,7 +866,7 @@ def enfermeria(request):
     return render(request, 'enfermeria.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def historial_evoluciones(request):
     """Vista para mostrar el historial completo de evoluciones sin formulario"""
     from datetime import date
@@ -889,7 +889,7 @@ def historial_evoluciones(request):
     return render(request, 'historial_evoluciones.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def evolucion_enfermeria(request):
     """Vista para el registro de evolución diaria de enfermería"""
     from datetime import date
@@ -1297,7 +1297,7 @@ from django.contrib.auth.decorators import login_required
 # ==========================
 # MÓDULO DEL MÉDICO
 # ==========================
-@login_required
+@login_required(login_url='login')
 def medico(request):
     """
     Vista del MÓDULO DEL MÉDICO - Dashboard principal
@@ -1361,8 +1361,7 @@ def medico(request):
 # =======================
 # VISTA PARA REGISTRAR CONSULTA MÉDICA
 # =======================
-@login_required
-@login_required
+@login_required(login_url='login')
 def medico_consulta_nueva(request):        
     """
     Vista para registrar una nueva consulta médica para un paciente.
