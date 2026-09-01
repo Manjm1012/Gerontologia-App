@@ -1,35 +1,20 @@
+{% extends 'module_base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if create %}Crear Usuario{% else %}Editar Usuario{% endif %}</title>
+
+{% block title %}{% if create %}Crear Usuario{% else %}Editar Usuario{% endif %}{% endblock %}
+
+{% block extra_head %}
   <link rel="stylesheet" href="{% static 'css/enfermeria.css' %}">
   <link rel="stylesheet" href="{% static 'css/historia_gerontologica.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+{% endblock %}
+
+{% block module_title %}
+  <div class="text-white">{% if create %}Crear Usuario{% else %}Editar Usuario{% endif %}</div>
+{% endblock %}
+
+{% block content %}
   <div class="container">
-    <!-- Header con navegación -->
-    <div class="header-section">
-      <div class="user-info-bar">
-        <div class="user-welcome">
-          <i class="fas fa-user-shield"></i>
-          <span><strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong></span>
-        </div>
-        <div class="header-actions">
-          <a href="{% url 'admin_users' %}" class="btn-secondary">
-            <i class="fas fa-arrow-left"></i> Volver
-          </a>
-          <a href="{% url 'logout' %}" class="btn-logout">
-            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-          </a>
-        </div>
-      </div>
-    </div>
-    <h1 class="main-title">{% if create %}Crear Usuario{% else %}Editar Usuario: {{ user_obj.username }}{% endif %}</h1>
-    <div class="section-title">Información del usuario</div>
     {% if messages %}
       <div style="margin-bottom:12px;">
         {% for m in messages %}
@@ -166,33 +151,31 @@
         <a href="{% url 'admin_users' %}" class="submit-button submit-button--small submit-button--secondary" style="width:auto;">Cancelar</a>
       </div>
     </form>
-  </div>
-</body>
-<script>
-(function() {
-    const profileSelect = document.getElementById('profile');
-    const ROLES_CON_MATRICULA = ['Doctor', 'Medico', 'Enfermeria'];
+    </div>
 
-    // Create mode containers
-    const matriculaCreate = document.getElementById('matricula-container');
-    const especialidadCreate = document.getElementById('especialidad-container');
-    // Edit mode containers
-    const matriculaEdit = document.getElementById('matricula-container-edit');
-    const especialidadEdit = document.getElementById('especialidad-container-edit');
+    <script>
+    (function() {
+      const profileSelect = document.getElementById('profile');
+      const ROLES_CON_MATRICULA = ['Doctor', 'Medico', 'Enfermeria'];
 
-    function toggleMatricula() {
+      const matriculaCreate = document.getElementById('matricula-container');
+      const especialidadCreate = document.getElementById('especialidad-container');
+      const matriculaEdit = document.getElementById('matricula-container-edit');
+      const especialidadEdit = document.getElementById('especialidad-container-edit');
+
+      function toggleMatricula() {
         if (!profileSelect) return;
         const show = ROLES_CON_MATRICULA.includes(profileSelect.value);
         if (matriculaCreate) matriculaCreate.style.display = show ? '' : 'none';
         if (especialidadCreate) especialidadCreate.style.display = show ? '' : 'none';
         if (matriculaEdit) matriculaEdit.style.display = show ? '' : 'none';
         if (especialidadEdit) especialidadEdit.style.display = show ? '' : 'none';
-    }
+      }
 
-    if (profileSelect) {
+      if (profileSelect) {
         profileSelect.addEventListener('change', toggleMatricula);
         toggleMatricula();
-    }
-})();
-</script>
-</html>
+      }
+    })();
+    </script>
+  {% endblock %}

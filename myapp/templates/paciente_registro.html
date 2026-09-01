@@ -1,15 +1,18 @@
+{% extends 'module_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Registro - Historias Clínicas Gerontológicas</title>
+
+{% block title %}Sistema de Registro - Historias Clínicas Gerontológicas{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/pacientes.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-</head>
-<body>
+{% endblock %}
+
+{% block module_title %}
+    <div class="text-white">Registro de Paciente</div>
+{% endblock %}
+
+{% block content %}
     <div class="container">
         <header>
             <h1><i class="fas fa-notes-medical"></i> Sistema de Registro</h1>
@@ -129,7 +132,7 @@
         document.getElementById('clinicalForm').addEventListener('submit', function(event) {
             const fechaNacimiento = new Date(document.getElementById('fecha_nacimiento').value);
             const hoy = new Date();
-            const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
             const mes = hoy.getMonth() - fechaNacimiento.getMonth();
             if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
                 edad--;
@@ -139,9 +142,9 @@
                 event.preventDefault();
             }
         });
-           document.getElementById('historiaClinicaBtn').addEventListener('click', function() {
-            window.location.href = "/historia_gerontologica"; // Redirige a una nueva vista
+        document.getElementById('historiaClinicaBtn').addEventListener('click', function() {
+            window.location.href = "/historia_gerontologica";
         });
     </script>
-</body>
-</html>
+    </div>
+{% endblock %}
