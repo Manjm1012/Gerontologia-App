@@ -12,6 +12,8 @@
     <div class="text-white">Historia Clínica Gerontológica</div>
 {% endblock %}
 
+{% block body_class %}no-module-topbar{% endblock %}
+
 {% block content %}
 <form id="historia_gerontologica_form" method="post" action="{% url 'historia_gerontologica' %}" data-cache="true" data-cache-interval="2000">
     {% csrf_token %}

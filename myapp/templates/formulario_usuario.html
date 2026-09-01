@@ -13,6 +13,8 @@
   <div class="text-white">{% if create %}Crear Usuario{% else %}Editar Usuario{% endif %}</div>
 {% endblock %}
 
+{% block body_class %}no-module-topbar{% endblock %}
+
 {% block content %}
   <div class="container">
     {% if messages %}
