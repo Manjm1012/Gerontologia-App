@@ -811,7 +811,7 @@ def kardes(request):
 
 
 #########################################
-@login_required
+@login_required(login_url='login')
 def enfermeria(request):
     """Vista del módulo de enfermería - Dashboard con funcionalidades específicas"""
     from datetime import date
@@ -1418,7 +1418,7 @@ def medico_consulta_nueva(request):
 # =======================
 # VISTA PARA REGISTRAR ENUNCIADO
 # =======================
-@login_required
+@login_required(login_url='login')
 def medico_enunciado_nuevo(request):
     """
     Vista para registrar un nuevo enunciado o nota del médico.
@@ -1449,7 +1449,7 @@ def medico_enunciado_nuevo(request):
         'fecha_hoy': date.today()
     })
 
-@login_required
+@login_required(login_url='login')
 def medico_procedimiento_nuevo(request):
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -1479,13 +1479,13 @@ def medico_procedimiento_nuevo(request):
     })
 
 
-@login_required
+@login_required(login_url='login')
 def ver_procedimiento(request, proc_id):
     procedimiento = get_object_or_404(ProcedimientoMedico, id=proc_id)
     return render(request, 'ver_procedimiento.html', {'procedimiento': procedimiento})
 
 
-@login_required
+@login_required(login_url='login')
 def lista_procedimientos(request):
     procedimientos = ProcedimientoMedico.objects.select_related('paciente', 'profesional').order_by('-fecha_registro')
     paciente_id = request.GET.get('paciente_id')
