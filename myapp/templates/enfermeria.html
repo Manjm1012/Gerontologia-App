@@ -1,34 +1,27 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo de Enfermería - Gerontología App</title>
+{% extends 'module_base.html' %}
+
+{% block title %}Módulo de Enfermería - Gerontología App{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/enfermeria.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Header con información del usuario -->
-        <div class="header-section">
-            <div class="user-info-bar">
-                <div class="user-welcome">
-                    <i class="fas fa-user-nurse"></i>
-                    <span>Bienvenido(a), <strong>{{ user.first_name }} {{ user.last_name }}</strong>
-                    {% if matricula_profesional %}<span style="font-size:0.85em; color:#a0aec0; margin-left:8px;">Mat: {{ matricula_profesional }}</span>{% endif %}
-                    </span>
-                </div>
-                <div class="header-actions">
-                    <a href="{% url 'home' %}" class="btn-secondary">
-                        <i class="fas fa-home"></i> Inicio
-                    </a>
-                    <a href="{% url 'logout' %}" class="btn-logout">
-                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </a>
-                </div>
+{% endblock %}
+
+{% block content %}
+    <div class="header-section">
+        <div class="user-info-bar d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <i class="fas fa-user-nurse"></i>
+                <span>Bienvenido(a), <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                {% if matricula_profesional %}<small class="text-muted">Mat: {{ matricula_profesional }}</small>{% endif %}
+                </span>
+            </div>
+            <div>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm me-2"><i class="fas fa-home"></i> Inicio</a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
             </div>
         </div>
+    </div>
 
         <h1 class="main-title">MÓDULO DE ENFERMERÍA</h1>
         <!-- Resumen de estadísticas -->
