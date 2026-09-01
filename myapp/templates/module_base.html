@@ -19,53 +19,60 @@
     </style>
 </head>
 <body class="{% block body_class %}{% endblock %}">
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <a class="navbar-brand me-3" href="{% url 'home' %}">
-                    <img src="{% static 'img/Logo.png' %}" height="36" alt="Logo"> Gerontología App
-                </a>
-                <ul class="navbar-nav d-flex flex-row gap-2">
-                    <li class="nav-item"><a class="nav-link text-light px-2" href="{% url 'servicios' %}">Servicios</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-2" href="{% url 'somos' %}">Quiénes Somos</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-2" href="{% url 'contactenos' %}">Contacto</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-2" href="{% url 'especialidades' %}">Especialidades</a></li>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg main-navbar">
+        <div class="container">
+            <a class="navbar-brand me-3" href="{% url 'home' %}">
+                <img src="{% static 'img/Logo.png' %}" height="36" alt="Logo"> Gerontología App
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Alternar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'servicios' %}">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'somos' %}">Quiénes Somos</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'contactenos' %}">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'especialidades' %}">Especialidades</a></li>
                 </ul>
-            </div>
-            <div class="d-flex align-items-center">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm me-2">Inicio</a>
-                    <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Cerrar sesión</a>
-                {% else %}
-                    <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm me-2">Inicio</a>
-                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Ingresar</a>
-                {% endif %}
+
+                <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">Inicio</a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Cerrar sesión</a>
+                    {% else %}
+                        <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">Inicio</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Ingresar</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Module top action bar: title and module actions (can be overridden per-template) -->
     <div class="module-topbar py-2">
-        <div class="container d-flex justify-content-between align-items-center">
+        <div class="container module-topbar-inner">
             <div class="module-topbar-title">
                 {% block module_title %}{% endblock %}
             </div>
-            <div class="module-topbar-actions d-flex align-items-center">
-                {% block module_actions %}
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm me-2">← Volver al Módulo</a>
-                        <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">Cerrar Sesión</a>
-                    {% endif %}
-                {% endblock %}
-            </div>
-            <!-- Theme selector: always present (outside module_actions so templates can't remove it accidentally) -->
-            <div class="theme-switcher ms-3">
-                <div class="btn-group">
-                    <button id="themeToggle" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Tema</button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeToggle">
-                        <li><a class="dropdown-item theme-select" data-theme="theme-professional" href="#">Profesional</a></li>
-                        <li><a class="dropdown-item theme-select" data-theme="theme-brand" href="#">Corporativo</a></li>
-                    </ul>
+            <div class="module-topbar-right d-flex align-items-center gap-2">
+                <div class="module-topbar-actions d-flex align-items-center">
+                    {% block module_actions %}
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm me-2">← Volver al Módulo</a>
+                            <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">Cerrar Sesión</a>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+                <!-- Theme selector: always present (outside module_actions so templates can't remove it accidentally) -->
+                <div class="theme-switcher ms-3">
+                    <div class="btn-group">
+                        <button id="themeToggle" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Tema</button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeToggle">
+                            <li><a class="dropdown-item theme-select" data-theme="theme-professional" href="#">Profesional</a></li>
+                            <li><a class="dropdown-item theme-select" data-theme="theme-brand" href="#">Corporativo</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -104,3 +104,97 @@ p {
     max-height: 50px;
     width: auto;
 }
+
+/* Global responsive helpers */
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+    max-width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+.table-responsive,
+.patients-table,
+.records-table,
+.history-table,
+.evolution-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.main-navbar .navbar-nav .nav-link {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+}
+
+.module-topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.module-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 991.98px) {
+    .main-navbar .navbar-collapse {
+        padding: 10px 0 6px;
+    }
+
+    .main-navbar .navbar-nav {
+        gap: 2px;
+    }
+
+    .module-topbar-title,
+    .module-topbar-right {
+        width: 100%;
+    }
+
+    .module-topbar-right {
+        justify-content: space-between;
+    }
+
+    .theme-switcher {
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    body {
+        font-size: 15px;
+    }
+
+    .module-wrapper .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .module-topbar-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .module-topbar-actions .btn,
+    .theme-switcher .btn {
+        width: 100%;
+    }
+}
