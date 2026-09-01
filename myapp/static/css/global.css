@@ -197,4 +197,20 @@ table {
     .theme-switcher .btn {
         width: 100%;
     }
+
+    .action-buttons {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .action-buttons .btn-action {
+        flex: 1 1 auto;
+        min-width: 44px;
+    }
+
+    .patients-table,
+    .records-table,
+    .history-table {
+        font-size: 0.85rem;
+    }
 }

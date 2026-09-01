@@ -584,3 +584,66 @@ select {
     box-sizing: border-box;
     resize: none; /* opcional si no quieres que el usuario lo redimensione */
 }
+
+@media (max-width: 991.98px) {
+    body {
+        display: block;
+        min-height: auto;
+        padding: 10px 0;
+    }
+
+    .container {
+        width: 96%;
+        padding: 16px;
+    }
+
+    table,
+    .identification-table,
+    .parentesco-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .gender-options-container,
+    .gender-radio-group,
+    .zona-options {
+        flex-wrap: wrap;
+        justify-content: flex-start !important;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .other-gender-option,
+    .gender-option {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .main-title {
+        font-size: 1.35rem;
+        margin: 12px auto 20px;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        padding: 10px 12px;
+        margin: 20px 0 12px;
+    }
+
+    .identification-table td,
+    .parentesco-table td,
+    table td,
+    table th {
+        padding: 9px 10px;
+        font-size: 0.88rem;
+    }
+
+    .back-button,
+    .submit-button {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+    }
+}
