@@ -37,6 +37,12 @@ body {
     backdrop-filter: blur(3px);
 }
 
+/* Hide mobile offcanvas and legacy sidebar on large screens to avoid overlapping widgets */
+@media (min-width: 992px) {
+    .offcanvas { display: none !important; }
+    .sidebar { display: none !important; }
+}
+
 :root {
     --brand-1: #0f172a;
     --accent-1: #144a91;

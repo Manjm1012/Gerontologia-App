@@ -34,6 +34,14 @@ body {
 .btn-primary:hover { filter: brightness(0.95); transform: translateY(-2px); }
 .btn-primary:focus { outline: 3px solid rgba(20,74,145,0.18); outline-offset: 2px; }
 
+/* Ensure footer is statically positioned and spans full width */
+footer {
+    position: static !important;
+    width: 100% !important;
+    bottom: auto !important;
+    right: auto !important;
+}
+
 /*Estilo de las tarjetas*/
 .card {
     height: auto; /* Se ajusta al contenido automaticamente */
