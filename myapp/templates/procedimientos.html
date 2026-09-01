@@ -1,10 +1,9 @@
+{% extends 'module_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procedimientos - Gerontologia App</title>
+
+{% block title %}Registro de Procedimiento{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/enfermeria.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -31,40 +30,31 @@
         #seccion_externo { display: none; }
         #seccion_interno { display: block; }
     </style>
-</head>
-<body>
+{% endblock %}
+
+{% block module_title %}
+    <div class="text-white">Registro de Procedimiento</div>
+{% endblock %}
+
+{% block content %}
 <div class="container">
 
     <div class="header-section">
         <div class="user-info-bar">
-            <div class="user-welcome">
-                <i class="fas fa-user-nurse"></i>
-                <span>Enfermero(a): <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
-            </div>
+            <div class="user-welcome"><i class="fas fa-user-nurse"></i><span>Enfermero(a): <strong>{{ user.first_name }} {{ user.last_name }}</strong></span></div>
             <div class="header-actions">
-                <a href="{% url 'lista_procedimientos' %}" class="btn-secondary">
-                    <i class="fas fa-list"></i> Ver Registros
-                </a>
-                <a href="{% url 'enfermeria' %}" class="btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Volver al Modulo
-                </a>
-                <a href="{% url 'logout' %}" class="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesion
-                </a>
+                <a href="{% url 'lista_procedimientos' %}" class="btn-secondary"><i class="fas fa-list"></i> Ver Registros</a>
+                <a href="{% url 'enfermeria' %}" class="btn-secondary"><i class="fas fa-arrow-left"></i> Volver al Modulo</a>
+                <a href="{% url 'logout' %}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a>
             </div>
         </div>
     </div>
 
     <h1 class="main-title"><i class="fas fa-procedures"></i> REGISTRO DE PROCEDIMIENTO</h1>
 
-    {% if messages %}
-    {% for msg in messages %}
-    <div class="alert-info"><i class="fas fa-check-circle"></i> {{ msg }}</div>
-    {% endfor %}
-    {% endif %}
+    {% if messages %}{% for msg in messages %}<div class="alert-info"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endfor %}{% endif %}
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
         <input type="hidden" name="tipo_procedimiento" id="tipo_procedimiento_hidden" value="INTERNO">
 
         <div class="section-title"><i class="fas fa-user-injured"></i> DATOS DEL PACIENTE</div>
@@ -84,91 +74,50 @@
         <div class="form-section">
             <label class="form-label">Donde se realiza el procedimiento?</label>
             <div class="tipo-toggle">
-                <button type="button" class="tipo-btn active" id="btn_interno" onclick="setTipo('INTERNO')">
-                    <i class="fas fa-hospital"></i> Interno (en el centro)
-                </button>
-                <button type="button" class="tipo-btn" id="btn_externo" onclick="setTipo('EXTERNO')">
-                    <i class="fas fa-ambulance"></i> Externo (fuera del centro)
-                </button>
+                <button type="button" class="tipo-btn active" id="btn_interno" onclick="setTipo('INTERNO')"><i class="fas fa-hospital"></i> Interno (en el centro)</button>
+                <button type="button" class="tipo-btn" id="btn_externo" onclick="setTipo('EXTERNO')"><i class="fas fa-ambulance"></i> Externo (fuera del centro)</button>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Nombre del Procedimiento <span style="color:red">*</span></label>
-                <input type="text" name="nombre_procedimiento" class="form-control" required
-                       placeholder="Ej: Curacion de herida, Toma de muestra, Fisioterapia...">
+                <input type="text" name="nombre_procedimiento" class="form-control" required placeholder="Ej: Curacion de herida, Toma de muestra, Fisioterapia...">
             </div>
 
             <div id="seccion_interno">
-                <div class="alert-info">
-                    <i class="fas fa-info-circle"></i> Procedimiento <strong>realizado dentro del centro</strong>. Indique el medico que lo recomendo.
-                </div>
+                <div class="alert-info"><i class="fas fa-info-circle"></i> Procedimiento <strong>realizado dentro del centro</strong>. Indique el medico que lo recomendo.</div>
                 <div class="form-group">
                     <label class="form-label">Medico del centro que recomendo el procedimiento</label>
-                    <select name="medico_que_aplico" class="form-control">
-                        <option value="">-- Sin asignar --</option>
-                        {% for medico in medicos_internos %}
-                        <option value="{{ medico.get_full_name|default:medico.username }}">{{ medico.get_full_name|default:medico.username }}</option>
-                        {% endfor %}
-                    </select>
+                    <select name="medico_que_aplico" class="form-control"><option value="">-- Sin asignar --</option>{% for medico in medicos_internos %}<option value="{{ medico.get_full_name|default:medico.username }}">{{ medico.get_full_name|default:medico.username }}</option>{% endfor %}</select>
                 </div>
             </div>
 
             <div id="seccion_externo">
-                <div class="alert-warn">
-                    <i class="fas fa-exclamation-triangle"></i> Procedimiento <strong>realizado fuera del centro</strong>. Registre los datos y adjunte el soporte medico.
-                </div>
+                <div class="alert-warn"><i class="fas fa-exclamation-triangle"></i> Procedimiento <strong>realizado fuera del centro</strong>. Registre los datos y adjunte el soporte medico.</div>
                 <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Nombre del Centro / Clinica / Hospital</label>
-                        <input type="text" name="sitio_procedimiento" class="form-control" placeholder="Ej: Clinica del Norte...">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Medico externo que realizo el procedimiento</label>
-                        <input type="text" name="medico_que_aplico_ext" class="form-control" placeholder="Nombre del medico externo">
-                    </div>
+                    <div class="form-group"><label class="form-label">Nombre del Centro / Clinica / Hospital</label><input type="text" name="sitio_procedimiento" class="form-control" placeholder="Ej: Clinica del Norte..."></div>
+                    <div class="form-group"><label class="form-label">Medico externo que realizo el procedimiento</label><input type="text" name="medico_que_aplico_ext" class="form-control" placeholder="Nombre del medico externo"></div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Adjuntar soporte (PDF, fotos de tablet o celular)</label>
-                    <label for="archivo_adjunto_input" class="file-upload-area">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <strong style="display:block; color:#374151;">Haz clic o arrastra un archivo aqui</strong>
-                        <span style="font-size:0.82rem; color:#6b7280;">PDF, JPG, PNG, HEIC -- Max. 10 MB</span>
-                        <div class="file-name-preview" id="file_name_preview"></div>
-                    </label>
-                    <input type="file" name="archivo_adjunto" id="archivo_adjunto_input"
-                           accept=".pdf,.jpg,.jpeg,.png,.heic,.heif,.webp"
-                           style="display:none" onchange="mostrarNombreArchivo(this)">
+                    <label for="archivo_adjunto_input" class="file-upload-area"><i class="fas fa-cloud-upload-alt"></i><strong style="display:block; color:#374151;">Haz clic o arrastra un archivo aqui</strong><span style="font-size:0.82rem; color:#6b7280;">PDF, JPG, PNG, HEIC -- Max. 10 MB</span><div class="file-name-preview" id="file_name_preview"></div></label>
+                    <input type="file" name="archivo_adjunto" id="archivo_adjunto_input" accept=".pdf,.jpg,.jpeg,.png,.heic,.heif,.webp" style="display:none" onchange="mostrarNombreArchivo(this)">
                 </div>
             </div>
         </div>
 
         <div class="section-title"><i class="fas fa-pen-nib"></i> DESCRIPCION DEL PROCEDIMIENTO</div>
         <div class="form-section">
-            <div class="form-group">
-                <label class="form-label">Protocolo aplicado / Detalle tecnico <span style="color:red">*</span></label>
-                <textarea name="descripcion" class="form-control" rows="4" required
-                          placeholder="Describe el procedimiento realizado, tecnica utilizada, materiales, etc."></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Observaciones / Novedades</label>
-                <textarea name="observaciones" class="form-control" rows="3"
-                          placeholder="Reacciones del paciente, indicaciones de seguimiento, etc."></textarea>
-            </div>
+            <div class="form-group"><label class="form-label">Protocolo aplicado / Detalle tecnico <span style="color:red">*</span></label><textarea name="descripcion" class="form-control" rows="4" required placeholder="Describe el procedimiento realizado, tecnica utilizada, materiales, etc."></textarea></div>
+            <div class="form-group"><label class="form-label">Observaciones / Novedades</label><textarea name="observaciones" class="form-control" rows="3" placeholder="Reacciones del paciente, indicaciones de seguimiento, etc."></textarea></div>
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:12px; padding: 8px 0 20px;">
-            <a href="{% url 'enfermeria' %}" class="btn-cancel-form">
-                <i class="fas fa-times"></i> Cancelar
-            </a>
-            <button type="submit" class="btn-guardar">
-                <i class="fas fa-save"></i> Registrar Procedimiento
-            </button>
+            <a href="{% url 'enfermeria' %}" class="btn-cancel-form"><i class="fas fa-times"></i> Cancelar</a>
+            <button type="submit" class="btn-guardar"><i class="fas fa-save"></i> Registrar Procedimiento</button>
         </div>
     </form>
 
-    <div class="footer-section">
-        <p>2026 Sistema de Historias Clinicas Gerontologicas</p>
-    </div>
+    <div class="footer-section"><p>2026 Sistema de Historias Clinicas Gerontologicas</p></div>
 </div>
 
 <script>
@@ -192,11 +141,7 @@ function setTipo(tipo) {
 }
 function mostrarNombreArchivo(input) {
     const p = document.getElementById('file_name_preview');
-    if (input.files && input.files[0]) {
-        p.textContent = input.files[0].name;
-        p.style.display = 'block';
-    }
+    if (input.files && input.files[0]) { p.textContent = input.files[0].name; p.style.display = 'block'; }
 }
 </script>
-</body>
-</html>
+{% endblock %}

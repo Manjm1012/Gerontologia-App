@@ -1,10 +1,9 @@
+{% extends 'module_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procedimientos Registrados</title>
+
+{% block title %}Procedimientos Registrados{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/enfermeria.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -22,16 +21,18 @@
         .empty-state { text-align:center; padding:50px 20px; color:#9ca3af; }
         .empty-state i { font-size:3rem; display:block; margin-bottom:12px; }
     </style>
-</head>
-<body>
+{% endblock %}
+
+{% block module_title %}
+    <div class="text-white">Procedimientos Registrados</div>
+{% endblock %}
+
+{% block content %}
 <div class="container">
 
     <div class="header-section">
         <div class="user-info-bar">
-            <div class="user-welcome">
-                <i class="fas fa-procedures"></i>
-                <span>Módulo de Procedimientos</span>
-            </div>
+            <div class="user-welcome"><i class="fas fa-procedures"></i><span>Módulo de Procedimientos</span></div>
             <div class="header-actions">
                 <a href="{% url 'medico_procedimiento_nuevo' %}" class="btn-secondary"><i class="fas fa-plus"></i> Nuevo Procedimiento</a>
                 <a href="{% url 'enfermeria' %}" class="btn-secondary"><i class="fas fa-arrow-left"></i> Volver al Módulo</a>
@@ -44,23 +45,18 @@
 
         <h1 class="main-title"><i class="fas fa-list-alt"></i> Procedimientos Registrados</h1>
 
-        <!-- Filtro por paciente -->
         <form method="get" class="filter-bar">
             <div>
                 <label>Filtrar por paciente</label>
                 <select name="paciente_id">
                     <option value="">— Todos los pacientes —</option>
                     {% for p in pacientes %}
-                    <option value="{{ p.id }}" {% if paciente_id_sel == p.id|stringformat:"s" %}selected{% endif %}>
-                        {{ p.primer_apellido }}, {{ p.primer_nombre }} — {{ p.numero_documento_paciente }}
-                    </option>
+                    <option value="{{ p.id }}" {% if paciente_id_sel == p.id|stringformat:"s" %}selected{% endif %}>{{ p.primer_apellido }}, {{ p.primer_nombre }} — {{ p.numero_documento_paciente }}</option>
                     {% endfor %}
                 </select>
             </div>
             <button type="submit" class="btn-filter"><i class="fas fa-search"></i> Filtrar</button>
-            {% if paciente_id_sel %}
-            <a href="{% url 'lista_procedimientos' %}" style="font-size:0.85rem; color:#6b7280; align-self:center;">✕ Limpiar filtro</a>
-            {% endif %}
+            {% if paciente_id_sel %}<a href="{% url 'lista_procedimientos' %}" style="font-size:0.85rem; color:#6b7280; align-self:center;">✕ Limpiar filtro</a>{% endif %}
         </form>
 
         {% if procedimientos %}
@@ -82,42 +78,19 @@
                     <td>{{ proc.fecha_registro|date:"d/m/Y" }}<br><small style="color:#9ca3af;">{{ proc.fecha_registro|date:"H:i" }}</small></td>
                     <td>{{ proc.paciente.primer_apellido }}, {{ proc.paciente.primer_nombre }}</td>
                     <td><strong>{{ proc.nombre_procedimiento }}</strong></td>
-                    <td>
-                        <span class="{% if proc.tipo_procedimiento == 'INTERNO' %}badge-interno{% else %}badge-externo{% endif %}">
-                            {{ proc.get_tipo_procedimiento_display }}
-                        </span>
-                    </td>
-                    <td>
-                        {% if proc.tipo_procedimiento == 'INTERNO' %}
-                        {{ proc.medico_que_aplico|default:"—" }}
-                        {% else %}
-                        {{ proc.sitio_procedimiento|default:"—" }}
-                        {% endif %}
-                    </td>
+                    <td><span class="{% if proc.tipo_procedimiento == 'INTERNO' %}badge-interno{% else %}badge-externo{% endif %}">{{ proc.get_tipo_procedimiento_display }}</span></td>
+                    <td>{% if proc.tipo_procedimiento == 'INTERNO' %}{{ proc.medico_que_aplico|default:"—" }}{% else %}{{ proc.sitio_procedimiento|default:"—" }}{% endif %}</td>
                     <td>{{ proc.profesional.get_full_name|default:proc.profesional.username }}</td>
-                    <td>
-                        <a href="{% url 'ver_procedimiento' proc.id %}" class="btn-ver">
-                            <i class="fas fa-eye"></i> Ver
-                        </a>
-                    </td>
+                    <td><a href="{% url 'ver_procedimiento' proc.id %}" class="btn-ver"><i class="fas fa-eye"></i> Ver</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         {% else %}
-        <div class="empty-state">
-            <i class="fas fa-procedures"></i>
-            <p>No hay procedimientos registrados{% if paciente_id_sel %} para este paciente{% endif %}.</p>
-            <a href="{% url 'medico_procedimiento_nuevo' %}" style="color:#1962bc; font-weight:600;">
-                <i class="fas fa-plus"></i> Registrar primer procedimiento
-            </a>
-        </div>
+        <div class="empty-state"><i class="fas fa-procedures"></i><p>No hay procedimientos registrados{% if paciente_id_sel %} para este paciente{% endif %}.</p><a href="{% url 'medico_procedimiento_nuevo' %}" style="color:#1962bc; font-weight:600;"><i class="fas fa-plus"></i> Registrar primer procedimiento</a></div>
         {% endif %}
     </div>
 
-    <div class="footer-section">
-        <p>© 2026 Sistema de Historias Clínicas Gerontológicas</p>
-    </div>
+    <div class="footer-section"><p>© 2026 Sistema de Historias Clínicas Gerontológicas</p></div>
 </div>
-</body>
-</html>
+{% endblock %}

@@ -1,22 +1,23 @@
+{% extends 'module_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia Clínica</title>
+
+{% block title %}Historia Clínica{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/historia_gerontologica.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-       
-    </style>
-</head>
-<body>
+{% endblock %}
+
+{% block module_title %}
+    <div class="text-white">Historia Clínica Gerontológica</div>
+{% endblock %}
+
+{% block content %}
 <form id="historia_gerontologica_form" method="post" action="{% url 'historia_gerontologica' %}" data-cache="true" data-cache-interval="2000">
     {% csrf_token %}
-    <div class="container">
+    <div class="container py-3">
         <button type="button" class="back-button" onclick="history.back()">⬅️ Regresar</button>
-        <h1 class="main-tittle" style="text-align: center;">Historia Clínica Gerontológica</h1>
+        <h1 class="main-tittle text-center">Historia Clínica Gerontológica</h1>
         <div>
             <div class="section-title"> 1. ASPECTOS SOCIALES</div>
             <table class="identification-table">
