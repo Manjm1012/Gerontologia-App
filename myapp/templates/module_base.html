@@ -16,6 +16,9 @@
         /* Hide module topbar on pages that opt-out */
         .no-module-topbar .module-topbar{ display: none !important; }
         .no-module-topbar .module-wrapper{ margin-top: 0 !important; }
+        /* Also hide the main navbar on opt-out pages */
+        .no-module-topbar .navbar{ display: none !important; }
+        .no-module-topbar main{ padding-top: 0 !important; }
     </style>
 </head>
 <body class="{% block body_class %}{% endblock %}">
