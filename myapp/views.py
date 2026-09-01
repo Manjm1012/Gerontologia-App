@@ -64,22 +64,31 @@ def buscar(request):
 
 
 # Simple role-specific module entry points
+@login_required(login_url='login')
 def psicologo(request):
     """Página de entrada para el módulo de Psicología (placeholder)."""
-    from django.http import HttpResponse
-    return HttpResponse("Módulo Psicólogo - Acceso correcto.")
+    if not request.user.groups.filter(name='Psicologo').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    return render(request, 'psicologo.html', {'matricula_profesional': _get_matricula(request.user)})
 
 
+@login_required(login_url='login')
 def fisioterapia(request):
     """Página de entrada para el módulo de Fisioterapia (placeholder)."""
-    from django.http import HttpResponse
-    return HttpResponse("Módulo Fisioterapia - Acceso correcto.")
+    if not request.user.groups.filter(name='Fisioterapia').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    return render(request, 'fisioterapia.html', {'matricula_profesional': _get_matricula(request.user)})
 
 
+@login_required(login_url='login')
 def fonoaudiologia(request):
     """Página de entrada para el módulo de Fonoaudiología (placeholder)."""
-    from django.http import HttpResponse
-    return HttpResponse("Módulo Fonoaudiología - Acceso correcto.")
+    if not request.user.groups.filter(name='Fonoaudiologia').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    return render(request, 'fonoaudiologia.html', {'matricula_profesional': _get_matricula(request.user)})
 #======================================================
 
 
